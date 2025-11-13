@@ -1,0 +1,299 @@
+{
+  "Index": {
+    "meta_title": "Sunulanı Değil Hayalindeki Ürünü Al - Hayalindeki Tasarım Birebiro",
+    "meta_description": "Yapay zeka destekli özel tasarım ürünleri platformu. Hayal gücünüzle tasarlayın, biz sizin için üretelim. Kişiye özel tablolar, duvar süslemeleri ve daha fazlası."
+  },
+  "Navbar": {
+    "sign_in": "Giriş",
+    "sign_up": "Kayıt Ol",
+    "product": "Özellikler",
+    "docs": "Nasıl Çalışır",
+    "blog": "Fiyatlandırma",
+    "community": "SSS",
+    "company": "İletişim"
+  },
+  "Hero": {
+    "follow_twitter": "X'te @Birebiro'yu takip et",
+    "title": "Sunulanı Değil Hayalindeki Ürünü Al <important>Hayalindeki Tasarım Birebiro</important>",
+    "description": "Kalemin yok, fırçan yok… ama hayalin var. Artık sunulan stoklu ürünlerle vakit kaybetmene gerek yok. Birebiro, sadece birkaç kelimenle bilinçaltının derinliklerinden bu mistik manzarayı ortaya çıkarır, evin ve ofisin için ustalıkla eserini işler ve sana ulaştırır. Bu senin zihninden çıkan bir şaheser.",
+    "primary_button": "Hemen Tasarla",
+    "secondary_button": "Hayal Mağazası"
+  },
+  "Sponsors": {
+    "title": "İş Ortaklarımız"
+  },
+  "HowItWorks": {
+    "section_title": "Nasıl Çalışır?",
+    "section_subtitle": "3 basit adımda hayalindeki ürünü elde et",
+    "step1_title": "Ürününü Seç",
+    "step1_description": "Duvar tablosu, vazo, yastık kılıfı veya dilediğin ürünü seç. Farklı boyut ve malzeme seçenekleri seni bekliyor.",
+    "step2_title": "Yapay Zeka İle Tasarla",
+    "step2_description": "Hayal ettiğin tasarımı kelimelerle tarif et. Yapay zeka teknolojimiz, senin için benzersiz ve kişiye özel tasarım oluşturur.",
+    "step3_title": "Tek Tıkla Sipariş Ver",
+    "step3_description": "Dünyada yalnızca 1 tane olan ürününü beğendin mi? Tek tıkla sipariş ver, biz sana ulaştıralım."
+  },
+  "Features": {
+    "section_subtitle": "Teknik Özellikler",
+    "section_title": "Birebiro Teknik Özellikler",
+    "section_description": "Yapay zeka destekli tasarım platformumuzla hayal gücünüzün sınırlarını zorlayın. Sen hayal et, biz yapalım.",
+    "feature1_title": "Hayalindeki Tabloyu Metinle Tarif Et",
+    "feature2_title": "Anında Görsel Önizleme",
+    "feature3_title": "Her Dilde Dilediğin Tasarımı Oluştur",
+    "feature4_title": "Boyut ve Yön Seçimiyle Kişiselleştirme",
+    "feature5_title": "Yüksek Kalite Baskı",
+    "feature6_title": "Hızlı Teslimat",
+    "feature_description": "Yapay zeka teknolojisiyle hayal ettiğiniz tasarımları gerçeğe dönüştürüyoruz. Kelimeleriniz bizim için yeterli."
+  },
+  "Pricing": {
+    "section_subtitle": "Fiyatlandırma",
+    "section_title": "Size Uygun Planı Seçin",
+    "section_description": "Hayal gücünüzü gerçeğe dönüştürmek için en uygun planı seçin. Her plan için özel avantajlar sunuyoruz.",
+    "button_text": "Hemen Başla"
+  },
+  "PricingPlan": {
+    "free_plan_name": "Deneme",
+    "premium_plan_name": "Standart",
+    "enterprise_plan_name": "Premium",
+    "free_plan_description": "Keşfetmek isteyenler için",
+    "premium_plan_description": "Bireysel kullanıcılar için",
+    "enterprise_plan_description": "Profesyonel kullanım için",
+    "feature_team_member": "{number} Tasarım Kredisi",
+    "feature_website": "{number} Ürün",
+    "feature_storage": "{number} GB Depolama",
+    "feature_transfer": "{number} Öncelikli Destek",
+    "feature_email_support": "E-posta Desteği",
+    "plan_interval_month": "ay",
+    "plan_interval_year": "yıl",
+    "next_renew_date": "Aboneliğiniz {date} tarihinde yenilenir"
+  },
+  "FAQ": {
+    "question": "Birebiro nasıl çalışır?",
+    "answer": "Birebiro, yapay zeka teknolojisi kullanarak hayal ettiğiniz tasarımları kelimelerle tarif etmenizi sağlar. Sadece birkaç cümleyle istediğiniz tasarımı tanımlayın, sistemimiz anında görsel önizleme oluşturur ve onayınızın ardından ürününüz özenle hazırlanıp adresinize gönderilir.",
+    "question-2": "Hangi tür ürünler sipariş edebilirim?",
+    "answer-2": "Birebiro ile duvar tabloları, kanvas baskılar, poster, çerçeveli eserler ve özel boyutlarda duvar süslemeleri siparişi verebilirsiniz. Tüm ürünlerimiz, sizin hayal ettiğiniz tasarıma göre özel olarak üretilir ve yüksek kaliteli malzemelerle hazırlanır.",
+    "question-3": "Tasarımımı kaç dilde oluşturabilirim?",
+    "answer-3": "Birebiro, çoklu dil desteği sunar. Türkçe, İngilizce, Fransızca ve daha birçok dilde hayal ettiğiniz tasarımı kelimelerle tarif edebilirsiniz. Yapay zeka sistemimiz, tüm dillerde eşit derecede başarılı sonuçlar üretir.",
+    "question-4": "Teslimat süresi ne kadar?",
+    "answer-4": "Tasarımınızı onayladıktan sonra, ürününüz 3-5 iş günü içinde özenle hazırlanır ve kargoya verilir. Kargo süresi bölgenize göre değişmekle birlikte, genellikle 2-3 iş günü içinde elinizde olur. Toplam süreç ortalama 5-8 iş günü sürmektedir.",
+    "question-5": "Tasarımımdan memnun kalmazsam ne olur?",
+    "answer-5": "Önizleme aşamasında tasarımınızı beğenmezseniz, sınırsız sayıda revize hakkınız vardır. Ürün üretildikten sonra ise, kalite sorunları için 14 gün içinde iade veya değişim garantisi sunuyoruz. Müşteri memnuniyeti bizim için önceliktir.",
+    "question-6": "Fiyatlandırma nasıl çalışır?",
+    "answer-6": "Fiyatlandırma, seçtiğiniz ürün türüne, boyutuna ve materyaline göre değişir. Deneme planımızla ücretsiz olarak platforma üye olabilir ve ilk tasarımınızı oluşturabilirsiniz. Aylık veya yıllık abonelik planlarımızla da daha avantajlı fiyatlarla sınırsız tasarım yapabilirsiniz."
+  },
+  "CTA": {
+    "title": "Hayallerinizi Gerçeğe Dönüştürmeye Hazır mısınız?",
+    "description": "Sen hayal et, biz yapalım. Hayal gücünün yolculuğuna şimdi başla.",
+    "button_text": "Hemen Tasarla"
+  },
+  "Footer": {
+    "product": "Ürünler",
+    "docs": "Nasıl Çalışır",
+    "blog": "Galeri",
+    "community": "Hakkımızda",
+    "company": "İletişim",
+    "terms_of_service": "Şart ve Koşullar",
+    "privacy_policy": "Gizlilik Politikası",
+    "designed_by": "© 2025, BİREBİRO, Özboya Group Global Markasıdır. Tüm Hakları Saklıdır."
+  },
+  "ProtectFallback": {
+    "not_enough_permission": "Bu işlemi gerçekleştirmek için yetkiniz yok"
+  },
+  "SignIn": {
+    "meta_title": "Giriş - Birebiro",
+    "meta_description": "Birebiro hesabınıza giriş yapın ve hayal ettiğiniz tasarımlara ulaşın."
+  },
+  "SignUp": {
+    "meta_title": "Kayıt Ol - Birebiro",
+    "meta_description": "Birebiro'ya katılın ve hayal gücünüzle tasarlamaya başlayın. Ücretsiz hesap oluşturun."
+  },
+  "DashboardLayout": {
+    "home": "Ana Sayfa",
+    "todos": "Tasarımlarım",
+    "members": "Siparişlerim",
+    "billing": "Abonelik ve Faturalama",
+    "settings": "Ayarlar"
+  },
+  "Dashboard": {
+    "meta_title": "Dashboard - Birebiro",
+    "meta_description": "Birebiro kullanıcı panelinize hoş geldiniz. Tasarımlarınızı yönetin, siparişlerinizi takip edin."
+  },
+  "DashboardIndex": {
+    "title_bar": "Hoş Geldiniz",
+    "title_bar_description": "Hayal gücünüzün yolculuğuna başlayın",
+    "message_state_title": "Hayallerini Gerçeğe Dönüştür",
+    "message_state_description": "Kalemin yok, fırçan yok… ama hayalin var. Birebiro ile hayal ettiğin tasarımları kelimelerle tarif et, biz gerçeğe dönüştürelim.",
+    "message_state_button": "Hemen Tasarla",
+    "message_state_alternative": "Zamanın ötesinden gelen tasarımlar için <url>hayal mağazamızı</url> keşfedin."
+  },
+  "UserProfile": {
+    "title_bar": "Profilim",
+    "title_bar_description": "Hesap bilgilerinizi görüntüleyin ve düzenleyin"
+  },
+  "OrganizationProfile": {
+    "title_bar": "Organizasyon Yönetimi",
+    "title_bar_description": "Organizasyon ayarlarınızı yönetin"
+  },
+  "Billing": {
+    "title_bar": "Abonelik ve Faturalama",
+    "title_bar_description": "Abonelik planınızı ve ödeme bilgilerinizi yönetin",
+    "current_section_title": "Mevcut Planınız",
+    "current_section_description": "İhtiyaçlarınıza en uygun planı seçin ve sınırsız hayal gücünün tadını çıkarın",
+    "manage_subscription_button": "Aboneliği Yönet"
+  },
+  "BillingOptions": {
+    "current_plan": "Mevcut Plan",
+    "upgrade_plan": "Planı Yükselt"
+  },
+  "CheckoutConfirmation": {
+    "title_bar": "Ödeme Onayı",
+    "message_state_title": "Ödemeniz Başarılı!",
+    "message_state_description": "Ödemeniz başarıyla alındı. Artık hayal gücünüzle tasarlamaya başlayabilirsiniz. Teşekkür ederiz!",
+    "message_state_button": "Dashboard'a Dön"
+  },
+  "DataTable": {
+    "no_results": "Henüz tasarım bulunmuyor."
+  },
+  "Todos": {
+    "title_bar": "Tasarımlarım",
+    "title_bar_description": "Oluşturduğunuz ve kaydettiğiniz tasarımları görüntüleyin",
+    "add_todo_button": "Yeni Tasarım Oluştur"
+  },
+  "TodoTableColumns": {
+    "open_menu": "Menüyü aç",
+    "edit": "Düzenle",
+    "delete": "Sil",
+    "title_header": "Tasarım Adı",
+    "message_header": "Açıklama",
+    "created_at_header": "Oluşturulma Tarihi"
+  },
+  "AddTodo": {
+    "title_bar": "Yeni Tasarım",
+    "add_todo_section_title": "Hayal Gücünüzü Serbest Bırakın",
+    "add_todo_section_description": "Hayalinizdeki tasarımı kelimelerle tarif edin, yapay zeka sizin için oluştursun"
+  },
+  "EditTodo": {
+    "title_bar": "Tasarımı Düzenle",
+    "edit_todo_section_title": "Tasarımınızı Geliştirin",
+    "edit_todo_section_description": "Mevcut tasarımınızı düzenleyin ve mükemmelleştirin"
+  },
+  "TodoForm": {
+    "title_label": "Tasarım Adı",
+    "title_description": "Tasarımınız için akılda kalıcı bir isim belirleyin",
+    "message_title": "Tasarım Açıklaması",
+    "message_description": "Hayal ettiğiniz tasarımı detaylı bir şekilde tarif edin. Ne kadar ayrıntılı olursanız, sonuç o kadar harika olur.",
+    "submit_button": "Tasarımı Oluştur"
+  },
+  "Products": {
+    "meta_title": "Ürün Seçimi - Birebiro",
+    "meta_description": "Hayalinizdeki tasarım için ürün, boyut ve çerçeve seçin",
+    "page_title": "Ürününüzü Seçin",
+    "page_description": "Tasarımınızı hangi ürün üzerinde görmek istersiniz?",
+    "product_wall_art": "Duvar Tablosu",
+    "product_wall_art_description": "Özel tasarımınızla benzersiz bir duvar dekoru oluşturun",
+    "starting_from": "Başlangıç",
+    "back_to_products": "Ürünlere Dön",
+    "select_size": "Boyut Seçin",
+    "select_frame": "Çerçeve Seçin",
+    "size_small": "Küçük",
+    "size_medium": "Orta",
+    "size_large": "Büyük",
+    "size_xlarge": "Ekstra Büyük",
+    "frame_none": "Çerçevesiz",
+    "frame_black": "Siyah Çerçeve",
+    "frame_white": "Beyaz Çerçeve",
+    "frame_wood": "Ahşap Çerçeve",
+    "free": "Ücretsiz",
+    "total": "Toplam",
+    "continue": "Devam Et",
+    "please_select_options": "Lütfen boyut ve çerçeve seçin",
+    "coming_soon": "Yakında",
+    "new_products": "Yeni Ürünler"
+  },
+  "Design": {
+    "page_title": "Tasarım Oluştur",
+    "welcome_message": "Merhaba! Size nasıl yardımcı olabilirim? İstediğiniz tasarımı tarif edin veya ilham almak için sohbet edelim.",
+    "selected_product": "Seçili Ürün",
+    "mode_generate": "Görsel Oluştur",
+    "mode_inspiration": "Tasarım İlhamı Al",
+    "generating_image": "Görseliniz oluşturuluyor, lütfen bekleyin...",
+    "providing_inspiration": "Size ilham verecek fikirler hazırlıyorum...",
+    "image_generated": "İşte görseliniz! Beğendiniz mi?",
+    "placeholder_generate": "Örn: 'Mor ve pembe tonlarında soyut bir sanat eseri oluştur' veya 'Minimalist geometrik şekiller'",
+    "placeholder_inspiration": "Örn: 'Yatak odası için sakin bir tasarım öner' veya 'Modern ofis dekorasyonu hakkında fikir ver'",
+    "wait_for_generation": "Görsel oluşturuluyor, lütfen bekleyin...",
+    "hint": "Shift + Enter ile yeni satır, Enter ile gönder",
+    "generated_images": "Oluşturulan Görseller",
+    "history_images": "Geçmişte Oluşturduklarım",
+    "selected": "Seçildi",
+    "no_images_yet": "Henüz görsel oluşturulmadı.\nYukarıdaki sohbet alanından isteklerinizi belirtin.",
+    "select": "Seç",
+    "explore": "Keşfet",
+    "creation_date": "Oluşturulma Tarihi",
+    "your_prompt": "Bu Hislerle Oluşturdunuz",
+    "art_credits": "Sanat Hakkı",
+    "credit_warning": "Bu işlem 1 Sanat Hakkı tüketecektir",
+    "insufficient_credits": "Yetersiz Sanat Hakkı! Görsel oluşturmak için en az 1 Sanat Hakkınız olmalıdır. Lütfen kredi satın alın veya abonelik planınızı yükseltin.",
+    "back_to_design": "Tasarıma Dön",
+    "preview_title": "Ürün Önizleme",
+    "your_feelings": "Hisleriniz",
+    "continue_to_checkout": "Sipariş Ver",
+    "preview_info": "Ödeme sayfasında son kontrolünüzü yapabilir ve siparişinizi tamamlayabilirsiniz.",
+    "creating_masterpiece": "En sanatsal tasarımı yapıyorum...",
+    "analyzing_details": "Detayları analiz edip renk paletini hazırlıyorum...",
+    "crafting_unique": "Dünyada yalnızca sizde olacak parçayı hazırlıyorum...",
+    "adding_artistic_touch": "Sanatsal dokunuşları ekliyorum...",
+    "almost_ready": "Neredeyse hazır! Son detaylar ekleniyor...",
+    "finalizing": "Eseriniz tamamlanıyor, birkaç saniye daha...",
+    "generation_timeout": "Görsel oluşturma beklenenden uzun sürüyor. Lütfen \"Geçmişte Oluşturdularım\" bölümünden kontrol edin."
+  },
+  "Checkout": {
+    "page_title": "Ödeme",
+    "page_description": "Sipariş bilgilerinizi kontrol edin ve ödeme işlemini tamamlayın",
+    "order_summary": "Sipariş Özeti",
+    "customer_information": "Müşteri Bilgileri",
+    "full_name": "Ad Soyad",
+    "full_name_placeholder": "Örn: Ahmet Yılmaz",
+    "email": "E-posta",
+    "email_placeholder": "ornek@email.com",
+    "phone": "Telefon",
+    "phone_placeholder": "0555 123 45 67",
+    "address": "Teslimat Adresi",
+    "address_placeholder": "Tam adresinizi yazın...",
+    "product": "Ürün",
+    "size": "Boyut",
+    "frame": "Çerçeve",
+    "your_design": "Tasarımınız",
+    "subtotal": "Ara Toplam",
+    "shipping": "Kargo",
+    "shipping_free": "Ücretsiz",
+    "total": "Toplam",
+    "complete_payment": "Ödemeyi Tamamla",
+    "fill_all_fields": "Lütfen tüm alanları doldurun",
+    "processing_payment": "Ödeme işleminiz hazırlanıyor...",
+    "payment_form": "Ödeme Formu",
+    "secure_payment": "Güvenli Ödeme",
+    "secure_payment_info": "Ödeme işleminiz SSL sertifikası ile korunmaktadır",
+    "back_to_preview": "Önizlemeye Dön"
+  },
+  "CheckoutSuccess": {
+    "page_title": "Ödeme Başarılı",
+    "success_message": "Ödemeniz Başarıyla Tamamlandı!",
+    "success_description": "Siparişiniz alındı ve hazırlanmaya başlandı. Kısa süre içinde kargo bilgileriniz e-posta adresinize gönderilecektir.",
+    "order_number": "Sipariş Numarası",
+    "what_next": "Sırada Ne Var?",
+    "step1": "Tasarımınız uzman ekibimiz tarafından yüksek kalitede basılacak",
+    "step2": "Ürününüz özenle paketlenip kargoya teslim edilecek",
+    "step3": "2-3 iş günü içinde kapınızda olacak",
+    "view_orders": "Siparişlerime Git",
+    "continue_designing": "Yeni Tasarım Yap"
+  },
+  "CheckoutFailed": {
+    "page_title": "Ödeme Başarısız",
+    "failed_message": "Ödeme İşlemi Tamamlanamadı",
+    "failed_description": "Ödeme işleminiz sırasında bir sorun oluştu. Lütfen bilgilerinizi kontrol edip tekrar deneyin.",
+    "try_again": "Tekrar Dene",
+    "back_to_home": "Ana Sayfaya Dön",
+    "contact_support": "Destek ile İletişime Geç"
+  }
+}
+

@@ -1,0 +1,110 @@
+'use server';
+
+import { eq } from 'drizzle-orm';
+import { db } from '@/libs/DB';
+import { productSchema, productSizeSchema, productFrameSchema } from '@/models/Schema';
+
+export async function getProducts(locale: string = 'tr') {
+  const products = await db
+    .select()
+    .from(productSchema)
+    .where(eq(productSchema.isActive, true))
+    .orderBy(productSchema.sortOrder);
+
+  return products.map(product => ({
+    id: product.id,
+    slug: product.slug,
+    name: locale === 'en' ? (product.nameEn || product.name) : locale === 'fr' ? (product.nameFr || product.name) : product.name,
+    description: locale === 'en' ? (product.descriptionEn || product.description) : locale === 'fr' ? (product.descriptionFr || product.description) : product.description,
+  }));
+}
+
+export async function getProductDetails(productSlug: string, locale: string = 'tr') {
+  const [product] = await db
+    .select()
+    .from(productSchema)
+    .where(eq(productSchema.slug, productSlug))
+    .limit(1);
+
+  if (!product) {
+    return null;
+  }
+
+  const sizes = await db
+    .select()
+    .from(productSizeSchema)
+    .where(eq(productSizeSchema.productId, product.id))
+    .orderBy(productSizeSchema.sortOrder);
+
+  const frames = await db
+    .select()
+    .from(productFrameSchema)
+    .where(eq(productFrameSchema.productId, product.id))
+    .orderBy(productFrameSchema.sortOrder);
+
+  return {
+    id: product.id,
+    slug: product.slug,
+    name: locale === 'en' ? (product.nameEn || product.name) : locale === 'fr' ? (product.nameFr || product.name) : product.name,
+    description: locale === 'en' ? (product.descriptionEn || product.description) : locale === 'fr' ? (product.descriptionFr || product.description) : product.description,
+    sizes: sizes.map(size => ({
+      id: size.id,
+      slug: size.slug,
+      name: locale === 'en' ? (size.nameEn || size.name) : locale === 'fr' ? (size.nameFr || size.name) : size.name,
+      dimensions: size.dimensions,
+      price: size.priceAmount / 100, // Convert from cents to TL
+    })),
+    frames: frames.map(frame => ({
+      id: frame.id,
+      slug: frame.slug,
+      name: locale === 'en' ? (frame.nameEn || frame.name) : locale === 'fr' ? (frame.nameFr || frame.name) : frame.name,
+      price: frame.priceAmount / 100, // Convert from cents to TL
+    })),
+  };
+}
+
+export async function getProductIdsFromSlugs(params: {
+  productSlug?: string;
+  sizeSlug?: string;
+  frameSlug?: string;
+}) {
+  let productId: number | null = null;
+  let sizeId: number | null = null;
+  let frameId: number | null = null;
+
+  // Get product ID
+  if (params.productSlug) {
+    const [product] = await db
+      .select({ id: productSchema.id })
+      .from(productSchema)
+      .where(eq(productSchema.slug, params.productSlug))
+      .limit(1);
+    productId = product?.id || null;
+  }
+
+  // Get size ID
+  if (params.sizeSlug && productId) {
+    const [size] = await db
+      .select({ id: productSizeSchema.id })
+      .from(productSizeSchema)
+      .where(eq(productSizeSchema.slug, params.sizeSlug))
+      .limit(1);
+    sizeId = size?.id || null;
+  }
+
+  // Get frame ID
+  if (params.frameSlug && productId) {
+    const [frame] = await db
+      .select({ id: productFrameSchema.id })
+      .from(productFrameSchema)
+      .where(eq(productFrameSchema.slug, params.frameSlug))
+      .limit(1);
+    frameId = frame?.id || null;
+  }
+
+  return {
+    productId,
+    sizeId,
+    frameId,
+  };
+}

@@ -1,0 +1,298 @@
+{
+  "Index": {
+    "meta_title": "SaaS Template - The perfect SaaS template to build and scale your business with ease.",
+    "meta_description": "A free and open-source landing page template for your SaaS business, built with React, TypeScript, Shadcn UI, and Tailwind CSS."
+  },
+  "Navbar": {
+    "sign_in": "Sign In",
+    "sign_up": "Sign Up",
+    "product": "Features",
+    "docs": "How It Works",
+    "blog": "Pricing",
+    "community": "FAQ",
+    "company": "Contact"
+  },
+  "Hero": {
+    "follow_twitter": "Follow @Ixartz on Twitter",
+    "title": "The perfect <important>SaaS template</important> to build and scale your business with ease.",
+    "description": "A free and open-source landing page template for your SaaS business, built with React, TypeScript, Shadcn UI, and Tailwind CSS.",
+    "primary_button": "Get Started",
+    "secondary_button": "Star on GitHub"
+  },
+  "Sponsors": {
+    "title": "Sponsored by"
+  },
+  "HowItWorks": {
+    "section_title": "How It Works?",
+    "section_subtitle": "Get your dream product in 3 simple steps",
+    "step1_title": "Choose Your Product",
+    "step1_description": "Select a wall art, vase, pillow case, or any product you desire. Different size and material options are waiting for you.",
+    "step2_title": "Design with AI",
+    "step2_description": "Describe your dream design with words. Our AI technology creates a unique and personalized design just for you.",
+    "step3_title": "Order with One Click",
+    "step3_description": "Love your one-of-a-kind product? Order with a single click and we'll deliver it to your doorstep."
+  },
+  "Features": {
+    "section_subtitle": "Features",
+    "section_title": "Unlock the Full Potential of the SaaS Template",
+    "section_description": "A free and open-source landing page template for your SaaS business, built with React, TypeScript, Shadcn UI, and Tailwind CSS.",
+    "feature1_title": "Node.js",
+    "feature2_title": "React",
+    "feature3_title": "Tailwind CSS",
+    "feature4_title": "TypeScript",
+    "feature5_title": "Shadcn UI",
+    "feature6_title": "ESLint",
+    "feature_description": "A free and open-source landing page template for your SaaS business, built with React, TypeScript, Shadcn UI, and Tailwind CSS."
+  },
+  "Pricing": {
+    "section_subtitle": "Features",
+    "section_title": "Unlock the Full Potential of the SaaS Template",
+    "section_description": "A free and open-source landing page template for your SaaS business, built with React, TypeScript, Shadcn UI, and Tailwind CSS.",
+    "button_text": "Get Started"
+  },
+  "PricingPlan": {
+    "free_plan_name": "Free",
+    "premium_plan_name": "Premium",
+    "enterprise_plan_name": "Enterprise",
+    "free_plan_description": "For individuals",
+    "premium_plan_description": "For small teams",
+    "enterprise_plan_description": "For industry leaders",
+    "feature_team_member": "{number} Team Members",
+    "feature_website": "{number} Websites",
+    "feature_storage": "{number} GB Storage",
+    "feature_transfer": "{number} TB Transfer",
+    "feature_email_support": "Email Support",
+    "plan_interval_month": "month",
+    "plan_interval_year": "year",
+    "next_renew_date": "Your subscription renews on {date}"
+  },
+  "FAQ": {
+    "question": "Lorem ipsum dolor sit amet, consectetur adipiscing elit?",
+    "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam aliquam enim dui, id consequat turpis ullamcorper ac. Mauris id quam dolor. Nullam eu egestas turpis. Proin risus elit, sollicitudin in mi a, accumsan euismod turpis. In euismod mi sed diam tristique hendrerit.",
+    "question-2": "Lorem ipsum dolor sit amet, consectetur adipiscing elit?",
+    "answer-2": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam aliquam enim dui, id consequat turpis ullamcorper ac. Mauris id quam dolor. Nullam eu egestas turpis. Proin risus elit, sollicitudin in mi a, accumsan euismod turpis. In euismod mi sed diam tristique hendrerit.",
+    "question-3": "Lorem ipsum dolor sit amet, consectetur adipiscing elit?",
+    "answer-3": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam aliquam enim dui, id consequat turpis ullamcorper ac. Mauris id quam dolor. Nullam eu egestas turpis. Proin risus elit, sollicitudin in mi a, accumsan euismod turpis. In euismod mi sed diam tristique hendrerit.",
+    "question-4": "Lorem ipsum dolor sit amet, consectetur adipiscing elit?",
+    "answer-4": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam aliquam enim dui, id consequat turpis ullamcorper ac. Mauris id quam dolor. Nullam eu egestas turpis. Proin risus elit, sollicitudin in mi a, accumsan euismod turpis. In euismod mi sed diam tristique hendrerit.",
+    "question-5": "Lorem ipsum dolor sit amet, consectetur adipiscing elit?",
+    "answer-5": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam aliquam enim dui, id consequat turpis ullamcorper ac. Mauris id quam dolor. Nullam eu egestas turpis. Proin risus elit, sollicitudin in mi a, accumsan euismod turpis. In euismod mi sed diam tristique hendrerit.",
+    "question-6": "Lorem ipsum dolor sit amet, consectetur adipiscing elit?",
+    "answer-6": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam aliquam enim dui, id consequat turpis ullamcorper ac. Mauris id quam dolor. Nullam eu egestas turpis. Proin risus elit, sollicitudin in mi a, accumsan euismod turpis. In euismod mi sed diam tristique hendrerit."
+  },
+  "CTA": {
+    "title": "You are ready?",
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    "button_text": "Star on GitHub"
+  },
+  "Footer": {
+    "product": "Product",
+    "docs": "Docs",
+    "blog": "Blog",
+    "community": "Community",
+    "company": "Company",
+    "terms_of_service": "Terms Of Service",
+    "privacy_policy": "Privacy Policy",
+    "designed_by": "Designed by <author></author>."
+  },
+  "ProtectFallback": {
+    "not_enough_permission": "You do not have the permissions to perform this action"
+  },
+  "SignIn": {
+    "meta_title": "Sign in",
+    "meta_description": "Seamlessly sign in to your account with our user-friendly login process."
+  },
+  "SignUp": {
+    "meta_title": "Sign up",
+    "meta_description": "Effortlessly create an account through our intuitive sign-up process."
+  },
+  "DashboardLayout": {
+    "home": "Home",
+    "todos": "Todos",
+    "members": "Members",
+    "billing": "Billing",
+    "settings": "Settings"
+  },
+  "Dashboard": {
+    "meta_title": "SaaS Template Dashboard",
+    "meta_description": "A free and open-source landing page template for your SaaS business, built with Next.js, TypeScript, Shadcn UI, and Tailwind CSS."
+  },
+  "DashboardIndex": {
+    "title_bar": "Dashboard",
+    "title_bar_description": "Welcome to your dashboard",
+    "message_state_title": "Let's get started",
+    "message_state_description": "You can customize this page by editing the file at <code>dashboard/page.tsx</code>",
+    "message_state_button": "Star on GitHub",
+    "message_state_alternative": "Want more features and the latest updates from Next.js 16? Try <url></url>."
+  },
+  "UserProfile": {
+    "title_bar": "User Profile",
+    "title_bar_description": "View and manage your user profile"
+  },
+  "OrganizationProfile": {
+    "title_bar": "Organization Management",
+    "title_bar_description": "Manage your organization"
+  },
+  "Billing": {
+    "title_bar": "Billing",
+    "title_bar_description": "Manage your billing and subscription",
+    "current_section_title": "Current Plan",
+    "current_section_description": "Adjust your payment plan to best suit your requirements",
+    "manage_subscription_button": "Manage Subscription"
+  },
+  "BillingOptions": {
+    "current_plan": "Current Plan",
+    "upgrade_plan": "Get Started"
+  },
+  "CheckoutConfirmation": {
+    "title_bar": "Payment Confirmation",
+    "message_state_title": "Payment successful",
+    "message_state_description": "Your payment has been successfully processed. Thank you for your purchase!",
+    "message_state_button": "Go back to Billing"
+  },
+  "DataTable": {
+    "no_results": "No results."
+  },
+  "Todos": {
+    "title_bar": "Todo List",
+    "title_bar_description": "View and manage your todo list",
+    "add_todo_button": "New todo"
+  },
+  "TodoTableColumns": {
+    "open_menu": "Open menu",
+    "edit": "Edit",
+    "delete": "Delete",
+    "title_header": "Title",
+    "message_header": "Message",
+    "created_at_header": "Created at"
+  },
+  "AddTodo": {
+    "title_bar": "Add Todo",
+    "add_todo_section_title": "Create a new todo",
+    "add_todo_section_description": "Fill in the form below to create a new todo"
+  },
+  "EditTodo": {
+    "title_bar": "Edit todo",
+    "edit_todo_section_title": "Modify todo",
+    "edit_todo_section_description": "Fill in the form below to edit the todo"
+  },
+  "TodoForm": {
+    "title_label": "Title",
+    "title_description": "Enter a descriptive title for your todo.",
+    "message_title": "Message",
+    "message_description": "Enter a detailed message for your todo.",
+    "submit_button": "Submit"
+  },
+  "Products": {
+    "meta_title": "Product Selection - Birebiro",
+    "meta_description": "Choose your product, size and frame for your dream design",
+    "page_title": "Choose Your Product",
+    "page_description": "Which product would you like to see your design on?",
+    "product_wall_art": "Wall Art",
+    "product_wall_art_description": "Create a unique wall decoration with your custom design",
+    "starting_from": "Starting from",
+    "back_to_products": "Back to Products",
+    "select_size": "Select Size",
+    "select_frame": "Select Frame",
+    "size_small": "Small",
+    "size_medium": "Medium",
+    "size_large": "Large",
+    "size_xlarge": "Extra Large",
+    "frame_none": "No Frame",
+    "frame_black": "Black Frame",
+    "frame_white": "White Frame",
+    "frame_wood": "Wooden Frame",
+    "free": "Free",
+    "total": "Total",
+    "continue": "Continue",
+    "please_select_options": "Please select size and frame",
+    "coming_soon": "Coming Soon",
+    "new_products": "New Products"
+  },
+  "Design": {
+    "page_title": "Create Design",
+    "welcome_message": "Hello! How can I help you? Describe your desired design or let's chat for inspiration.",
+    "selected_product": "Selected Product",
+    "mode_generate": "Generate Image",
+    "mode_inspiration": "Get Design Inspiration",
+    "generating_image": "Your image is being generated, please wait...",
+    "providing_inspiration": "Preparing inspiring ideas for you...",
+    "image_generated": "Here's your image! Do you like it?",
+    "placeholder_generate": "E.g., 'Create an abstract artwork in purple and pink tones' or 'Minimalist geometric shapes'",
+    "placeholder_inspiration": "E.g., 'Suggest a calm design for bedroom' or 'Give ideas about modern office decoration'",
+    "wait_for_generation": "Image is being generated, please wait...",
+    "hint": "Shift + Enter for new line, Enter to send",
+    "generated_images": "Generated Images",
+    "history_images": "Previously Created",
+    "selected": "Selected",
+    "no_images_yet": "No images generated yet.\nSpecify your requests in the chat area above.",
+    "select": "Select",
+    "explore": "Explore",
+    "creation_date": "Creation Date",
+    "your_prompt": "You Created This With These Feelings",
+    "art_credits": "Art Credits",
+    "credit_warning": "This action will consume 1 Art Credit",
+    "insufficient_credits": "Insufficient Art Credits! You need at least 1 Art Credit to generate images. Please purchase credits or upgrade your subscription plan.",
+    "back_to_design": "Back to Design",
+    "preview_title": "Product Preview",
+    "your_feelings": "Your Feelings",
+    "continue_to_checkout": "Continue to Checkout",
+    "preview_info": "You can make final checks and complete your order on the payment page.",
+    "creating_masterpiece": "Crafting the most artistic design...",
+    "analyzing_details": "Analyzing details and preparing color palette...",
+    "crafting_unique": "Preparing a piece that only you will have in the world...",
+    "adding_artistic_touch": "Adding artistic touches...",
+    "almost_ready": "Almost ready! Adding final touches...",
+    "finalizing": "Finalizing your masterpiece, just a few more seconds...",
+    "generation_timeout": "Image generation is taking longer than expected. Please check the \"Previously Created\" section."
+  },
+  "Checkout": {
+    "page_title": "Checkout",
+    "page_description": "Review your order details and complete payment",
+    "order_summary": "Order Summary",
+    "customer_information": "Customer Information",
+    "full_name": "Full Name",
+    "full_name_placeholder": "e.g: John Doe",
+    "email": "Email",
+    "email_placeholder": "example@email.com",
+    "phone": "Phone",
+    "phone_placeholder": "+1 555 123 4567",
+    "address": "Delivery Address",
+    "address_placeholder": "Enter your complete address...",
+    "product": "Product",
+    "size": "Size",
+    "frame": "Frame",
+    "your_design": "Your Design",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "shipping_free": "Free",
+    "total": "Total",
+    "complete_payment": "Complete Payment",
+    "fill_all_fields": "Please fill in all fields",
+    "processing_payment": "Processing your payment...",
+    "payment_form": "Payment Form",
+    "secure_payment": "Secure Payment",
+    "secure_payment_info": "Your payment is protected with SSL certificate",
+    "back_to_preview": "Back to Preview"
+  },
+  "CheckoutSuccess": {
+    "page_title": "Payment Successful",
+    "success_message": "Payment Completed Successfully!",
+    "success_description": "Your order has been received and is being prepared. Shipping information will be sent to your email shortly.",
+    "order_number": "Order Number",
+    "what_next": "What's Next?",
+    "step1": "Your design will be printed in high quality by our expert team",
+    "step2": "Your product will be carefully packaged and shipped",
+    "step3": "It will be at your door within 2-3 business days",
+    "view_orders": "View My Orders",
+    "continue_designing": "Create New Design"
+  },
+  "CheckoutFailed": {
+    "page_title": "Payment Failed",
+    "failed_message": "Payment Could Not Be Completed",
+    "failed_description": "There was an issue with your payment. Please check your information and try again.",
+    "try_again": "Try Again",
+    "back_to_home": "Back to Home",
+    "contact_support": "Contact Support"
+  }
+}

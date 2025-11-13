@@ -1,0 +1,716 @@
+'use client';
+
+import { useState, useRef, useEffect } from 'react';
+import { useTranslations } from 'next-intl';
+import { useUser } from '@clerk/nextjs';
+import { useRouter } from '@/libs/i18nNavigation';
+import { Send, Sparkles, Image as ImageIcon, Upload, X, Loader2, Check } from 'lucide-react';
+import { sendChatMessage, getGeneratedImage, getUserGeneratedImages, type GeneratedImageResponse } from './chatActions';
+import { uploadImageToN8n } from './imageUpload';
+import { generateChatSessionId } from './chatUtils';
+import { getUserArtCredits, decrementArtCredits } from './creditsActions';
+
+type Message = {
+  id: string;
+  role: 'user' | 'assistant';
+  content: string;
+  imageUrl?: string;
+  userImageUrl?: string; // User uploaded image
+  timestamp: Date;
+};
+
+type ChatInterfaceProps = {
+  locale: string;
+  productSlug?: string;
+  sizeSlug?: string;
+  frameSlug?: string;
+};
+
+export function ChatInterface({ 
+  productSlug, 
+  sizeSlug, 
+  frameSlug 
+}: ChatInterfaceProps) {
+  const t = useTranslations('Design');
+  const { user } = useUser();
+  const router = useRouter();
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [inputValue, setInputValue] = useState('');
+  const [isGenerateMode, setIsGenerateMode] = useState(false); // false = tasarım ilhamı (default)
+  const [generatedImages, setGeneratedImages] = useState<GeneratedImageResponse[]>([]);
+  const [uploadedImageUrl, setUploadedImageUrl] = useState<string>('');
+  const [isUploading, setIsUploading] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+  const [isGeneratingImage, setIsGeneratingImage] = useState(false);
+  const [chatSessionId] = useState(() => 
+    generateChatSessionId(user?.id || 'anonymous', productSlug)
+  );
+  const [historyImages, setHistoryImages] = useState<GeneratedImageResponse[]>([]);
+  const [isLoadingHistory, setIsLoadingHistory] = useState(true);
+  const [selectedImageDetail, setSelectedImageDetail] = useState<GeneratedImageResponse | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [artCredits, setArtCredits] = useState<number>(0);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Auto-scroll to bottom when new messages arrive (only scroll the chat container)
+  useEffect(() => {
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+    }
+  }, [messages]);
+
+  // Load user's art credits
+  useEffect(() => {
+    async function loadCredits() {
+      if (!user) return;
+      
+      try {
+        const credits = await getUserArtCredits();
+        setArtCredits(credits);
+      } catch (error) {
+        console.error('Failed to load credits:', error);
+      }
+    }
+    
+    loadCredits();
+  }, [user]);
+
+  // Load user's history images
+  useEffect(() => {
+    async function loadHistoryImages() {
+      if (!user) return;
+      
+      setIsLoadingHistory(true);
+      const result = await getUserGeneratedImages();
+      
+      if (result.success && result.data) {
+        // Filter images that have image_url (completed generations)
+        const completedImages = result.data.filter(img => img.image_url);
+        setHistoryImages(completedImages);
+      }
+      
+      setIsLoadingHistory(false);
+    }
+    
+    loadHistoryImages();
+  }, [user]);
+
+  // Welcome message
+  useEffect(() => {
+    if (messages.length === 0) {
+      const welcomeMessage: Message = {
+        id: Date.now().toString(),
+        role: 'assistant',
+        content: t('welcome_message'),
+        timestamp: new Date(),
+      };
+      setMessages([welcomeMessage]);
+    }
+  }, []);
+
+  const handleSendMessage = async () => {
+    if (!inputValue.trim() || !user) return;
+
+    // Check credits only for image generation mode
+    if (isGenerateMode && artCredits <= 0) {
+      const errorMessage: Message = {
+        id: Date.now().toString(),
+        role: 'assistant',
+        content: t('insufficient_credits'),
+        timestamp: new Date(),
+      };
+      setMessages(prev => [...prev, errorMessage]);
+      return;
+    }
+
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      role: 'user',
+      content: inputValue,
+      userImageUrl: uploadedImageUrl || undefined,
+      timestamp: new Date(),
+    };
+
+    setMessages(prev => [...prev, userMessage]);
+    const currentInput = inputValue;
+    const currentImageUrl = uploadedImageUrl;
+    setInputValue('');
+    setUploadedImageUrl('');
+    setIsSending(true);
+
+    try {
+      // Call API
+      const result = await sendChatMessage({
+        textPrompt: currentInput,
+        imagePromptUrl: currentImageUrl,
+        isGenerateMode,
+        chatSessionId,
+        productSlug,
+        sizeSlug,
+        frameSlug,
+      });
+
+      if (!result.success || !result.data) {
+        throw new Error(result.error || 'API yanıt vermedi');
+      }
+
+      // Display AI response
+      const aiMessage: Message = {
+        id: Date.now().toString(),
+        role: 'assistant',
+        content: result.data.reply_to_user,
+        timestamp: new Date(),
+      };
+      setMessages(prev => [...prev, aiMessage]);
+
+      // If image_generation is true, wait and fetch the generated image
+      if (result.data.image_generation && result.data.generation_id) {
+        // Decrement credits when starting image generation
+        try {
+          const newCredits = await decrementArtCredits();
+          setArtCredits(newCredits);
+        } catch (error) {
+          console.error('Failed to decrement credits:', error);
+        }
+
+        setIsGeneratingImage(true); // Disable input during image generation
+        
+        // Show motivational messages while waiting (30 seconds total)
+        const motivationalMessages: string[] = [
+          t('creating_masterpiece'),
+          t('analyzing_details'),
+          t('crafting_unique'),
+          t('adding_artistic_touch'),
+          t('almost_ready'),
+          t('finalizing'),
+        ];
+
+        // Add motivational message
+        const motivationMessageId = `${Date.now()}-motivation`;
+        let currentMessageIndex = 0;
+
+        const motivationMessage: Message = {
+          id: motivationMessageId,
+          role: 'assistant',
+          content: motivationalMessages[0]!,
+          timestamp: new Date(),
+        };
+        setMessages(prev => [...prev, motivationMessage]);
+
+        // Update motivational message every 5 seconds (6 messages over 30 seconds)
+        const messageInterval = setInterval(() => {
+          currentMessageIndex = (currentMessageIndex + 1) % motivationalMessages.length;
+          setMessages(prev =>
+            prev.map(msg =>
+              msg.id === motivationMessageId
+                ? { ...msg, content: motivationalMessages[currentMessageIndex]! }
+                : msg
+            )
+          );
+        }, 5000);
+
+        // Polling function to check image generation status
+        const pollForImage = async (generationId: string, attempts = 0, maxAttempts = 20) => {
+          const pollInterval = 5000; // Check every 5 seconds
+          // Max wait time: 20 attempts × 5s = 100 seconds max
+          
+          try {
+            const imageResult = await getGeneratedImage(generationId);
+
+            // Check if image is ready
+            if (imageResult.success && imageResult.data && imageResult.data.image_url) {
+              // Image is ready!
+              clearInterval(messageInterval);
+              
+              // Remove motivational message
+              setMessages(prev => prev.filter(msg => msg.id !== motivationMessageId));
+
+              setGeneratedImages(prev => [...prev, imageResult.data!]);
+
+              const imageMessage: Message = {
+                id: `${Date.now()}-image`,
+                role: 'assistant',
+                content: t('image_generated'),
+                imageUrl: imageResult.data.image_url,
+                timestamp: new Date(),
+              };
+              setMessages(prev => [...prev, imageMessage]);
+              setIsGeneratingImage(false);
+            } else if (attempts < maxAttempts - 1) {
+              // Image not ready yet, try again after delay
+              setTimeout(() => {
+                pollForImage(generationId, attempts + 1, maxAttempts);
+              }, pollInterval);
+            } else {
+              // Max attempts reached
+              clearInterval(messageInterval);
+              setMessages(prev => prev.filter(msg => msg.id !== motivationMessageId));
+              
+              const timeoutMessage: Message = {
+                id: `${Date.now()}-timeout`,
+                role: 'assistant',
+                content: t('generation_timeout'),
+                timestamp: new Date(),
+              };
+              setMessages(prev => [...prev, timeoutMessage]);
+              setIsGeneratingImage(false);
+            }
+          } catch (error) {
+            console.error('Error fetching generated image:', error);
+            clearInterval(messageInterval);
+            setMessages(prev => prev.filter(msg => msg.id !== motivationMessageId));
+            
+            const errorMsg: Message = {
+              id: `${Date.now()}-image-error`,
+              role: 'assistant',
+              content: 'Görsel alınırken bir hata oluştu.',
+              timestamp: new Date(),
+            };
+            setMessages(prev => [...prev, errorMsg]);
+            setIsGeneratingImage(false);
+          }
+        };
+
+        // Start polling after initial 10 seconds
+        setTimeout(() => {
+          pollForImage(result.data.generation_id!, 0, 20);
+        }, 10000); // Wait 10 seconds before first check
+      }
+    } catch (error) {
+      console.error('Chat error:', error);
+      const errorMessage: Message = {
+        id: (Date.now() + 999).toString(),
+        role: 'assistant',
+        content: `Üzgünüm, bir hata oluştu: ${error instanceof Error ? error.message : 'Bilinmeyen hata'}`,
+        timestamp: new Date(),
+      };
+      setMessages(prev => [...prev, errorMessage]);
+    } finally {
+      setIsSending(false);
+    }
+  };
+
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Check file type
+    if (!file.type.startsWith('image/')) {
+      alert('Lütfen bir görsel dosyası seçin');
+      return;
+    }
+
+    // Check file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('Görsel boyutu 5MB\'dan küçük olmalıdır');
+      return;
+    }
+
+    setIsUploading(true);
+
+    try {
+      // Upload to n8n webhook
+      const uploadResult = await uploadImageToN8n(file);
+      
+      console.log('Upload result:', uploadResult); // Debug log
+      
+      if (uploadResult.success && uploadResult.imageUrl) {
+        console.log('Setting uploaded image URL:', uploadResult.imageUrl);
+        setUploadedImageUrl(uploadResult.imageUrl);
+      } else {
+        console.error('Upload failed:', uploadResult);
+        throw new Error(uploadResult.error || 'Yükleme başarısız - URL bulunamadı');
+      }
+    } catch (error) {
+      console.error('Image upload error:', error);
+      alert(`Görsel yüklenirken hata oluştu: ${error instanceof Error ? error.message : 'Bilinmeyen hata'}`);
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const removeUploadedImage = () => {
+    setUploadedImageUrl('');
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  };
+
+  return (
+    <div className="mx-auto max-w-7xl px-4 pb-4 pt-8">
+      {/* Header with Product Info & Mode Toggle */}
+      <div className="mb-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          {/* Product Info */}
+          {productSlug && (
+            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
+              <span className="font-medium">{t('selected_product')}:</span>
+              <span className="rounded-full bg-purple-100 px-3 py-1 dark:bg-purple-900">
+                {productSlug}
+              </span>
+              {sizeSlug && (
+                <span className="rounded-full bg-blue-100 px-3 py-1 dark:bg-blue-900">
+                  {sizeSlug}
+                </span>
+              )}
+              {frameSlug && frameSlug !== 'none' && (
+                <span className="rounded-full bg-green-100 px-3 py-1 dark:bg-green-900">
+                  {frameSlug}
+                </span>
+              )}
+            </div>
+          )}
+
+          {/* Art Credits Display */}
+          <div className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-yellow-50 to-amber-50 px-4 py-2 dark:from-yellow-900/20 dark:to-amber-900/20">
+            <Sparkles className="size-5 text-yellow-600 dark:text-yellow-400" />
+            <span className="text-sm font-semibold text-gray-800 dark:text-gray-200">
+              {t('art_credits')}: <span className="text-yellow-600 dark:text-yellow-400">{artCredits}</span>
+            </span>
+          </div>
+
+          {/* Mode Toggle */}
+          <div className="flex items-center gap-4">
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
+              {isGenerateMode ? t('mode_generate') : t('mode_inspiration')}
+            </span>
+            <button
+              onClick={() => setIsGenerateMode(!isGenerateMode)}
+              className={`relative inline-flex h-8 w-16 items-center rounded-full transition-colors ${
+                isGenerateMode 
+                  ? 'bg-gradient-to-r from-purple-500 to-pink-500' 
+                  : 'bg-gray-300 dark:bg-gray-600'
+              }`}
+            >
+              <span
+                className={`inline-block size-6 transform rounded-full bg-white shadow-lg transition-transform ${
+                  isGenerateMode ? 'translate-x-9' : 'translate-x-1'
+                }`}
+              >
+                {isGenerateMode ? (
+                  <ImageIcon className="size-6 p-1 text-purple-500" />
+                ) : (
+                  <Sparkles className="size-6 p-1 text-gray-500" />
+                )}
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Container */}
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        {/* Chat Area - Takes 2/3 on large screens */}
+        <div className="lg:col-span-2">
+          <div className="flex h-[600px] flex-col rounded-xl border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-800">
+            {/* Messages */}
+            <div 
+              ref={messagesContainerRef}
+              className="flex-1 space-y-4 overflow-y-auto p-6"
+            >
+              {messages.map((message) => (
+                <div
+                  key={message.id}
+                  className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                >
+                  <div
+                    className={`max-w-[80%] rounded-2xl px-4 py-3 ${
+                      message.role === 'user'
+                        ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white'
+                        : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-100'
+                    }`}
+                  >
+                    <p className="whitespace-pre-wrap text-sm">{message.content}</p>
+                    {/* User uploaded image */}
+                    {message.userImageUrl && (
+                      <img
+                        src={message.userImageUrl}
+                        alt="User upload"
+                        className="mt-3 max-h-48 rounded-lg"
+                      />
+                    )}
+                    {/* AI generated image */}
+                    {message.imageUrl && (
+                      <img
+                        src={message.imageUrl}
+                        alt="Generated"
+                        className="mt-3 rounded-lg"
+                      />
+                    )}
+                  </div>
+                </div>
+              ))}
+              {isSending && (
+                <div className="flex justify-start">
+                  <div className="rounded-2xl bg-gray-100 px-4 py-3 dark:bg-gray-700">
+                    <Loader2 className="size-5 animate-spin text-gray-600 dark:text-gray-300" />
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Input Area */}
+            <div className="border-t border-gray-200 p-4 dark:border-gray-700">
+              {/* Uploaded Image Preview */}
+              {uploadedImageUrl && (
+                <div className="mb-3 flex items-center gap-2 rounded-lg bg-purple-50 p-2 dark:bg-purple-900/20">
+                  <img
+                    src={uploadedImageUrl}
+                    alt="Upload preview"
+                    className="size-16 rounded object-cover"
+                  />
+                  <span className="flex-1 text-sm text-gray-600 dark:text-gray-300">
+                    Görsel yüklendi
+                  </span>
+                  <button
+                    onClick={removeUploadedImage}
+                    className="rounded-full p-1 hover:bg-purple-100 dark:hover:bg-purple-800"
+                  >
+                    <X className="size-4 text-gray-600 dark:text-gray-300" />
+                  </button>
+                </div>
+              )}
+
+              <div className="flex gap-3">
+                {/* Image Upload Button */}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                  className="hidden"
+                />
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={isUploading || isSending || isGeneratingImage}
+                  className="flex size-12 items-center justify-center rounded-xl border border-gray-300 bg-white text-gray-600 transition-colors hover:bg-gray-50 disabled:opacity-50 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800"
+                  title="Görsel yükle"
+                >
+                  {isUploading ? (
+                    <Loader2 className="size-5 animate-spin" />
+                  ) : (
+                    <Upload className="size-5" />
+                  )}
+                </button>
+
+                <textarea
+                  ref={inputRef}
+                  value={inputValue}
+                  onChange={(e) => setInputValue(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder={isGeneratingImage ? t('wait_for_generation') : (isGenerateMode ? t('placeholder_generate') : t('placeholder_inspiration'))}
+                  rows={2}
+                  disabled={isSending || isGeneratingImage}
+                  className="flex-1 resize-none rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20 disabled:opacity-50 dark:border-gray-600 dark:bg-gray-900 dark:text-white"
+                />
+                <button
+                  onClick={handleSendMessage}
+                  disabled={!inputValue.trim() || isSending || isGeneratingImage}
+                  className="flex size-12 items-center justify-center rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+                >
+                  {isSending ? (
+                    <Loader2 className="size-5 animate-spin" />
+                  ) : (
+                    <Send className="size-5" />
+                  )}
+                </button>
+              </div>
+              <div className="mt-2 flex items-center justify-between">
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  {t('hint')}
+                </p>
+                {isGenerateMode && (
+                  <p className="text-xs text-yellow-600 dark:text-yellow-400">
+                    ⚡ {t('credit_warning')}
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Image Gallery - Takes 1/3 on large screens */}
+        <div className="lg:col-span-1">
+          {/* Current Session Generated Images */}
+          <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-lg dark:border-gray-700 dark:bg-gray-800">
+            <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-gray-800 dark:text-white">
+              <ImageIcon className="size-5 text-purple-500" />
+              {t('generated_images')}
+            </h2>
+
+            {generatedImages.length === 0 ? (
+              <div className="flex h-64 items-center justify-center rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600">
+                <p className="text-center text-sm text-gray-500 dark:text-gray-400">
+                  {t('no_images_yet')}
+                </p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 gap-3">
+                {generatedImages.map((image, index) => (
+                  <div
+                    key={index}
+                    className="group relative aspect-square overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700"
+                  >
+                    <img
+                      src={image.image_url}
+                      alt={`Generated ${index + 1}`}
+                      className="size-full object-cover transition-transform group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 transition-opacity group-hover:opacity-100">
+                      <button 
+                        onClick={() => {
+                          if (!productSlug || !sizeSlug || !frameSlug) {
+                            alert(t('please_select_product'));
+                            return;
+                          }
+                          router.push(
+                            `/design/preview?generationId=${image.generation_id}&product=${productSlug}&size=${sizeSlug}&frame=${frameSlug}`
+                          );
+                        }}
+                        className="absolute bottom-2 right-2 rounded-lg bg-white px-3 py-1 text-xs font-medium text-gray-800 transition-colors hover:bg-gray-100"
+                      >
+                        {t('select')}
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* History Images Section - Full Width Below */}
+      {historyImages.length > 0 && (
+        <div className="mt-6 rounded-xl border border-gray-200 bg-white p-6 shadow-lg dark:border-gray-700 dark:bg-gray-800">
+          <h2 className="mb-6 flex items-center gap-2 text-xl font-semibold text-gray-800 dark:text-white">
+            <ImageIcon className="size-6 text-blue-500" />
+            {t('history_images')}
+          </h2>
+
+          {isLoadingHistory ? (
+            <div className="flex h-48 items-center justify-center">
+              <Loader2 className="size-8 animate-spin text-gray-400" />
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+              {historyImages.map((image) => (
+                <div
+                  key={image.id}
+                  className="group relative aspect-square cursor-pointer overflow-hidden rounded-lg border border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-900"
+                  onClick={() => {
+                    setSelectedImageDetail(image);
+                    setIsModalOpen(true);
+                  }}
+                >
+                  <img
+                    src={image.image_url}
+                    alt={image.text_prompt}
+                    className="size-full object-cover transition-transform duration-300 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                    <div className="absolute inset-x-0 bottom-0 p-3">
+                      <p className="mb-2 line-clamp-2 text-xs text-white">
+                        {image.text_prompt}
+                      </p>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedImageDetail(image);
+                          setIsModalOpen(true);
+                        }}
+                        className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-blue-500 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-600"
+                      >
+                        {t('explore')}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Image Detail Modal */}
+      {isModalOpen && selectedImageDetail && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm"
+          onClick={() => setIsModalOpen(false)}
+        >
+          <div
+            className="relative max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-2xl bg-white p-6 shadow-2xl dark:bg-gray-800"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close Button */}
+            <button
+              onClick={() => setIsModalOpen(false)}
+              className="absolute right-4 top-4 rounded-full bg-gray-100 p-2 text-gray-500 transition-colors hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-gray-600"
+            >
+              <X className="size-5" />
+            </button>
+
+            {/* Image */}
+            <div className="mb-6">
+              <img
+                src={selectedImageDetail.image_url}
+                alt={selectedImageDetail.text_prompt}
+                className="w-full rounded-xl"
+              />
+            </div>
+
+            {/* Details */}
+            <div className="space-y-4">
+              {/* Creation Date */}
+              <div>
+                <h3 className="mb-1 text-sm font-medium text-gray-500 dark:text-gray-400">
+                  {t('creation_date')}
+                </h3>
+                <p className="text-base text-gray-900 dark:text-white">
+                  {new Date(selectedImageDetail.created_at).toLocaleDateString('tr-TR', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  })}
+                </p>
+              </div>
+
+              {/* Prompt */}
+              <div>
+                <h3 className="mb-1 text-sm font-medium text-gray-500 dark:text-gray-400">
+                  {t('your_prompt')}
+                </h3>
+                <p className="text-base text-gray-900 dark:text-white">
+                  {selectedImageDetail.text_prompt}
+                </p>
+              </div>
+
+              {/* Select Button */}
+              <button
+                onClick={() => {
+                  // Navigate to preview page with all necessary params
+                  router.push(`/design/preview?generationId=${selectedImageDetail.generation_id}&product=${productSlug}&size=${sizeSlug}&frame=${frameSlug}`);
+                }}
+                className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-500 px-6 py-3 text-base font-medium text-white transition-colors hover:bg-blue-600"
+              >
+                <Check className="size-5" />
+                {t('select')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
