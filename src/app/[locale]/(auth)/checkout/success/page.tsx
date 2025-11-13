@@ -1,6 +1,6 @@
-import { getTranslations } from 'next-intl/server';
+import { CheckCircle, Home, Package, Truck } from 'lucide-react';
 import Link from 'next/link';
-import { CheckCircle, Package, Truck, Home } from 'lucide-react';
+import { getTranslations } from 'next-intl/server';
 
 // Force dynamic rendering
 export const dynamic = 'force-dynamic';

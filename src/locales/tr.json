@@ -294,6 +294,10 @@
     "try_again": "Tekrar Dene",
     "back_to_home": "Ana Sayfaya Dön",
     "contact_support": "Destek ile İletişime Geç"
+  },
+  "Orders": {
+    "meta_title": "Siparişlerim",
+    "meta_description": "Siparişlerinizi görüntüleyin ve takip edin"
   }
 }
 

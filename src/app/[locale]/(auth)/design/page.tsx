@@ -1,6 +1,6 @@
-import { Navbar } from '@/templates/Navbar';
-import { Footer } from '@/templates/Footer';
 import { ChatInterface } from '@/features/design/ChatInterface';
+import { Footer } from '@/templates/Footer';
+import { Navbar } from '@/templates/Navbar';
 
 // Force dynamic rendering
 export const dynamic = 'force-dynamic';
@@ -12,7 +12,7 @@ export default function DesignPage(props: {
   return (
     <>
       <Navbar />
-      <ChatInterface 
+      <ChatInterface
         locale={props.params.locale}
         productSlug={props.searchParams.product}
         sizeSlug={props.searchParams.size}

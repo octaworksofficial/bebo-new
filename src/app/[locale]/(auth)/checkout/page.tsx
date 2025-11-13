@@ -1,4 +1,5 @@
 import { getTranslations } from 'next-intl/server';
+
 import { CheckoutInterface } from '@/features/checkout/CheckoutInterface';
 
 // Force dynamic rendering

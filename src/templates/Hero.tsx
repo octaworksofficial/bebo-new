@@ -1,7 +1,11 @@
+'use client';
+
 import { TwitterLogoIcon } from '@radix-ui/react-icons';
+import { Loader2, Sparkles } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { Sparkles } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 import { badgeVariants } from '@/components/ui/badgeVariants';
 import { buttonVariants } from '@/components/ui/buttonVariants';
@@ -10,6 +14,14 @@ import { Section } from '@/features/landing/Section';
 
 export const Hero = () => {
   const t = useTranslations('Hero');
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleStartDesigning = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    setIsLoading(true);
+    router.push('/products');
+  };
 
   return (
     <Section className="py-36">
@@ -39,8 +51,16 @@ export const Hero = () => {
             <Link
               className={buttonVariants({ size: 'lg' })}
               href="/products"
+              onClick={handleStartDesigning}
             >
-              {t('primary_button')}
+              {isLoading
+                ? (
+                    <>
+                      <Loader2 className="mr-2 size-5 animate-spin" />
+                      Yükleniyor...
+                    </>
+                  )
+                : t('primary_button')}
             </Link>
 
             <a

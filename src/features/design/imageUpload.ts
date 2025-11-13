@@ -30,7 +30,7 @@ export async function uploadImageToN8n(imageFile: File): Promise<{
 
     const responseText = await response.text();
     console.log('Upload response:', responseText);
-    
+
     // Try to parse as JSON
     let data: UploadImageResponse;
     try {

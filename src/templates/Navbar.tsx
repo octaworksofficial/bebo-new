@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
+import { usePathname, useRouter } from 'next/navigation';
 import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
@@ -13,14 +14,32 @@ import { Logo } from './Logo';
 
 export const Navbar = () => {
   const t = useTranslations('Navbar');
+  const pathname = usePathname();
+  const router = useRouter();
 
   const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ 
-        behavior: 'smooth',
-        block: 'start'
-      });
+    // Eğer ana sayfada değilsek, önce ana sayfaya git
+    if (pathname !== '/' && !pathname.endsWith('/')) {
+      router.push(`/#${sectionId}`);
+      // Sayfa yüklendikten sonra scroll yap
+      setTimeout(() => {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          element.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+          });
+        }
+      }, 500);
+    } else {
+      // Ana sayfadaysak direkt scroll yap
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+      }
     }
   };
 
@@ -50,14 +69,37 @@ export const Navbar = () => {
             {/* Giriş yapmış kullanıcılar için */}
             <SignedIn>
               <li className="ml-3" data-fade>
-                <UserButton 
+                <UserButton
                   afterSignOutUrl="/"
                   appearance={{
                     elements: {
-                      avatarBox: 'size-9'
-                    }
+                      avatarBox: 'size-9',
+                    },
                   }}
-                />
+                >
+                  <UserButton.MenuItems>
+                    <UserButton.Link
+                      label="Geçmiş Siparişlerim"
+                      labelIcon={(
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth={1.5}
+                          stroke="currentColor"
+                          className="size-4"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
+                          />
+                        </svg>
+                      )}
+                      href="/dashboard/orders"
+                    />
+                  </UserButton.MenuItems>
+                </UserButton>
               </li>
             </SignedIn>
           </>

@@ -1,8 +1,9 @@
 'use server';
 
 import { eq } from 'drizzle-orm';
+
 import { db } from '@/libs/DB';
-import { productSchema, productSizeSchema, productFrameSchema } from '@/models/Schema';
+import { productFrameSchema, productSchema, productSizeSchema } from '@/models/Schema';
 
 export async function getProducts(locale: string = 'tr') {
   const products = await db

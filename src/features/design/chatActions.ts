@@ -1,6 +1,7 @@
 'use server';
 
 import { currentUser } from '@clerk/nextjs/server';
+
 import { getProductIdsFromSlugs } from '@/features/products/productActions';
 
 export type ChatRequest = {
@@ -40,7 +41,7 @@ export async function sendChatMessage(params: {
   try {
     // Get authenticated user
     const user = await currentUser();
-    
+
     if (!user) {
       return {
         success: false,
@@ -85,9 +86,9 @@ export async function sendChatMessage(params: {
       'text-prompt': requestBody.textPrompt,
       'ai-model': requestBody.aiModel,
       'is-generate-mode': params.isGenerateMode,
-      resolution: requestBody.resolution,
-      quality: requestBody.quality,
-      style: requestBody.style,
+      'resolution': requestBody.resolution,
+      'quality': requestBody.quality,
+      'style': requestBody.style,
       'product-slug': requestBody.productSlug,
       'size-slug': requestBody.sizeSlug,
       'frame-slug': requestBody.frameSlug,
@@ -148,12 +149,12 @@ export type GeneratedImageResponse = {
 export async function getGeneratedImage(generationId: string) {
   try {
     // Convert generation_id to number
-    const generationIdNumber = parseInt(generationId, 10);
-    
+    const generationIdNumber = Number.parseInt(generationId, 10);
+
     if (isNaN(generationIdNumber)) {
-      throw new Error('Invalid generation_id format');
+      throw new TypeError('Invalid generation_id format');
     }
-    
+
     const n8nUrl = `${process.env.N8N_WEBHOOK_URL || 'https://n8n-production-14b9.up.railway.app'}${process.env.N8N_WEBHOOK_GET_GENERATED_IMAGE || '/webhook/getGeneratedImage'}`;
     const response = await fetch(n8nUrl, {
       method: 'POST',
@@ -170,7 +171,7 @@ export async function getGeneratedImage(generationId: string) {
     }
 
     const dataArray: GeneratedImageResponse[] = await response.json();
-    
+
     // Return first item from array (or null if array is empty)
     const data = dataArray.length > 0 ? dataArray[0] : null;
 
@@ -191,7 +192,7 @@ export async function getUserGeneratedImages() {
   try {
     // Get authenticated user
     const user = await currentUser();
-    
+
     if (!user) {
       return {
         success: false,
@@ -206,7 +207,7 @@ export async function getUserGeneratedImages() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        'user_id': user.id,
+        user_id: user.id,
       }),
     });
 

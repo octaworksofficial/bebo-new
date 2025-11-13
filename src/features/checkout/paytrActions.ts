@@ -1,11 +1,13 @@
 'use server';
 
+import { createHmac } from 'node:crypto';
+
 import { auth } from '@clerk/nextjs/server';
-import { createHmac } from 'crypto';
+import { eq } from 'drizzle-orm';
+
 import { db } from '@/libs/DB';
 import { Env } from '@/libs/Env';
 import { orderSchema } from '@/models/Schema';
-import { eq } from 'drizzle-orm';
 
 export type PayTRTokenRequest = {
   generationId: string;
@@ -51,12 +53,12 @@ export async function getPayTRToken(
     const merchantSalt = Env.PAYTR_MERCHANT_SALT;
 
     // App URL'ler - Production'da Railway'den gelecek
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.RAILWAY_PUBLIC_DOMAIN 
-      ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` 
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.RAILWAY_PUBLIC_DOMAIN
+      ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}`
       : 'http://localhost:3001';
-    
+
     console.log('App URL for PayTR:', appUrl);
-    
+
     const merchantOkUrl = `${appUrl}/checkout/success?merchant_oid=${merchantOid}`;
     const merchantFailUrl = `${appUrl}/checkout/failed?merchant_oid=${merchantOid}`;
 
@@ -76,7 +78,7 @@ export async function getPayTRToken(
       merchantId,
       merchantOid,
       paymentAmount: request.paymentAmount,
-      hashStr: hashStr.substring(0, 50) + '...', // İlk 50 karakter
+      hashStr: `${hashStr.substring(0, 50)}...`, // İlk 50 karakter
     });
 
     // PayTR API'ye gönderilecek veriler
@@ -211,7 +213,7 @@ export async function validatePayTRCallback(payload: {
         .update(orderSchema)
         .set({
           paymentStatus: 'success',
-          totalAmount: parseInt(payload.total_amount, 10),
+          totalAmount: Number.parseInt(payload.total_amount, 10),
           paymentType: payload.payment_type,
           paidAt: new Date(),
           shippingStatus: 'preparing',

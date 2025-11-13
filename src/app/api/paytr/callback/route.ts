@@ -1,4 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
+
 import { validatePayTRCallback } from '@/features/checkout/paytrActions';
 
 // Force dynamic rendering for this API route
@@ -7,7 +9,7 @@ export const runtime = 'nodejs';
 
 /**
  * PayTR Bildirim URL (Webhook) Endpoint
- * 
+ *
  * PayTR'dan ödeme sonucu bildirimi alır.
  * PayTR Paneli > Destek & Kurulum > Ayarlar > Bildirim URL'de tanımlanmalı:
  * https://yourdomain.com/api/paytr/callback
@@ -16,7 +18,7 @@ export async function POST(request: NextRequest) {
   try {
     // PayTR'dan gelen POST verilerini al
     const formData = await request.formData();
-    
+
     const payload = {
       merchant_oid: formData.get('merchant_oid') as string,
       status: formData.get('status') as string,

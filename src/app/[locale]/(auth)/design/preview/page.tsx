@@ -1,16 +1,16 @@
-import { Navbar } from '@/templates/Navbar';
-import { Footer } from '@/templates/Footer';
 import { PreviewInterface } from '@/features/design/PreviewInterface';
+import { Footer } from '@/templates/Footer';
+import { Navbar } from '@/templates/Navbar';
 
 // Force dynamic rendering
 export const dynamic = 'force-dynamic';
 
 export default function PreviewPage(props: {
   params: { locale: string };
-  searchParams: { 
+  searchParams: {
     generationId?: string;
-    product?: string; 
-    size?: string; 
+    product?: string;
+    size?: string;
     frame?: string;
   };
 }) {
@@ -35,7 +35,7 @@ export default function PreviewPage(props: {
   return (
     <>
       <Navbar />
-      <PreviewInterface 
+      <PreviewInterface
         locale={props.params.locale}
         generationId={generationId}
         productSlug={product}

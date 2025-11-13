@@ -294,5 +294,9 @@
     "try_again": "Try Again",
     "back_to_home": "Back to Home",
     "contact_support": "Contact Support"
+  },
+  "Orders": {
+    "meta_title": "My Orders",
+    "meta_description": "View and track your orders"
   }
 }
