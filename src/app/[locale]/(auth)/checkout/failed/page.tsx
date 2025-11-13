@@ -2,6 +2,9 @@ import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
 import { XCircle } from 'lucide-react';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 export async function generateMetadata(props: { params: Promise<{ locale: string }> }) {
   const { locale } = await props.params;
   const t = await getTranslations({

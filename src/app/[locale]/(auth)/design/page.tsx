@@ -2,6 +2,9 @@ import { Navbar } from '@/templates/Navbar';
 import { Footer } from '@/templates/Footer';
 import { ChatInterface } from '@/features/design/ChatInterface';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 export default function DesignPage(props: {
   params: { locale: string };
   searchParams: { product?: string; size?: string; frame?: string };

@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { validatePayTRCallback } from '@/features/checkout/paytrActions';
 
+// Force dynamic rendering for this API route
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 /**
  * PayTR Bildirim URL (Webhook) Endpoint
  * 

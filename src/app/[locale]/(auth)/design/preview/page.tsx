@@ -2,6 +2,9 @@ import { Navbar } from '@/templates/Navbar';
 import { Footer } from '@/templates/Footer';
 import { PreviewInterface } from '@/features/design/PreviewInterface';
 
+// Force dynamic rendering
+export const dynamic = 'force-dynamic';
+
 export default function PreviewPage(props: {
   params: { locale: string };
   searchParams: { 
