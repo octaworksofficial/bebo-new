@@ -50,8 +50,13 @@ export async function getPayTRToken(
     const merchantKey = Env.PAYTR_MERCHANT_KEY;
     const merchantSalt = Env.PAYTR_MERCHANT_SALT;
 
-    // App URL'ler
-    const appUrl = Env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    // App URL'ler - Production'da Railway'den gelecek
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.RAILWAY_PUBLIC_DOMAIN 
+      ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` 
+      : 'http://localhost:3001';
+    
+    console.log('App URL for PayTR:', appUrl);
+    
     const merchantOkUrl = `${appUrl}/checkout/success?merchant_oid=${merchantOid}`;
     const merchantFailUrl = `${appUrl}/checkout/failed?merchant_oid=${merchantOid}`;
 

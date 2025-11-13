@@ -89,17 +89,29 @@ export function CheckoutInterface({ }: CheckoutInterfaceProps) {
   // PayTR iframe'den gelen mesajları dinle
   useEffect(() => {
     const handlePayTRMessage = (event: MessageEvent) => {
+      // Tüm mesajları logla
+      console.log('📨 Message received:', {
+        origin: event.origin,
+        data: event.data,
+        dataType: typeof event.data,
+      });
+
       // PayTR'den gelen mesajları kontrol et
       if (event.origin === 'https://www.paytr.com') {
-        console.log('PayTR Message:', event.data);
+        console.log('✅ PayTR confirmed message:', event.data);
         
         // Ödeme başarılı
         if (event.data === 'success' || event.data?.status === 'success') {
+          console.log('🎉 Payment SUCCESS - Redirecting...');
           router.push('/checkout/success');
         }
         // Ödeme başarısız
         else if (event.data === 'failed' || event.data?.status === 'failed') {
+          console.log('❌ Payment FAILED - Redirecting...');
           router.push('/checkout/failed');
+        }
+        else {
+          console.log('⚠️ Unknown PayTR message format:', event.data);
         }
       }
     };
