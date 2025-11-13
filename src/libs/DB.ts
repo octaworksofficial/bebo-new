@@ -17,7 +17,12 @@ let drizzle;
 
 // Need a database for production? Check out https://www.prisma.io/?via=saasboilerplatesrc
 // Tested and compatible with Next.js Boilerplate
-if (process.env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD && Env.DATABASE_URL) {
+if (process.env.NEXT_PHASE === PHASE_PRODUCTION_BUILD) {
+  // During build time, don't connect to database at all
+  // This prevents build-time database queries
+  drizzle = null as any;
+} else if (Env.DATABASE_URL) {
+  // Production/Development with real PostgreSQL
   client = new Client({
     connectionString: Env.DATABASE_URL,
   });
@@ -28,6 +33,7 @@ if (process.env.NEXT_PHASE !== PHASE_PRODUCTION_BUILD && Env.DATABASE_URL) {
     migrationsFolder: path.join(process.cwd(), 'migrations'),
   });
 } else {
+  // Local development with PGlite (in-memory database)
   // Stores the db connection in the global scope to prevent multiple instances due to hot reloading with Next.js
   const global = globalThis as unknown as { client: PGlite; drizzle: PgliteDatabase<typeof schema> };
 
