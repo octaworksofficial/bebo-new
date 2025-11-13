@@ -2,9 +2,9 @@
 
 import { TwitterLogoIcon } from '@radix-ui/react-icons';
 import { Loader2, Sparkles } from 'lucide-react';
-import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 import { badgeVariants } from '@/components/ui/badgeVariants';
@@ -24,7 +24,7 @@ export const Hero = () => {
   };
 
   return (
-    <Section className="py-36">
+    <Section className="bg-gray-900 py-36 dark:bg-gray-950">
       <CenteredHero
         banner={(
           <a

@@ -1,14 +1,16 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
-import { useTranslations } from 'next-intl';
 import { useUser } from '@clerk/nextjs';
+import { Check, Image as ImageIcon, Loader2, Send, ShoppingCart, Sparkles, Upload, X } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useEffect, useRef, useState } from 'react';
+
 import { useRouter } from '@/libs/i18nNavigation';
-import { Send, Sparkles, Image as ImageIcon, Upload, X, Loader2, Check, ShoppingCart } from 'lucide-react';
-import { sendChatMessage, getGeneratedImage, getUserGeneratedImages, type GeneratedImageResponse } from './chatActions';
-import { uploadImageToN8n } from './imageUpload';
+
+import { type GeneratedImageResponse, getGeneratedImage, getUserGeneratedImages, sendChatMessage } from './chatActions';
 import { generateChatSessionId } from './chatUtils';
-import { getUserArtCredits, decrementArtCredits } from './creditsActions';
+import { decrementArtCredits, getUserArtCredits } from './creditsActions';
+import { uploadImageToN8n } from './imageUpload';
 
 type Message = {
   id: string;
@@ -26,10 +28,10 @@ type ChatInterfaceProps = {
   frameSlug?: string;
 };
 
-export function ChatInterface({ 
-  productSlug, 
-  sizeSlug, 
-  frameSlug 
+export function ChatInterface({
+  productSlug,
+  sizeSlug,
+  frameSlug,
 }: ChatInterfaceProps) {
   const t = useTranslations('Design');
   const { user } = useUser();
@@ -42,8 +44,8 @@ export function ChatInterface({
   const [isUploading, setIsUploading] = useState(false);
   const [isSending, setIsSending] = useState(false);
   const [isGeneratingImage, setIsGeneratingImage] = useState(false);
-  const [chatSessionId] = useState(() => 
-    generateChatSessionId(user?.id || 'anonymous', productSlug)
+  const [chatSessionId] = useState(() =>
+    generateChatSessionId(user?.id || 'anonymous', productSlug),
   );
   const [historyImages, setHistoryImages] = useState<GeneratedImageResponse[]>([]);
   const [isLoadingHistory, setIsLoadingHistory] = useState(true);
@@ -64,8 +66,10 @@ export function ChatInterface({
   // Load user's art credits
   useEffect(() => {
     async function loadCredits() {
-      if (!user) return;
-      
+      if (!user) {
+        return;
+      }
+
       try {
         const credits = await getUserArtCredits();
         setArtCredits(credits);
@@ -73,27 +77,29 @@ export function ChatInterface({
         console.error('Failed to load credits:', error);
       }
     }
-    
+
     loadCredits();
   }, [user]);
 
   // Load user's history images
   useEffect(() => {
     async function loadHistoryImages() {
-      if (!user) return;
-      
+      if (!user) {
+        return;
+      }
+
       setIsLoadingHistory(true);
       const result = await getUserGeneratedImages();
-      
+
       if (result.success && result.data) {
         // Filter images that have image_url (completed generations)
         const completedImages = result.data.filter(img => img.image_url);
         setHistoryImages(completedImages);
       }
-      
+
       setIsLoadingHistory(false);
     }
-    
+
     loadHistoryImages();
   }, [user]);
 
@@ -111,7 +117,9 @@ export function ChatInterface({
   }, []);
 
   const handleSendMessage = async () => {
-    if (!inputValue.trim() || !user) return;
+    if (!inputValue.trim() || !user) {
+      return;
+    }
 
     // Check credits only for image generation mode
     if (isGenerateMode && artCredits <= 0) {
@@ -176,7 +184,7 @@ export function ChatInterface({
         }
 
         setIsGeneratingImage(true); // Disable input during image generation
-        
+
         // Show motivational messages while waiting (30 seconds total)
         const motivationalMessages: string[] = [
           t('creating_masterpiece'),
@@ -206,8 +214,8 @@ export function ChatInterface({
             prev.map(msg =>
               msg.id === motivationMessageId
                 ? { ...msg, content: motivationalMessages[currentMessageIndex]! }
-                : msg
-            )
+                : msg,
+            ),
           );
         }, 5000);
 
@@ -215,7 +223,7 @@ export function ChatInterface({
         const pollForImage = async (generationId: string, attempts = 0, maxAttempts = 20) => {
           const pollInterval = 5000; // Check every 5 seconds
           // Max wait time: 20 attempts × 5s = 100 seconds max
-          
+
           try {
             const imageResult = await getGeneratedImage(generationId);
 
@@ -223,7 +231,7 @@ export function ChatInterface({
             if (imageResult.success && imageResult.data && imageResult.data.image_url) {
               // Image is ready!
               clearInterval(messageInterval);
-              
+
               // Remove motivational message
               setMessages(prev => prev.filter(msg => msg.id !== motivationMessageId));
 
@@ -247,7 +255,7 @@ export function ChatInterface({
               // Max attempts reached
               clearInterval(messageInterval);
               setMessages(prev => prev.filter(msg => msg.id !== motivationMessageId));
-              
+
               const timeoutMessage: Message = {
                 id: `${Date.now()}-timeout`,
                 role: 'assistant',
@@ -261,7 +269,7 @@ export function ChatInterface({
             console.error('Error fetching generated image:', error);
             clearInterval(messageInterval);
             setMessages(prev => prev.filter(msg => msg.id !== motivationMessageId));
-            
+
             const errorMsg: Message = {
               id: `${Date.now()}-image-error`,
               role: 'assistant',
@@ -294,7 +302,9 @@ export function ChatInterface({
 
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (!file) return;
+    if (!file) {
+      return;
+    }
 
     // Check file type
     if (!file.type.startsWith('image/')) {
@@ -313,9 +323,9 @@ export function ChatInterface({
     try {
       // Upload to n8n webhook
       const uploadResult = await uploadImageToN8n(file);
-      
+
       console.log('Upload result:', uploadResult); // Debug log
-      
+
       if (uploadResult.success && uploadResult.imageUrl) {
         console.log('Setting uploaded image URL:', uploadResult.imageUrl);
         setUploadedImageUrl(uploadResult.imageUrl);
@@ -353,7 +363,10 @@ export function ChatInterface({
           {/* Product Info */}
           {productSlug && (
             <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
-              <span className="font-medium">{t('selected_product')}:</span>
+              <span className="font-medium">
+                {t('selected_product')}
+                :
+              </span>
               <span className="rounded-full bg-purple-100 px-3 py-1 dark:bg-purple-900">
                 {productSlug}
               </span>
@@ -398,21 +411,23 @@ export function ChatInterface({
             <button
               onClick={() => setIsGenerateMode(!isGenerateMode)}
               className={`relative inline-flex h-8 w-16 items-center rounded-full transition-colors ${
-                isGenerateMode 
-                  ? 'bg-gradient-to-r from-purple-500 to-pink-500' 
+                isGenerateMode
+                  ? 'bg-gradient-to-r from-purple-500 to-pink-500'
                   : 'bg-gray-300 dark:bg-gray-600'
               }`}
             >
               <span
-                className={`inline-block size-6 transform rounded-full bg-white shadow-lg transition-transform ${
+                className={`inline-block size-6 rounded-full bg-white shadow-lg transition-transform ${
                   isGenerateMode ? 'translate-x-9' : 'translate-x-1'
                 }`}
               >
-                {isGenerateMode ? (
-                  <ImageIcon className="size-6 p-1 text-purple-500" />
-                ) : (
-                  <Sparkles className="size-6 p-1 text-gray-500" />
-                )}
+                {isGenerateMode
+                  ? (
+                      <ImageIcon className="size-6 p-1 text-purple-500" />
+                    )
+                  : (
+                      <Sparkles className="size-6 p-1 text-gray-500" />
+                    )}
               </span>
             </button>
           </div>
@@ -425,11 +440,11 @@ export function ChatInterface({
         <div className="lg:col-span-2">
           <div className="flex h-[600px] flex-col rounded-xl border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-800">
             {/* Messages */}
-            <div 
+            <div
               ref={messagesContainerRef}
               className="flex-1 space-y-4 overflow-y-auto p-6"
             >
-              {messages.map((message) => (
+              {messages.map(message => (
                 <div
                   key={message.id}
                   className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
@@ -507,17 +522,19 @@ export function ChatInterface({
                   className="flex size-12 items-center justify-center rounded-xl border border-gray-300 bg-white text-gray-600 transition-colors hover:bg-gray-50 disabled:opacity-50 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800"
                   title="Görsel yükle"
                 >
-                  {isUploading ? (
-                    <Loader2 className="size-5 animate-spin" />
-                  ) : (
-                    <Upload className="size-5" />
-                  )}
+                  {isUploading
+                    ? (
+                        <Loader2 className="size-5 animate-spin" />
+                      )
+                    : (
+                        <Upload className="size-5" />
+                      )}
                 </button>
 
                 <textarea
                   ref={inputRef}
                   value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
+                  onChange={e => setInputValue(e.target.value)}
                   onKeyDown={handleKeyDown}
                   placeholder={isGeneratingImage ? t('wait_for_generation') : (isGenerateMode ? t('placeholder_generate') : t('placeholder_inspiration'))}
                   rows={2}
@@ -529,11 +546,13 @@ export function ChatInterface({
                   disabled={!inputValue.trim() || isSending || isGeneratingImage}
                   className="flex size-12 items-center justify-center rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 text-white transition-opacity hover:opacity-90 disabled:opacity-50"
                 >
-                  {isSending ? (
-                    <Loader2 className="size-5 animate-spin" />
-                  ) : (
-                    <Send className="size-5" />
-                  )}
+                  {isSending
+                    ? (
+                        <Loader2 className="size-5 animate-spin" />
+                      )
+                    : (
+                        <Send className="size-5" />
+                      )}
                 </button>
               </div>
               <div className="mt-2 flex items-center justify-between">
@@ -542,7 +561,9 @@ export function ChatInterface({
                 </p>
                 {isGenerateMode && (
                   <p className="text-xs text-yellow-600 dark:text-yellow-400">
-                    ⚡ {t('credit_warning')}
+                    ⚡
+                    {' '}
+                    {t('credit_warning')}
                   </p>
                 )}
               </div>
@@ -559,44 +580,46 @@ export function ChatInterface({
               {t('generated_images')}
             </h2>
 
-            {generatedImages.length === 0 ? (
-              <div className="flex h-64 items-center justify-center rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600">
-                <p className="text-center text-sm text-gray-500 dark:text-gray-400">
-                  {t('no_images_yet')}
-                </p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-2 gap-3">
-                {generatedImages.map((image, index) => (
-                  <div
-                    key={index}
-                    className="group relative aspect-square overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700"
-                  >
-                    <img
-                      src={image.image_url}
-                      alt={`Generated ${index + 1}`}
-                      className="size-full object-cover transition-transform group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 transition-opacity group-hover:opacity-100">
-                      <button 
-                        onClick={() => {
-                          if (!productSlug || !sizeSlug || !frameSlug) {
-                            alert(t('please_select_product'));
-                            return;
-                          }
-                          router.push(
-                            `/design/preview?generationId=${image.generation_id}&product=${productSlug}&size=${sizeSlug}&frame=${frameSlug}`
-                          );
-                        }}
-                        className="absolute bottom-2 right-2 rounded-lg bg-white px-3 py-1 text-xs font-medium text-gray-800 transition-colors hover:bg-gray-100"
-                      >
-                        {t('select')}
-                      </button>
-                    </div>
+            {generatedImages.length === 0
+              ? (
+                  <div className="flex h-64 items-center justify-center rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600">
+                    <p className="text-center text-sm text-gray-500 dark:text-gray-400">
+                      {t('no_images_yet')}
+                    </p>
                   </div>
-                ))}
-              </div>
-            )}
+                )
+              : (
+                  <div className="grid grid-cols-2 gap-3">
+                    {generatedImages.map((image, index) => (
+                      <div
+                        key={index}
+                        className="group relative aspect-square overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700"
+                      >
+                        <img
+                          src={image.image_url}
+                          alt={`Generated ${index + 1}`}
+                          className="size-full object-cover transition-transform group-hover:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 transition-opacity group-hover:opacity-100">
+                          <button
+                            onClick={() => {
+                              if (!productSlug || !sizeSlug || !frameSlug) {
+                                alert(t('please_select_product'));
+                                return;
+                              }
+                              router.push(
+                                `/design/preview?generationId=${image.generation_id}&product=${productSlug}&size=${sizeSlug}&frame=${frameSlug}`,
+                              );
+                            }}
+                            className="absolute bottom-2 right-2 rounded-lg bg-white px-3 py-1 text-xs font-medium text-gray-800 transition-colors hover:bg-gray-100"
+                          >
+                            {t('select')}
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
           </div>
         </div>
       </div>
@@ -609,47 +632,49 @@ export function ChatInterface({
             {t('history_images')}
           </h2>
 
-          {isLoadingHistory ? (
-            <div className="flex h-48 items-center justify-center">
-              <Loader2 className="size-8 animate-spin text-gray-400" />
-            </div>
-          ) : (
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
-              {historyImages.map((image) => (
-                <div
-                  key={image.id}
-                  className="group relative aspect-square cursor-pointer overflow-hidden rounded-lg border border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-900"
-                  onClick={() => {
-                    setSelectedImageDetail(image);
-                    setIsModalOpen(true);
-                  }}
-                >
-                  <img
-                    src={image.image_url}
-                    alt={image.text_prompt}
-                    className="size-full object-cover transition-transform duration-300 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                    <div className="absolute inset-x-0 bottom-0 p-3">
-                      <p className="mb-2 line-clamp-2 text-xs text-white">
-                        {image.text_prompt}
-                      </p>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setSelectedImageDetail(image);
-                          setIsModalOpen(true);
-                        }}
-                        className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-blue-500 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-600"
-                      >
-                        {t('explore')}
-                      </button>
-                    </div>
-                  </div>
+          {isLoadingHistory
+            ? (
+                <div className="flex h-48 items-center justify-center">
+                  <Loader2 className="size-8 animate-spin text-gray-400" />
                 </div>
-              ))}
-            </div>
-          )}
+              )
+            : (
+                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+                  {historyImages.map(image => (
+                    <div
+                      key={image.id}
+                      className="group relative aspect-square cursor-pointer overflow-hidden rounded-lg border border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-900"
+                      onClick={() => {
+                        setSelectedImageDetail(image);
+                        setIsModalOpen(true);
+                      }}
+                    >
+                      <img
+                        src={image.image_url}
+                        alt={image.text_prompt}
+                        className="size-full object-cover transition-transform duration-300 group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                        <div className="absolute inset-x-0 bottom-0 p-3">
+                          <p className="mb-2 line-clamp-2 text-xs text-white">
+                            {image.text_prompt}
+                          </p>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedImageDetail(image);
+                              setIsModalOpen(true);
+                            }}
+                            className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-blue-500 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-600"
+                          >
+                            {t('explore')}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
         </div>
       )}
 
@@ -661,7 +686,7 @@ export function ChatInterface({
         >
           <div
             className="relative max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-2xl bg-white p-6 shadow-2xl dark:bg-gray-800"
-            onClick={(e) => e.stopPropagation()}
+            onClick={e => e.stopPropagation()}
           >
             {/* Close Button */}
             <button
@@ -693,7 +718,7 @@ export function ChatInterface({
                     month: 'long',
                     day: 'numeric',
                     hour: '2-digit',
-                    minute: '2-digit'
+                    minute: '2-digit',
                   })}
                 </p>
               </div>

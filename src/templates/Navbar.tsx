@@ -1,9 +1,9 @@
 'use client';
 
-import Link from 'next/link';
-import { useTranslations } from 'next-intl';
-import { usePathname, useRouter } from 'next/navigation';
 import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 import { buttonVariants } from '@/components/ui/buttonVariants';
@@ -53,7 +53,7 @@ export const Navbar = () => {
             <li data-fade>
               <LocaleSwitcher />
             </li>
-            
+
             {/* Giriş yapmamış kullanıcılar için */}
             <SignedOut>
               <li className="ml-1 mr-2.5" data-fade>
@@ -105,6 +105,15 @@ export const Navbar = () => {
           </>
         )}
       >
+        <li>
+          <Link
+            href="/products"
+            className="cursor-pointer transition-colors hover:text-foreground/80"
+          >
+            {t('products')}
+          </Link>
+        </li>
+
         <li>
           <button
             type="button"

@@ -1,7 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 
-import { OrdersList } from '@/features/orders/OrdersList';
 import { getUserOrders } from '@/features/orders/ordersActions';
+import { OrdersList } from '@/features/orders/OrdersList';
 
 export async function generateMetadata(props: { params: { locale: string } }) {
   const t = await getTranslations({

@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 
@@ -9,6 +11,17 @@ import { Logo } from './Logo';
 
 export const Footer = () => {
   const t = useTranslations('Footer');
+  const tNavbar = useTranslations('Navbar');
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }
+  };
 
   return (
     <Section className="pb-16 pt-0">
@@ -86,23 +99,55 @@ export const Footer = () => {
         )}
       >
         <li>
-          <Link href="/sign-up">{t('product')}</Link>
+          <Link href="/products">{tNavbar('products')}</Link>
         </li>
 
         <li>
-          <Link href="/sign-up">{t('docs')}</Link>
+          <button
+            type="button"
+            className="cursor-pointer transition-colors hover:text-foreground/80"
+            onClick={() => scrollToSection('ozellikler')}
+          >
+            {tNavbar('product')}
+          </button>
         </li>
 
         <li>
-          <Link href="/sign-up">{t('blog')}</Link>
+          <button
+            type="button"
+            className="cursor-pointer transition-colors hover:text-foreground/80"
+            onClick={() => scrollToSection('nasil-calisir')}
+          >
+            {tNavbar('docs')}
+          </button>
         </li>
 
         <li>
-          <Link href="/sign-up">{t('community')}</Link>
+          <button
+            type="button"
+            className="cursor-pointer transition-colors hover:text-foreground/80"
+            onClick={() => scrollToSection('fiyatlandirma')}
+          >
+            {tNavbar('blog')}
+          </button>
         </li>
 
         <li>
-          <Link href="/sign-up">{t('company')}</Link>
+          <button
+            type="button"
+            className="cursor-pointer transition-colors hover:text-foreground/80"
+            onClick={() => scrollToSection('sss')}
+          >
+            {tNavbar('community')}
+          </button>
+        </li>
+
+        <li>
+          <Link href="/about">{t('community')}</Link>
+        </li>
+
+        <li>
+          <Link href="/sign-up">{tNavbar('company')}</Link>
         </li>
       </CenteredFooter>
     </Section>

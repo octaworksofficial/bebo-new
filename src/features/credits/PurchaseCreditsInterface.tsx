@@ -1,15 +1,15 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-
 import { useUser } from '@clerk/nextjs';
 import { Info, Sparkles } from 'lucide-react';
-import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { useEffect, useRef, useState } from 'react';
 
 import { Footer } from '@/templates/Footer';
 import { Navbar } from '@/templates/Navbar';
 
+import { debugAddCredits } from './debugCreditActions';
 import { createCreditPurchase, type CreditSettings, getCreditSettings } from './purchaseCreditActions';
 
 export function PurchaseCreditsInterface() {
@@ -109,7 +109,6 @@ export function PurchaseCreditsInterface() {
         setIsProcessing(false);
       }
     } catch (error) {
-      // eslint-disable-next-line no-console
       console.error('Payment error:', error);
       // eslint-disable-next-line no-alert
       alert('Bir hata oluştu');
@@ -180,152 +179,181 @@ export function PurchaseCreditsInterface() {
           <p className="text-gray-600 dark:text-gray-400">{t('page_description')}</p>
         </div>
 
-      {/* Exchange Rate Card */}
-      <div className="mb-8 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 p-6 text-white shadow-lg">
-        <div className="text-center">
-          <p className="mb-2 text-sm font-medium opacity-90">
-            {t('current_rate')}
-          </p>
-          <p className="text-4xl font-bold">
-            {t('credit_price', { price: (pricePerCredit / 100).toFixed(2) })}
-          </p>
+        {/* Exchange Rate Card */}
+        <div className="mb-8 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 p-6 text-white shadow-lg">
+          <div className="text-center">
+            <p className="mb-2 text-sm font-medium opacity-90">
+              {t('current_rate')}
+            </p>
+            <p className="text-4xl font-bold">
+              {t('credit_price', { price: (pricePerCredit / 100).toFixed(2) })}
+            </p>
+          </div>
         </div>
-      </div>
 
-      {/* Quick Amount Selection */}
-      <div className="mb-6">
-        <label className="mb-3 block text-sm font-semibold text-gray-700 dark:text-gray-300">
-          {t('quick_amounts')}
-        </label>
-        <div className="grid grid-cols-4 gap-3">
-          {quickAmounts.map(amount => (
-            <button
-              key={amount}
-              type="button"
-              onClick={() => handleQuickSelect(amount)}
-              className={`rounded-lg border-2 p-4 text-center transition-all ${
-                !isCustom && selectedAmount === amount
-                  ? 'border-purple-600 bg-purple-50 dark:border-purple-400 dark:bg-purple-900/20'
-                  : 'border-gray-200 hover:border-purple-300 dark:border-gray-700 dark:hover:border-purple-500'
+        {/* Quick Amount Selection */}
+        <div className="mb-6">
+          <label className="mb-3 block text-sm font-semibold text-gray-700 dark:text-gray-300">
+            {t('quick_amounts')}
+          </label>
+          <div className="grid grid-cols-4 gap-3">
+            {quickAmounts.map(amount => (
+              <button
+                key={amount}
+                type="button"
+                onClick={() => handleQuickSelect(amount)}
+                className={`rounded-lg border-2 p-4 text-center transition-all ${
+                  !isCustom && selectedAmount === amount
+                    ? 'border-purple-600 bg-purple-50 dark:border-purple-400 dark:bg-purple-900/20'
+                    : 'border-gray-200 hover:border-purple-300 dark:border-gray-700 dark:hover:border-purple-500'
+                }`}
+              >
+                <div className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                  {amount}
+                </div>
+                <div className="text-xs text-gray-600 dark:text-gray-400">
+                  Sanat Hakkı
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Custom Amount Input */}
+        <div className="mb-8">
+          <label className="mb-3 block text-sm font-semibold text-gray-700 dark:text-gray-300">
+            {t('custom_amount')}
+          </label>
+          <div className="relative">
+            <input
+              type="number"
+              min={minPurchase}
+              max={maxPurchase}
+              value={customAmount}
+              onChange={e => handleCustomInput(e.target.value)}
+              placeholder={t('amount_placeholder')}
+              className={`w-full rounded-lg border-2 px-4 py-3 transition-all focus:outline-none dark:bg-gray-800 dark:text-gray-100 ${
+                isCustom
+                  ? 'border-purple-600 dark:border-purple-400'
+                  : 'border-gray-200 focus:border-purple-400 dark:border-gray-700'
               }`}
-            >
-              <div className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-                {amount}
-              </div>
-              <div className="text-xs text-gray-600 dark:text-gray-400">
+            />
+            <Sparkles className="absolute right-4 top-1/2 size-5 -translate-y-1/2 text-yellow-500" />
+          </div>
+          <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+            {t('min_purchase', { min: minPurchase })}
+            {' • '}
+            {t('max_purchase', { max: maxPurchase })}
+          </p>
+        </div>
+
+        {/* Total Price Display */}
+        <div className="mb-8 rounded-xl border-2 border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-800">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                {t('amount_label')}
+              </p>
+              <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                {isCustom ? Number.parseInt(customAmount, 10) || 0 : selectedAmount}
+                {' '}
                 Sanat Hakkı
-              </div>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Custom Amount Input */}
-      <div className="mb-8">
-        <label className="mb-3 block text-sm font-semibold text-gray-700 dark:text-gray-300">
-          {t('custom_amount')}
-        </label>
-        <div className="relative">
-          <input
-            type="number"
-            min={minPurchase}
-            max={maxPurchase}
-            value={customAmount}
-            onChange={e => handleCustomInput(e.target.value)}
-            placeholder={t('amount_placeholder')}
-            className={`w-full rounded-lg border-2 px-4 py-3 transition-all focus:outline-none dark:bg-gray-800 dark:text-gray-100 ${
-              isCustom
-                ? 'border-purple-600 dark:border-purple-400'
-                : 'border-gray-200 focus:border-purple-400 dark:border-gray-700'
-            }`}
-          />
-          <Sparkles className="absolute right-4 top-1/2 size-5 -translate-y-1/2 text-yellow-500" />
-        </div>
-        <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-          {t('min_purchase', { min: minPurchase })}
-          {' • '}
-          {t('max_purchase', { max: maxPurchase })}
-        </p>
-      </div>
-
-      {/* Total Price Display */}
-      <div className="mb-8 rounded-xl border-2 border-gray-200 bg-gray-50 p-6 dark:border-gray-700 dark:bg-gray-800">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              {t('amount_label')}
-            </p>
-            <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-              {isCustom ? Number.parseInt(customAmount, 10) || 0 : selectedAmount}
-              {' '}
-              Sanat Hakkı
-            </p>
-          </div>
-          <div className="text-right">
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              {t('total_price')}
-            </p>
-            <p className="text-3xl font-bold text-purple-600 dark:text-purple-400">
-              {totalPrice.toFixed(2)}
-              {' '}
-              TL
-            </p>
+              </p>
+            </div>
+            <div className="text-right">
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                {t('total_price')}
+              </p>
+              <p className="text-3xl font-bold text-purple-600 dark:text-purple-400">
+                {totalPrice.toFixed(2)}
+                {' '}
+                TL
+              </p>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Info Box */}
-      <div className="mb-6 flex items-start gap-3 rounded-lg bg-blue-50 p-4 dark:bg-blue-900/20">
-        <Info className="mt-0.5 size-5 shrink-0 text-blue-600 dark:text-blue-400" />
-        <p className="text-sm text-blue-900 dark:text-blue-200">
-          Satın aldığınız Sanat Hakları, hesabınıza anında yüklenecek ve sınırsız
-          süre geçerli olacaktır. Her görsel oluşturma işlemi 1 Sanat Hakkı
-          tüketir.
+        {/* Info Box */}
+        <div className="mb-6 flex items-start gap-3 rounded-lg bg-blue-50 p-4 dark:bg-blue-900/20">
+          <Info className="mt-0.5 size-5 shrink-0 text-blue-600 dark:text-blue-400" />
+          <p className="text-sm text-blue-900 dark:text-blue-200">
+            Satın aldığınız Sanat Hakları, hesabınıza anında yüklenecek ve sınırsız
+            süre geçerli olacaktır. Her görsel oluşturma işlemi 1 Sanat Hakkı
+            tüketir.
+          </p>
+        </div>
+
+        {/* Purchase Button */}
+        <button
+          type="button"
+          onClick={handlePurchase}
+          disabled={totalPrice === 0 || isProcessing}
+          className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 px-8 py-4 text-lg font-semibold text-white shadow-lg transition-all hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          <Sparkles className="size-6" />
+          {isProcessing ? t('processing') : t('buy_button')}
+        </button>
+
+        {/* DEBUG: Geçici Test Butonu */}
+        <button
+          type="button"
+          onClick={async () => {
+            if (!user?.id) {
+              return;
+            }
+
+            // Krediyi direkt artır (test için)
+            const amount = isCustom ? Number.parseInt(customAmount, 10) || 0 : selectedAmount;
+
+            try {
+              const result = await debugAddCredits(user.id, amount);
+
+              if (result.success) {
+                // Başarılı sayfasına yönlendir
+                router.push('/tr/purchase-credits/success');
+              } else {
+                console.error('Test başarısız oldu:', result.error);
+              }
+            } catch (error) {
+              console.error('Test error:', error);
+            }
+          }}
+          className="mt-2 w-full text-center text-xs text-gray-500 hover:text-gray-600"
+        >
+          🔧 DEBUG: Başarılı Olmuş Gibi Yap (Test)
+        </button>
+
+        {/* Footer Note */}
+        <p className="mt-4 text-center text-xs text-gray-500 dark:text-gray-400">
+          Ödeme işleminiz güvenli SSL sertifikası ile korunmaktadır
         </p>
-      </div>
 
-      {/* Purchase Button */}
-      <button
-        type="button"
-        onClick={handlePurchase}
-        disabled={totalPrice === 0 || isProcessing}
-        className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 px-8 py-4 text-lg font-semibold text-white shadow-lg transition-all hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
-      >
-        <Sparkles className="size-6" />
-        {isProcessing ? t('processing') : t('buy_button')}
-      </button>
-
-      {/* Footer Note */}
-      <p className="mt-4 text-center text-xs text-gray-500 dark:text-gray-400">
-        Ödeme işleminiz güvenli SSL sertifikası ile korunmaktadır
-      </p>
-
-      {/* PayTR Ödeme Formu */}
-      {paytrToken && (
-        <div className="mt-8 rounded-xl border border-gray-200 bg-white p-6 shadow-lg dark:border-gray-700 dark:bg-gray-800">
-          <h2 className="mb-6 text-xl font-semibold text-gray-900 dark:text-white">
-            Güvenli Ödeme
-          </h2>
-          <script src="https://www.paytr.com/js/iframeResizer.min.js" />
-          <div className="overflow-hidden rounded-lg">
-            <iframe
-              ref={iframeRef}
-              src={`https://www.paytr.com/odeme/guvenli/${paytrToken}`}
-              id="paytriframe"
-              frameBorder="0"
-              scrolling="no"
-              style={{ width: '100%', height: 'auto', minHeight: '800px' }}
-              className="block"
-              title="PayTR Payment"
+        {/* PayTR Ödeme Formu */}
+        {paytrToken && (
+          <div className="mt-8 rounded-xl border border-gray-200 bg-white p-6 shadow-lg dark:border-gray-700 dark:bg-gray-800" style={{ minHeight: '1000px' }}>
+            <h2 className="mb-6 text-xl font-semibold text-gray-900 dark:text-white">
+              Güvenli Ödeme
+            </h2>
+            <script src="https://www.paytr.com/js/iframeResizer.min.js" />
+            <div className="overflow-hidden rounded-lg" style={{ minHeight: '1000px' }}>
+              <iframe
+                ref={iframeRef}
+                src={`https://www.paytr.com/odeme/guvenli/${paytrToken}`}
+                id="paytriframe"
+                frameBorder="0"
+                scrolling="no"
+                style={{ width: '100%', height: 'auto', minHeight: '1000px' }}
+                className="block"
+                title="PayTR Payment"
+              />
+            </div>
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `iFrameResize({},'#paytriframe');`,
+              }}
             />
           </div>
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `iFrameResize({},'#paytriframe');`,
-            }}
-          />
-        </div>
-      )}
+        )}
       </div>
 
       {/* Footer */}

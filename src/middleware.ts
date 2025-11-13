@@ -23,6 +23,8 @@ const isProtectedRoute = createRouteMatcher([
   '/:locale/design(.*)',
   '/checkout(.*)',
   '/:locale/checkout(.*)',
+  '/purchase-credits(.*)',
+  '/:locale/purchase-credits(.*)',
   '/api(.*)',
   '/:locale/api(.*)',
 ]);
@@ -36,6 +38,8 @@ const isClerkRoute = createRouteMatcher([
   '/:locale/design(.*)',
   '/checkout(.*)',
   '/:locale/checkout(.*)',
+  '/purchase-credits(.*)',
+  '/:locale/purchase-credits(.*)',
   '/dashboard(.*)',
   '/:locale/dashboard(.*)',
   '/onboarding(.*)',

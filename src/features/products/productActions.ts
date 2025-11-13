@@ -48,6 +48,8 @@ export async function getProductDetails(productSlug: string, locale: string = 't
     slug: product.slug,
     name: locale === 'en' ? (product.nameEn || product.name) : locale === 'fr' ? (product.nameFr || product.name) : product.name,
     description: locale === 'en' ? (product.descriptionEn || product.description) : locale === 'fr' ? (product.descriptionFr || product.description) : product.description,
+    sizeLabel: locale === 'en' ? (product.sizeLabelEn || product.sizeLabel || 'Select Size') : locale === 'fr' ? (product.sizeLabelFr || product.sizeLabel || 'Sélectionner la taille') : (product.sizeLabel || 'Boyut Seçin'),
+    frameLabel: locale === 'en' ? (product.frameLabelEn || product.frameLabel || 'Select Frame') : locale === 'fr' ? (product.frameLabelFr || product.frameLabel || 'Sélectionner le cadre') : (product.frameLabel || 'Çerçeve Seçin'),
     sizes: sizes.map((size: typeof productSizeSchema.$inferSelect) => ({
       id: size.id,
       slug: size.slug,

@@ -82,6 +82,12 @@ export const productSchema = pgTable('product', {
   description: text('description').notNull(),
   descriptionEn: text('description_en'),
   descriptionFr: text('description_fr'),
+  sizeLabel: text('size_label').default('Boyut Seçin').notNull(), // "Boyut Seçin" etiketi
+  sizeLabelEn: text('size_label_en').default('Select Size'),
+  sizeLabelFr: text('size_label_fr').default('Sélectionner la taille'),
+  frameLabel: text('frame_label').default('Çerçeve Seçin').notNull(), // "Çerçeve Seçin" etiketi
+  frameLabelEn: text('frame_label_en').default('Select Frame'),
+  frameLabelFr: text('frame_label_fr').default('Sélectionner le cadre'),
   isActive: boolean('is_active').default(true).notNull(),
   sortOrder: integer('sort_order').default(0).notNull(),
   updatedAt: timestamp('updated_at', { mode: 'date' })

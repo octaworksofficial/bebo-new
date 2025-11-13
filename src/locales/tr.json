@@ -6,6 +6,7 @@
   "Navbar": {
     "sign_in": "Giriş",
     "sign_up": "Kayıt Ol",
+    "products": "Ürünler",
     "product": "Özellikler",
     "docs": "Nasıl Çalışır",
     "blog": "Fiyatlandırma",
@@ -329,4 +330,3 @@
     "try_again": "Tekrar Dene"
   }
 }
-

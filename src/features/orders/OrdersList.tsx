@@ -80,121 +80,121 @@ export function OrdersList({ initialOrders }: OrdersListProps) {
           >
             <div className="flex flex-col gap-6 lg:flex-row">
               {/* Ürün Görseli */}
-            <div className="shrink-0">
-              {order.imageUrl
-                ? (
-                    <Image
-                      src={order.imageUrl}
-                      alt={order.productName || 'Ürün'}
-                      width={150}
-                      height={150}
-                      className="rounded-lg object-cover"
-                    />
-                  )
-                : (
-                    <div className="flex size-[150px] items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-700">
-                      <Package className="size-12 text-gray-400" />
-                    </div>
-                  )}
-            </div>
-
-            {/* Sipariş Bilgileri */}
-            <div className="flex-1 space-y-3">
-              <div className="flex items-start justify-between">
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                    {order.productName || 'Ürün'}
-                  </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    Sipariş No:
-                    {' '}
-                    {order.merchantOid}
-                  </p>
-                </div>
-                {getStatusBadge(order.paymentStatus || 'pending')}
+              <div className="shrink-0">
+                {order.imageUrl
+                  ? (
+                      <Image
+                        src={order.imageUrl}
+                        alt={order.productName || 'Ürün'}
+                        width={150}
+                        height={150}
+                        className="rounded-lg object-cover"
+                      />
+                    )
+                  : (
+                      <div className="flex size-[150px] items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-700">
+                        <Package className="size-12 text-gray-400" />
+                      </div>
+                    )}
               </div>
 
-              <div className="grid gap-2 text-sm sm:grid-cols-2">
-                <div>
-                  <span className="text-gray-600 dark:text-gray-400">Boyut:</span>
-                  <span className="ml-2 font-medium text-gray-900 dark:text-white">
-                    {order.sizeName || order.sizeDimensions || '-'}
-                  </span>
-                </div>
-                <div>
-                  <span className="text-gray-600 dark:text-gray-400">Çerçeve:</span>
-                  <span className="ml-2 font-medium text-gray-900 dark:text-white">
-                    {order.frameName || 'Yok'}
-                  </span>
-                </div>
-                <div>
-                  <span className="text-gray-600 dark:text-gray-400">Tutar:</span>
-                  <span className="ml-2 font-medium text-gray-900 dark:text-white">
-                    {((order.paymentAmount || 0) / 100).toFixed(2)}
-                    {' '}
-                    TL
-                  </span>
-                </div>
-              </div>
-
-              <div className="text-xs text-gray-500 dark:text-gray-400">
-                {order.createdAt && (
-                  <span>
-                    Sipariş Tarihi:
-                    {' '}
-                    {new Date(order.createdAt).toLocaleDateString('tr-TR', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric',
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })}
-                  </span>
-                )}
-              </div>
-
-              {/* Kargo Takip Bilgisi */}
-              {order.trackingNumber && (
-                <div className="rounded-lg border-l-4 border-blue-500 bg-blue-50 p-3 dark:bg-blue-900/20">
-                  <h4 className="mb-1 text-sm font-semibold text-blue-900 dark:text-blue-100">
-                    🚚 Kargo Takip
-                  </h4>
-                  <p className="text-sm text-blue-800 dark:text-blue-200">
-                    Takip Kodu:
-                    {' '}
-                    <span className="font-mono font-semibold">{order.trackingNumber}</span>
-                  </p>
-                  {order.shippingStatus && (
-                    <p className="mt-1 text-xs text-blue-700 dark:text-blue-300">
-                      Durum:
+              {/* Sipariş Bilgileri */}
+              <div className="flex-1 space-y-3">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                      {order.productName || 'Ürün'}
+                    </h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      Sipariş No:
                       {' '}
-                      {order.shippingStatus === 'preparing' && 'Hazırlanıyor'}
-                      {order.shippingStatus === 'shipped' && 'Kargoya Verildi'}
-                      {order.shippingStatus === 'delivered' && 'Teslim Edildi'}
-                      {order.shippingStatus === 'pending' && 'Beklemede'}
+                      {order.merchantOid}
                     </p>
-                  )}
+                  </div>
+                  {getStatusBadge(order.paymentStatus || 'pending')}
                 </div>
-              )}
 
-              {/* Teslimat Bilgileri */}
-              {order.customerName && (
-                <div className="rounded-lg bg-gray-50 p-3 dark:bg-gray-700/50">
-                  <h4 className="mb-2 text-sm font-semibold text-gray-900 dark:text-white">
-                    Teslimat Bilgileri
-                  </h4>
-                  <div className="space-y-1 text-sm text-gray-600 dark:text-gray-400">
-                    <p>{order.customerName}</p>
-                    <p>{order.customerEmail}</p>
-                    <p>{order.customerPhone}</p>
-                    <p>{order.customerAddress}</p>
+                <div className="grid gap-2 text-sm sm:grid-cols-2">
+                  <div>
+                    <span className="text-gray-600 dark:text-gray-400">Boyut:</span>
+                    <span className="ml-2 font-medium text-gray-900 dark:text-white">
+                      {order.sizeName || order.sizeDimensions || '-'}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-gray-600 dark:text-gray-400">Çerçeve:</span>
+                    <span className="ml-2 font-medium text-gray-900 dark:text-white">
+                      {order.frameName || 'Yok'}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-gray-600 dark:text-gray-400">Tutar:</span>
+                    <span className="ml-2 font-medium text-gray-900 dark:text-white">
+                      {((order.paymentAmount || 0) / 100).toFixed(2)}
+                      {' '}
+                      TL
+                    </span>
                   </div>
                 </div>
-              )}
+
+                <div className="text-xs text-gray-500 dark:text-gray-400">
+                  {order.createdAt && (
+                    <span>
+                      Sipariş Tarihi:
+                      {' '}
+                      {new Date(order.createdAt).toLocaleDateString('tr-TR', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })}
+                    </span>
+                  )}
+                </div>
+
+                {/* Kargo Takip Bilgisi */}
+                {order.trackingNumber && (
+                  <div className="rounded-lg border-l-4 border-blue-500 bg-blue-50 p-3 dark:bg-blue-900/20">
+                    <h4 className="mb-1 text-sm font-semibold text-blue-900 dark:text-blue-100">
+                      🚚 Kargo Takip
+                    </h4>
+                    <p className="text-sm text-blue-800 dark:text-blue-200">
+                      Takip Kodu:
+                      {' '}
+                      <span className="font-mono font-semibold">{order.trackingNumber}</span>
+                    </p>
+                    {order.shippingStatus && (
+                      <p className="mt-1 text-xs text-blue-700 dark:text-blue-300">
+                        Durum:
+                        {' '}
+                        {order.shippingStatus === 'preparing' && 'Hazırlanıyor'}
+                        {order.shippingStatus === 'shipped' && 'Kargoya Verildi'}
+                        {order.shippingStatus === 'delivered' && 'Teslim Edildi'}
+                        {order.shippingStatus === 'pending' && 'Beklemede'}
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                {/* Teslimat Bilgileri */}
+                {order.customerName && (
+                  <div className="rounded-lg bg-gray-50 p-3 dark:bg-gray-700/50">
+                    <h4 className="mb-2 text-sm font-semibold text-gray-900 dark:text-white">
+                      Teslimat Bilgileri
+                    </h4>
+                    <div className="space-y-1 text-sm text-gray-600 dark:text-gray-400">
+                      <p>{order.customerName}</p>
+                      <p>{order.customerEmail}</p>
+                      <p>{order.customerPhone}</p>
+                      <p>{order.customerAddress}</p>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-        </div>
-      ))}
+        ))}
       </div>
 
       {/* Pagination */}

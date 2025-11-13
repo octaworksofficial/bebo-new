@@ -1,44 +1,46 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useTranslations } from 'next-intl';
+import { ChevronRight, Frame, Maximize2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { Frame, Maximize2, ChevronRight } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useEffect, useState } from 'react';
+
 import { Button } from '@/components/ui/button';
 import { cn } from '@/utils/Helpers';
+
 import { getProductDetails } from './productActions';
 
-interface Product {
+type Product = {
   id: number;
   slug: string;
   name: string;
   description: string;
-}
+};
 
-interface Size {
+type Size = {
   id: number;
   slug: string;
   name: string;
   dimensions: string;
   price: number;
-}
+};
 
-interface Frame {
+type Frame = {
   id: number;
   slug: string;
   name: string;
   price: number;
-}
+};
 
-interface ProductConfig {
+type ProductConfig = {
   frame: string | null;
   size: string | null;
-}
+};
 
-interface Props {
+type Props = {
   products: Product[];
   locale: string;
-}
+};
 
 export const ProductSelection = ({ products, locale }: Props) => {
   const t = useTranslations('Products');
@@ -46,6 +48,8 @@ export const ProductSelection = ({ products, locale }: Props) => {
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
   const [sizes, setSizes] = useState<Size[]>([]);
   const [frames, setFrames] = useState<Frame[]>([]);
+  const [sizeLabel, setSizeLabel] = useState<string>('');
+  const [frameLabel, setFrameLabel] = useState<string>('');
   const [loading, setLoading] = useState(false);
   const [config, setConfig] = useState<ProductConfig>({
     frame: null,
@@ -59,6 +63,8 @@ export const ProductSelection = ({ products, locale }: Props) => {
         if (details) {
           setSizes(details.sizes);
           setFrames(details.frames);
+          setSizeLabel(details.sizeLabel);
+          setFrameLabel(details.frameLabel);
         }
         setLoading(false);
       });
@@ -113,31 +119,35 @@ export const ProductSelection = ({ products, locale }: Props) => {
         {/* Product Grid */}
         <div className={cn(
           'grid gap-6 transition-all duration-500',
-          selectedProduct ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
-        )}>
+          selectedProduct ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3',
+        )}
+        >
           {/* Product Cards */}
           {products.map((product) => {
             const isSelected = selectedProduct === product.slug;
             const isHidden = selectedProduct && !isSelected;
-            
-            if (isHidden) return null;
+
+            if (isHidden) {
+              return null;
+            }
 
             return (
               <div
                 key={product.id}
                 className={cn(
                   'group relative cursor-pointer overflow-hidden rounded-2xl border bg-card shadow-sm transition-all duration-500',
-                  isSelected 
-                    ? 'col-span-full' 
-                    : 'hover:shadow-lg hover:scale-[1.02]'
+                  isSelected
+                    ? 'col-span-full'
+                    : 'hover:shadow-lg hover:scale-[1.02]',
                 )}
                 onClick={() => !selectedProduct && handleProductClick(product.slug)}
               >
                 {/* Product Image */}
                 <div className={cn(
                   'relative overflow-hidden bg-gradient-to-br from-purple-500/10 to-pink-500/10',
-                  isSelected ? 'h-64 md:h-80' : 'h-64'
-                )}>
+                  isSelected ? 'h-64 md:h-80' : 'h-64',
+                )}
+                >
                   <div className="absolute inset-0 flex items-center justify-center">
                     <Frame className="size-24 text-muted-foreground/20" />
                   </div>
@@ -158,7 +168,9 @@ export const ProductSelection = ({ products, locale }: Props) => {
                     </p>
                     <div className="flex items-center justify-between">
                       <span className="text-lg font-bold text-primary">
-                        {t('starting_from')} 299₺
+                        {t('starting_from')}
+                        {' '}
+                        299₺
                       </span>
                       <ChevronRight className="size-5 text-muted-foreground transition-transform group-hover:translate-x-1" />
                     </div>
@@ -193,10 +205,10 @@ export const ProductSelection = ({ products, locale }: Props) => {
                         <div>
                           <div className="mb-4 flex items-center gap-2">
                             <Maximize2 className="size-5 text-primary" />
-                            <h4 className="text-lg font-semibold">{t('select_size')}</h4>
+                            <h4 className="text-lg font-semibold">{sizeLabel || t('select_size')}</h4>
                           </div>
                           <div className="grid gap-3">
-                            {sizes.map((size) => (
+                            {sizes.map(size => (
                               <button
                                 key={size.id}
                                 type="button"
@@ -208,7 +220,7 @@ export const ProductSelection = ({ products, locale }: Props) => {
                                   'rounded-lg border-2 p-4 text-left transition-all',
                                   config.size === size.slug
                                     ? 'border-primary bg-primary/5'
-                                    : 'border-border hover:border-primary/50'
+                                    : 'border-border hover:border-primary/50',
                                 )}
                               >
                                 <div className="flex items-center justify-between">
@@ -218,7 +230,10 @@ export const ProductSelection = ({ products, locale }: Props) => {
                                       {size.dimensions}
                                     </div>
                                   </div>
-                                  <div className="font-bold text-primary">{size.price}₺</div>
+                                  <div className="font-bold text-primary">
+                                    {size.price}
+                                    ₺
+                                  </div>
                                 </div>
                               </button>
                             ))}
@@ -229,10 +244,10 @@ export const ProductSelection = ({ products, locale }: Props) => {
                         <div>
                           <div className="mb-4 flex items-center gap-2">
                             <Frame className="size-5 text-primary" />
-                            <h4 className="text-lg font-semibold">{t('select_frame')}</h4>
+                            <h4 className="text-lg font-semibold">{frameLabel || t('select_frame')}</h4>
                           </div>
                           <div className="grid gap-3">
-                            {frames.map((frame) => (
+                            {frames.map(frame => (
                               <button
                                 key={frame.id}
                                 type="button"
@@ -244,7 +259,7 @@ export const ProductSelection = ({ products, locale }: Props) => {
                                   'rounded-lg border-2 p-4 text-left transition-all',
                                   config.frame === frame.slug
                                     ? 'border-primary bg-primary/5'
-                                    : 'border-border hover:border-primary/50'
+                                    : 'border-border hover:border-primary/50',
                                 )}
                               >
                                 <div className="flex items-center gap-4">
@@ -254,14 +269,16 @@ export const ProductSelection = ({ products, locale }: Props) => {
                                     frame.slug === 'no-frame' && 'bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900',
                                     frame.slug === 'black' && 'bg-black p-1',
                                     frame.slug === 'white' && 'bg-white p-1 ring-2 ring-gray-200',
-                                    frame.slug === 'wood' && 'bg-gradient-to-br from-amber-700 to-amber-900 p-1'
-                                  )}>
+                                    frame.slug === 'wood' && 'bg-gradient-to-br from-amber-700 to-amber-900 p-1',
+                                  )}
+                                  >
                                     <div className={cn(
                                       'size-full rounded-sm bg-gradient-to-br from-purple-400 to-pink-400',
-                                      frame.slug !== 'no-frame' && 'ring-1 ring-white/20'
-                                    )} />
+                                      frame.slug !== 'no-frame' && 'ring-1 ring-white/20',
+                                    )}
+                                    />
                                   </div>
-                                  
+
                                   {/* Frame Info */}
                                   <div className="flex flex-1 items-center justify-between">
                                     <div className="font-semibold">{frame.name}</div>
@@ -283,7 +300,8 @@ export const ProductSelection = ({ products, locale }: Props) => {
                         <div className="mb-4 flex items-center justify-between text-lg">
                           <span className="font-semibold">{t('total')}</span>
                           <span className="text-2xl font-bold text-primary">
-                            {calculateTotal()}₺
+                            {calculateTotal()}
+                            ₺
                           </span>
                         </div>
                         <Button
