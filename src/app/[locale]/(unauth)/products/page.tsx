@@ -5,6 +5,9 @@ import { getProducts } from '@/features/products/productActions';
 import { Navbar } from '@/templates/Navbar';
 import { Footer } from '@/templates/Footer';
 
+// Force dynamic rendering to prevent build-time database queries
+export const dynamic = 'force-dynamic';
+
 export async function generateMetadata(props: { params: { locale: string } }) {
   const t = await getTranslations({
     locale: props.params.locale,
