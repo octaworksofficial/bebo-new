@@ -199,6 +199,15 @@ export async function validatePayTRCallback(payload: {
 
     const existingOrder = order[0]!;
 
+    // eslint-disable-next-line no-console
+    console.log('PayTR Callback - Order Details:', {
+      merchantOid: payload.merchant_oid,
+      orderType: existingOrder.orderType,
+      creditAmount: existingOrder.creditAmount,
+      userId: existingOrder.userId,
+      status: payload.status,
+    });
+
     // Sipariş zaten onaylandıysa veya iptal edildiyse tekrar işlem yapma
     if (
       existingOrder.paymentStatus === 'success'
@@ -222,6 +231,19 @@ export async function validatePayTRCallback(payload: {
 
       // Eğer kredi satın alımıysa, kullanıcının kredi bakiyesini artır
       if (existingOrder.orderType === 'credit' && existingOrder.creditAmount) {
+        // eslint-disable-next-line no-console
+        console.log(`🎯 CREDIT PURCHASE: Adding ${existingOrder.creditAmount} credits to user ${existingOrder.userId}`);
+        
+        // Önce mevcut kredileri görelim
+        const userBefore = await db
+          .select({ artCredits: userSchema.artCredits })
+          .from(userSchema)
+          .where(eq(userSchema.id, existingOrder.userId))
+          .limit(1);
+        
+        // eslint-disable-next-line no-console
+        console.log(`📊 User credits BEFORE: ${userBefore[0]?.artCredits || 0}`);
+        
         await db
           .update(userSchema)
           .set({
@@ -229,8 +251,21 @@ export async function validatePayTRCallback(payload: {
           })
           .where(eq(userSchema.id, existingOrder.userId));
 
+        // Sonra yeni kredileri görelim
+        const userAfter = await db
+          .select({ artCredits: userSchema.artCredits })
+          .from(userSchema)
+          .where(eq(userSchema.id, existingOrder.userId))
+          .limit(1);
+
         // eslint-disable-next-line no-console
-        console.log(`Added ${existingOrder.creditAmount} credits to user ${existingOrder.userId}`);
+        console.log(`✅ User credits AFTER: ${userAfter[0]?.artCredits || 0}`);
+      } else {
+        // eslint-disable-next-line no-console
+        console.log('⚠️ NOT A CREDIT ORDER or creditAmount is null:', {
+          orderType: existingOrder.orderType,
+          creditAmount: existingOrder.creditAmount,
+        });
       }
 
       // TODO: Müşteriye email/SMS gönder
