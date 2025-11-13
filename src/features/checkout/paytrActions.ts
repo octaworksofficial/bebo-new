@@ -3,7 +3,7 @@
 import { createHmac } from 'node:crypto';
 
 import { auth } from '@clerk/nextjs/server';
-import { eq, sql } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 
 import { db } from '@/libs/DB';
 import { Env } from '@/libs/Env';
@@ -231,35 +231,36 @@ export async function validatePayTRCallback(payload: {
 
       // Eğer kredi satın alımıysa, kullanıcının kredi bakiyesini artır
       if (existingOrder.orderType === 'credit' && existingOrder.creditAmount) {
-        // eslint-disable-next-line no-console
-        console.log(`🎯 CREDIT PURCHASE: Adding ${existingOrder.creditAmount} credits to user ${existingOrder.userId}`);
-        
-        // Önce mevcut kredileri görelim
-        const userBefore = await db
+        // Önce mevcut krediyi al
+        const [currentUser] = await db
           .select({ artCredits: userSchema.artCredits })
           .from(userSchema)
           .where(eq(userSchema.id, existingOrder.userId))
           .limit(1);
-        
+
+        if (!currentUser) {
+          console.error(`❌ User not found: ${existingOrder.userId}`);
+          throw new Error('User not found');
+        }
+
+        // Yeni kredi miktarını hesapla
+        const newCreditAmount = currentUser.artCredits + existingOrder.creditAmount;
+
         // eslint-disable-next-line no-console
-        console.log(`📊 User credits BEFORE: ${userBefore[0]?.artCredits || 0}`);
-        
+        console.log(`💰 Adding ${existingOrder.creditAmount} credits to user ${existingOrder.userId}`);
+        // eslint-disable-next-line no-console
+        console.log(`� Current: ${currentUser.artCredits} → New: ${newCreditAmount}`);
+
+        // Kredileri güncelle - SQL expression yerine direkt değer kullan
         await db
           .update(userSchema)
           .set({
-            artCredits: sql`${userSchema.artCredits} + ${existingOrder.creditAmount}`,
+            artCredits: newCreditAmount,
           })
           .where(eq(userSchema.id, existingOrder.userId));
 
-        // Sonra yeni kredileri görelim
-        const userAfter = await db
-          .select({ artCredits: userSchema.artCredits })
-          .from(userSchema)
-          .where(eq(userSchema.id, existingOrder.userId))
-          .limit(1);
-
         // eslint-disable-next-line no-console
-        console.log(`✅ User credits AFTER: ${userAfter[0]?.artCredits || 0}`);
+        console.log(`✅ Successfully updated credits for user ${existingOrder.userId}`);
       } else {
         // eslint-disable-next-line no-console
         console.log('⚠️ NOT A CREDIT ORDER or creditAmount is null:', {
