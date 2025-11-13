@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 
 import { CheckCircle, Home, Sparkles } from 'lucide-react';
 import { useTranslations } from 'next-intl';
@@ -9,7 +9,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Footer } from '@/templates/Footer';
 import { Navbar } from '@/templates/Navbar';
 
-export function PurchaseCreditsSuccess() {
+function SuccessContent() {
   const t = useTranslations('PurchaseCredits');
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -101,5 +101,22 @@ export function PurchaseCreditsSuccess() {
 
       <Footer />
     </>
+  );
+}
+
+export function PurchaseCreditsSuccess() {
+  return (
+    <Suspense
+      fallback={(
+        <div className="flex min-h-screen items-center justify-center">
+          <div className="flex flex-col items-center text-center">
+            <div className="size-12 animate-spin rounded-full border-4 border-gray-300 border-t-purple-600" />
+            <p className="mt-4 text-gray-600 dark:text-gray-400">Yükleniyor...</p>
+          </div>
+        </div>
+      )}
+    >
+      <SuccessContent />
+    </Suspense>
   );
 }

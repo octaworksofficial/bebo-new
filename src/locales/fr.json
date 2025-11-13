@@ -244,6 +244,35 @@
     "adding_artistic_touch": "J'ajoute des touches artistiques...",
     "almost_ready": "Presque prêt ! J'ajoute les dernières touches...",
     "finalizing": "Je finalise votre chef-d'œuvre, encore quelques secondes...",
-    "generation_timeout": "La génération d'image prend plus de temps que prévu. Veuillez vérifier la section \"Créations Précédentes\"."
+    "generation_timeout": "La génération d'image prend plus de temps que prévu. Veuillez vérifier la section \"Créations Précédentes\".",
+    "buy_credits": "Acheter",
+    "buy_credits_title": "Acheter des Crédits d'Art"
+  },
+  "PurchaseCredits": {
+    "meta_title": "Acheter des Crédits",
+    "meta_description": "Achetez des Crédits d'Art et créez des designs illimités",
+    "page_title": "Acheter des Crédits d'Art",
+    "page_description": "Rechargez vos Crédits d'Art pour créer plus de designs",
+    "current_rate": "Taux Actuel",
+    "credit_price": "1 Crédit d'Art = {price} TL",
+    "quick_amounts": "Sélection Rapide",
+    "custom_amount": "Montant Personnalisé",
+    "amount_label": "Combien de Crédits d'Art souhaitez-vous ?",
+    "amount_placeholder": "par ex., 10",
+    "min_purchase": "Minimum {min} crédits",
+    "max_purchase": "Maximum {max} crédits",
+    "total_price": "Montant Total",
+    "buy_button": "Acheter",
+    "processing": "Traitement de votre commande...",
+    "success_title": "Paiement Réussi !",
+    "success_message": "Vos Crédits d'Art ont été ajoutés à votre compte",
+    "order_id": "ID de Commande",
+    "credits_added": "Crédits Ajoutés",
+    "redirect_message": "Redirection vers la page de design dans {seconds} secondes...",
+    "start_creating": "Commencer à Créer",
+    "go_dashboard": "Aller au Tableau de Bord",
+    "failed_title": "Paiement Échoué",
+    "failed_message": "Votre paiement n'a pas pu être complété. Veuillez réessayer ou contacter le support client.",
+    "try_again": "Réessayer"
   }
 }
