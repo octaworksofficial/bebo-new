@@ -10,8 +10,6 @@ import { Client } from 'pg';
 
 import * as schema from '@/models/Schema';
 
-import { Env } from './Env';
-
 let client;
 let drizzle;
 
@@ -21,19 +19,24 @@ if (process.env.NEXT_PHASE === PHASE_PRODUCTION_BUILD) {
   // During build time, don't connect to database at all
   // This prevents build-time database queries
   drizzle = null as any;
-} else if (Env.DATABASE_URL) {
+} else if (process.env.DATABASE_URL) {
   // Production/Development with real PostgreSQL
+  console.log('🔌 Connecting to PostgreSQL database...');
   client = new Client({
-    connectionString: Env.DATABASE_URL,
+    connectionString: process.env.DATABASE_URL,
   });
   await client.connect();
+  console.log('✅ Connected to PostgreSQL');
 
   drizzle = drizzlePg(client, { schema });
+  console.log('🚀 Running migrations...');
   await migratePg(drizzle, {
     migrationsFolder: path.join(process.cwd(), 'migrations'),
   });
+  console.log('✅ Migrations completed');
 } else {
   // Local development with PGlite (in-memory database)
+  console.log('⚠️  No DATABASE_URL found, using PGlite in-memory database');
   // Stores the db connection in the global scope to prevent multiple instances due to hot reloading with Next.js
   const global = globalThis as unknown as { client: PGlite; drizzle: PgliteDatabase<typeof schema> };
 
