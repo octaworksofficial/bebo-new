@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { useUser } from '@clerk/nextjs';
 import { useRouter } from '@/libs/i18nNavigation';
-import { Send, Sparkles, Image as ImageIcon, Upload, X, Loader2, Check } from 'lucide-react';
+import { Send, Sparkles, Image as ImageIcon, Upload, X, Loader2, Check, ShoppingCart } from 'lucide-react';
 import { sendChatMessage, getGeneratedImage, getUserGeneratedImages, type GeneratedImageResponse } from './chatActions';
 import { uploadImageToN8n } from './imageUpload';
 import { generateChatSessionId } from './chatUtils';
@@ -374,8 +374,20 @@ export function ChatInterface({
           <div className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-yellow-50 to-amber-50 px-4 py-2 dark:from-yellow-900/20 dark:to-amber-900/20">
             <Sparkles className="size-5 text-yellow-600 dark:text-yellow-400" />
             <span className="text-sm font-semibold text-gray-800 dark:text-gray-200">
-              {t('art_credits')}: <span className="text-yellow-600 dark:text-yellow-400">{artCredits}</span>
+              {t('art_credits')}
+              :
+              {' '}
+              <span className="text-yellow-600 dark:text-yellow-400">{artCredits}</span>
             </span>
+            <button
+              type="button"
+              onClick={() => router.push('/purchase-credits')}
+              className="ml-2 flex items-center gap-1 rounded-md bg-yellow-600 px-3 py-1 text-xs font-medium text-white transition-all hover:bg-yellow-700 dark:bg-yellow-500 dark:hover:bg-yellow-600"
+              title={t('buy_credits_title')}
+            >
+              <ShoppingCart className="size-3.5" />
+              {t('buy_credits')}
+            </button>
           </div>
 
           {/* Mode Toggle */}

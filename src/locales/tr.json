@@ -231,6 +231,8 @@
     "creation_date": "Oluşturulma Tarihi",
     "your_prompt": "Bu Hislerle Oluşturdunuz",
     "art_credits": "Sanat Hakkı",
+    "buy_credits": "Satın Al",
+    "buy_credits_title": "Sanat Hakkı Satın Al",
     "credit_warning": "Bu işlem 1 Sanat Hakkı tüketecektir",
     "insufficient_credits": "Yetersiz Sanat Hakkı! Görsel oluşturmak için en az 1 Sanat Hakkınız olmalıdır. Lütfen kredi satın alın veya abonelik planınızı yükseltin.",
     "back_to_design": "Tasarıma Dön",
@@ -298,6 +300,33 @@
   "Orders": {
     "meta_title": "Siparişlerim",
     "meta_description": "Siparişlerinizi görüntüleyin ve takip edin"
+  },
+  "PurchaseCredits": {
+    "meta_title": "Kredi Satın Al",
+    "meta_description": "Sanat Hakkı satın alın ve sınırsız tasarım yapın",
+    "page_title": "Sanat Hakkı Satın Al",
+    "page_description": "Daha fazla tasarım oluşturmak için Sanat Hakkı yükleyin",
+    "current_rate": "Güncel Kur",
+    "credit_price": "1 Sanat Hakkı = {price} TL",
+    "quick_amounts": "Hızlı Seçim",
+    "custom_amount": "Özel Miktar",
+    "amount_label": "Kaç Sanat Hakkı almak istersiniz?",
+    "amount_placeholder": "Örn: 10",
+    "min_purchase": "Minimum {min} kredi",
+    "max_purchase": "Maximum {max} kredi",
+    "total_price": "Toplam Tutar",
+    "buy_button": "Satın Al",
+    "processing": "İşleminiz hazırlanıyor...",
+    "success_title": "Ödeme Başarılı!",
+    "success_message": "Sanat Haklarınız hesabınıza yüklendi",
+    "order_id": "Sipariş No",
+    "credits_added": "Kredi Eklendi",
+    "redirect_message": "{seconds} saniye sonra tasarım sayfasına yönlendiriliyorsunuz...",
+    "start_creating": "Tasarım Yapmaya Başla",
+    "go_dashboard": "Gösterge Paneli",
+    "failed_title": "Ödeme Başarısız",
+    "failed_message": "Ödeme işleminiz tamamlanamadı. Lütfen tekrar deneyin veya müşteri hizmetlerimizle iletişime geçin.",
+    "try_again": "Tekrar Dene"
   }
 }
 

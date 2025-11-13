@@ -3,11 +3,11 @@
 import { createHmac } from 'node:crypto';
 
 import { auth } from '@clerk/nextjs/server';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 
 import { db } from '@/libs/DB';
 import { Env } from '@/libs/Env';
-import { orderSchema } from '@/models/Schema';
+import { orderSchema, userSchema } from '@/models/Schema';
 
 export type PayTRTokenRequest = {
   generationId: string;
@@ -216,9 +216,22 @@ export async function validatePayTRCallback(payload: {
           totalAmount: Number.parseInt(payload.total_amount, 10),
           paymentType: payload.payment_type,
           paidAt: new Date(),
-          shippingStatus: 'preparing',
+          shippingStatus: existingOrder.orderType === 'credit' ? null : 'preparing',
         })
         .where(eq(orderSchema.merchantOid, payload.merchant_oid));
+
+      // Eğer kredi satın alımıysa, kullanıcının kredi bakiyesini artır
+      if (existingOrder.orderType === 'credit' && existingOrder.creditAmount) {
+        await db
+          .update(userSchema)
+          .set({
+            artCredits: sql`${userSchema.artCredits} + ${existingOrder.creditAmount}`,
+          })
+          .where(eq(userSchema.id, existingOrder.userId));
+
+        // eslint-disable-next-line no-console
+        console.log(`Added ${existingOrder.creditAmount} credits to user ${existingOrder.userId}`);
+      }
 
       // TODO: Müşteriye email/SMS gönder
       // TODO: Admin'e bildirim gönder

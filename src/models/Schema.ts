@@ -180,3 +180,16 @@ export const orderSchema = pgTable('order', {
     .notNull(),
   createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
 });
+
+// Art Credit Settings Schema
+export const artCreditSettingsSchema = pgTable('art_credit_settings', {
+  id: serial('id').primaryKey(),
+  pricePerCredit: integer('price_per_credit').default(100).notNull(), // Kuruş cinsinden (100 kuruş = 1 TL)
+  isActive: boolean('is_active').default(true).notNull(),
+  minPurchase: integer('min_purchase').default(1).notNull(), // Minimum satın alma adedi
+  maxPurchase: integer('max_purchase').default(1000).notNull(), // Maximum satın alma adedi
+  updatedAt: timestamp('updated_at', { mode: 'date' })
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+  createdAt: timestamp('created_at', { mode: 'date' }).defaultNow(),
+});

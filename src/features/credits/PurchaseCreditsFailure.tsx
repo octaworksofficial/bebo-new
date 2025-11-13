@@ -1,0 +1,63 @@
+'use client';
+
+import { AlertCircle, ArrowLeft, Home } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
+
+import { Footer } from '@/templates/Footer';
+import { Navbar } from '@/templates/Navbar';
+
+export function PurchaseCreditsFailure() {
+  const t = useTranslations('PurchaseCredits');
+  const router = useRouter();
+
+  return (
+    <>
+      <Navbar />
+
+      <div className="flex min-h-screen items-center justify-center px-4 py-16">
+        <div className="w-full max-w-md text-center">
+          {/* Error Icon */}
+          <div className="mb-6 flex justify-center">
+            <div className="flex size-24 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30">
+              <AlertCircle className="size-16 text-red-600 dark:text-red-400" />
+            </div>
+          </div>
+
+          {/* Title */}
+          <h1 className="mb-4 text-3xl font-bold text-gray-900 dark:text-gray-100">
+            {t('failed_title')}
+          </h1>
+
+          {/* Message */}
+          <p className="mb-8 text-gray-600 dark:text-gray-400">
+            {t('failed_message')}
+          </p>
+
+          {/* Buttons */}
+          <div className="flex flex-col gap-3">
+            <button
+              type="button"
+              onClick={() => router.push('/purchase-credits')}
+              className="flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 px-6 py-3 font-semibold text-white shadow-lg transition-all hover:shadow-xl"
+            >
+              <ArrowLeft className="size-5" />
+              {t('try_again')}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => router.push('/dashboard')}
+              className="flex items-center justify-center gap-2 rounded-xl border-2 border-gray-300 bg-white px-6 py-3 font-semibold text-gray-700 transition-all hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+            >
+              <Home className="size-5" />
+              {t('go_dashboard')}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <Footer />
+    </>
+  );
+}

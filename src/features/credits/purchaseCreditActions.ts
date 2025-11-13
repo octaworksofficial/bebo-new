@@ -1,0 +1,247 @@
+'use server';
+
+import { createHmac } from 'node:crypto';
+import { Buffer } from 'node:buffer';
+
+import { eq } from 'drizzle-orm';
+
+import { db } from '@/libs/DB';
+import { Env } from '@/libs/Env';
+import { artCreditSettingsSchema, orderSchema } from '@/models/Schema';
+
+export type CreditSettings = {
+  pricePerCredit: number; // Kuruş cinsinden
+  minPurchase: number;
+  maxPurchase: number;
+  isActive: boolean;
+};
+
+type PayTRCreditTokenResponse = {
+  success: boolean;
+  token?: string;
+  merchantOid?: string;
+  error?: string;
+};
+
+/**
+ * Art Credit ayarlarını veritabanından çeker
+ * @returns Credit ayarları veya null
+ */
+export async function getCreditSettings(): Promise<CreditSettings | null> {
+  try {
+    // En son aktif ayarları al
+    const settings = await db
+      .select({
+        pricePerCredit: artCreditSettingsSchema.pricePerCredit,
+        minPurchase: artCreditSettingsSchema.minPurchase,
+        maxPurchase: artCreditSettingsSchema.maxPurchase,
+        isActive: artCreditSettingsSchema.isActive,
+      })
+      .from(artCreditSettingsSchema)
+      .where(eq(artCreditSettingsSchema.isActive, true))
+      .limit(1);
+
+    if (!settings || settings.length === 0) {
+      // Eğer ayar yoksa default değerleri döndür
+      return {
+        pricePerCredit: 100, // 1 TL
+        minPurchase: 1,
+        maxPurchase: 1000,
+        isActive: true,
+      };
+    }
+
+    return settings[0]!;
+  } catch (error) {
+    console.error('Error fetching credit settings:', error);
+    // Hata durumunda default değerleri döndür
+    return {
+      pricePerCredit: 100,
+      minPurchase: 1,
+      maxPurchase: 1000,
+      isActive: true,
+    };
+  }
+}
+
+/**
+ * Kredi fiyatını hesaplar
+ * @param amount - Satın alınacak kredi miktarı
+ * @returns Toplam tutar (kuruş cinsinden)
+ */
+export async function calculateCreditPrice(amount: number): Promise<number> {
+  const settings = await getCreditSettings();
+
+  if (!settings) {
+    return amount * 100; // Default: 1 TL per credit
+  }
+
+  return amount * settings.pricePerCredit;
+}
+
+/**
+ * Kredi satın alımı için PayTR token oluşturur ve sipariş kaydeder
+ * @param userId - Kullanıcı ID (Clerk'ten gelecek)
+ * @param userEmail - Kullanıcı email adresi
+ * @param creditAmount - Satın alınacak kredi miktarı
+ * @param userIp - Kullanıcının IP adresi
+ * @returns PayTR token ve merchant_oid
+ */
+export async function createCreditPurchase(
+  userId: string,
+  userEmail: string,
+  creditAmount: number,
+  userIp: string,
+): Promise<PayTRCreditTokenResponse> {
+  try {
+    if (!userId) {
+      return { success: false, error: 'Kullanıcı girişi yapılmamış' };
+    }
+
+    if (!userEmail) {
+      return { success: false, error: 'Email adresi gerekli' };
+    }
+
+    // Kredi ayarlarını kontrol et
+    const settings = await getCreditSettings();
+    if (!settings || !settings.isActive) {
+      return { success: false, error: 'Kredi satışı şu an aktif değil' };
+    }
+
+    // Min/Max kontrolü
+    if (creditAmount < settings.minPurchase || creditAmount > settings.maxPurchase) {
+      return {
+        success: false,
+        error: `Kredi miktarı ${settings.minPurchase} ile ${settings.maxPurchase} arasında olmalıdır`,
+      };
+    }
+
+    // Toplam tutarı hesapla (kuruş cinsinden)
+    const totalAmount = creditAmount * settings.pricePerCredit;
+
+    // Benzersiz sipariş numarası oluştur
+    const merchantOid = `CRD${Date.now()}${Math.floor(Math.random() * 1000)}`;
+
+    // PayTR API bilgileri
+    const merchantId = Env.PAYTR_MERCHANT_ID;
+    const merchantKey = Env.PAYTR_MERCHANT_KEY;
+    const merchantSalt = Env.PAYTR_MERCHANT_SALT;
+
+    // App URL
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.RAILWAY_PUBLIC_DOMAIN
+      ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}`
+      : 'http://localhost:3001';
+
+    const merchantOkUrl = `${appUrl}/purchase-credits/success`;
+    const merchantFailUrl = `${appUrl}/purchase-credits/failed`;
+
+    // User basket (sepet içeriği) - PayTR formatında
+    const userBasket = Buffer.from(JSON.stringify([
+      [`${creditAmount} Sanat Hakkı`, totalAmount.toString(), 1],
+    ])).toString('base64');
+
+    const noInstallment = 0;
+    const maxInstallment = 0;
+    const currency = 'TL';
+    const testMode = 0;
+
+    // Kullanıcı bilgileri
+    const customerEmail = userEmail; // Clerk'ten gelen gerçek email
+    const customerName = userEmail.split('@')[0] || 'Birebiro Kullanıcısı'; // Email'den isim oluştur
+    const customerPhone = '5555555555'; // Kredi için telefon gerekmez
+    const customerAddress = 'Online Kredi Satın Alımı'; // Kredi için adres gerekmez
+
+    // Hash oluştur
+    const hashStr = `${merchantId}${userIp}${merchantOid}${customerEmail}${totalAmount}${userBasket}${noInstallment}${maxInstallment}${currency}${testMode}`;
+    const paytrToken = createHmac('sha256', merchantKey)
+      .update(hashStr + merchantSalt)
+      .digest('base64');
+
+    // PayTR API'ye gönderilecek veriler
+    const postData = new URLSearchParams({
+      merchant_id: merchantId,
+      user_ip: userIp,
+      merchant_oid: merchantOid,
+      email: customerEmail,
+      payment_amount: totalAmount.toString(),
+      paytr_token: paytrToken,
+      user_basket: userBasket,
+      debug_on: '1',
+      no_installment: noInstallment.toString(),
+      max_installment: maxInstallment.toString(),
+      user_name: customerName,
+      user_address: customerAddress,
+      user_phone: customerPhone,
+      merchant_ok_url: merchantOkUrl,
+      merchant_fail_url: merchantFailUrl,
+      timeout_limit: '30',
+      currency,
+      test_mode: testMode.toString(),
+      lang: 'tr',
+    });
+
+    // eslint-disable-next-line no-console
+    console.log('PayTR Credit Purchase Request:', {
+      merchantOid,
+      creditAmount,
+      totalAmount,
+      userIp,
+    });
+
+    // PayTR API'ye istek gönder
+    const response = await fetch('https://www.paytr.com/odeme/api/get-token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: postData.toString(),
+    });
+
+    const result = await response.json() as { status: string; token?: string; reason?: string };
+
+    // eslint-disable-next-line no-console
+    console.log('PayTR Response:', result);
+
+    if (result.status === 'success' && result.token) {
+      // Siparişi veritabanına kaydet
+      await db.insert(orderSchema).values({
+        userId,
+        merchantOid,
+        paymentAmount: totalAmount,
+        totalAmount,
+        currency: 'TL',
+        paymentStatus: 'pending',
+        paytrToken: result.token,
+        customerName,
+        customerEmail,
+        customerPhone,
+        customerAddress,
+        orderType: 'credit', // Kredi siparişi
+        creditAmount, // Kredi miktarını kaydet
+        // Fiziksel ürün alanlarını null bırak
+        generationId: null,
+        productId: null,
+        productSizeId: null,
+        productFrameId: null,
+        shippingStatus: null,
+      });
+
+      return {
+        success: true,
+        token: result.token,
+        merchantOid,
+      };
+    }
+
+    return {
+      success: false,
+      error: result.reason || 'PayTR token alınamadı',
+    };
+  } catch (error) {
+    console.error('Credit purchase error:', error);
+    return {
+      success: false,
+      error: 'Bir hata oluştu. Lütfen tekrar deneyin.',
+    };
+  }
+}
