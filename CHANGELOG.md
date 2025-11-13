@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/octaworksofficial/bebo-new/compare/v1.0.0...v1.1.0) (2025-11-13)
+
+
+### Features
+
+* Add credit purchase system with PayTR integration ([6969d97](https://github.com/octaworksofficial/bebo-new/commit/6969d971a478ce2f722c7a42c18ffde710ae5760))
+
 # 1.0.0 (2025-11-13)
 
 
