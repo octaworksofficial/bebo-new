@@ -1,3 +1,10 @@
+# 1.0.0 (2025-11-13)
+
+
+### Features
+
+* Add comprehensive orders management system with enhanced navigation ([24539b2](https://github.com/octaworksofficial/bebo-new/commit/24539b219f3aeba9b371f385cf43efd0c854bec3))
+
 ## [1.7.6](https://github.com/ixartz/SaaS-Boilerplate/compare/v1.7.5...v1.7.6) (2025-05-01)
 
 
