@@ -97,7 +97,8 @@ export async function sendChatMessage(params: {
     };
 
     // Send to n8n webhook
-    const response = await fetch('https://n8n-production-14b9.up.railway.app/webhook/chat', {
+    const n8nUrl = `${process.env.N8N_WEBHOOK_URL || 'https://n8n-production-14b9.up.railway.app'}${process.env.N8N_WEBHOOK_CHAT || '/webhook/chat'}`;
+    const response = await fetch(n8nUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -153,7 +154,8 @@ export async function getGeneratedImage(generationId: string) {
       throw new Error('Invalid generation_id format');
     }
     
-    const response = await fetch('https://n8n-production-14b9.up.railway.app/webhook/getGeneratedImage', {
+    const n8nUrl = `${process.env.N8N_WEBHOOK_URL || 'https://n8n-production-14b9.up.railway.app'}${process.env.N8N_WEBHOOK_GET_GENERATED_IMAGE || '/webhook/getGeneratedImage'}`;
+    const response = await fetch(n8nUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -197,7 +199,8 @@ export async function getUserGeneratedImages() {
       };
     }
 
-    const response = await fetch('https://n8n-production-14b9.up.railway.app/webhook/getGeneratedImage', {
+    const n8nUrl = `${process.env.N8N_WEBHOOK_URL || 'https://n8n-production-14b9.up.railway.app'}${process.env.N8N_WEBHOOK_GET_GENERATED_IMAGE || '/webhook/getGeneratedImage'}`;
+    const response = await fetch(n8nUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -16,7 +16,8 @@ export async function uploadImageToN8n(imageFile: File): Promise<{
     const formData = new FormData();
     formData.append('image', imageFile);
 
-    const response = await fetch('https://n8n-production-14b9.up.railway.app/webhook/upload-image', {
+    const n8nUrl = `${process.env.N8N_WEBHOOK_URL || 'https://n8n-production-14b9.up.railway.app'}${process.env.N8N_WEBHOOK_UPLOAD_IMAGE || '/webhook/upload-image'}`;
+    const response = await fetch(n8nUrl, {
       method: 'POST',
       body: formData,
     });
