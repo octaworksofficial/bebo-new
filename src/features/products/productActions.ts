@@ -11,7 +11,7 @@ export async function getProducts(locale: string = 'tr') {
     .where(eq(productSchema.isActive, true))
     .orderBy(productSchema.sortOrder);
 
-  return products.map(product => ({
+  return products.map((product: typeof productSchema.$inferSelect) => ({
     id: product.id,
     slug: product.slug,
     name: locale === 'en' ? (product.nameEn || product.name) : locale === 'fr' ? (product.nameFr || product.name) : product.name,
@@ -47,14 +47,14 @@ export async function getProductDetails(productSlug: string, locale: string = 't
     slug: product.slug,
     name: locale === 'en' ? (product.nameEn || product.name) : locale === 'fr' ? (product.nameFr || product.name) : product.name,
     description: locale === 'en' ? (product.descriptionEn || product.description) : locale === 'fr' ? (product.descriptionFr || product.description) : product.description,
-    sizes: sizes.map(size => ({
+    sizes: sizes.map((size: typeof productSizeSchema.$inferSelect) => ({
       id: size.id,
       slug: size.slug,
       name: locale === 'en' ? (size.nameEn || size.name) : locale === 'fr' ? (size.nameFr || size.name) : size.name,
       dimensions: size.dimensions,
       price: size.priceAmount / 100, // Convert from cents to TL
     })),
-    frames: frames.map(frame => ({
+    frames: frames.map((frame: typeof productFrameSchema.$inferSelect) => ({
       id: frame.id,
       slug: frame.slug,
       name: locale === 'en' ? (frame.nameEn || frame.name) : locale === 'fr' ? (frame.nameFr || frame.name) : frame.name,
