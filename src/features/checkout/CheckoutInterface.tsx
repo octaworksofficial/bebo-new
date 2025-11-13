@@ -338,14 +338,16 @@ export function CheckoutInterface({ }: CheckoutInterfaceProps) {
                 {t('payment_form')}
               </h2>
               <script src="https://www.paytr.com/js/iframeResizer.min.js"></script>
-              <iframe
-                src={`https://www.paytr.com/odeme/guvenli/${paytrToken}`}
-                id="paytriframe"
-                frameBorder="0"
-                scrolling="no"
-                style={{ width: '100%', minHeight: '1200px' }}
-                className="rounded-lg"
-              />
+              <div className="overflow-hidden rounded-lg">
+                <iframe
+                  src={`https://www.paytr.com/odeme/guvenli/${paytrToken}`}
+                  id="paytriframe"
+                  frameBorder="0"
+                  scrolling="no"
+                  style={{ width: '100%', height: 'auto', minHeight: '600px' }}
+                  className="block"
+                />
+              </div>
               <script
                 dangerouslySetInnerHTML={{
                   __html: `iFrameResize({},'#paytriframe');`,
