@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/octaworksofficial/bebo-new/compare/v1.1.0...v1.1.1) (2025-11-13)
+
+
+### Bug Fixes
+
+* Add French translations and Suspense boundary for purchase credits ([b4a2c5f](https://github.com/octaworksofficial/bebo-new/commit/b4a2c5f0ed2facb6e50b7e7ea1863a899d79e969))
+
 # [1.1.0](https://github.com/octaworksofficial/bebo-new/compare/v1.0.0...v1.1.0) (2025-11-13)
 
 
