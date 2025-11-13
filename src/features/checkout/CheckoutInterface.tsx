@@ -344,7 +344,7 @@ export function CheckoutInterface({ }: CheckoutInterfaceProps) {
                   id="paytriframe"
                   frameBorder="0"
                   scrolling="no"
-                  style={{ width: '100%', height: 'auto', minHeight: '600px' }}
+                  style={{ width: '100%', height: 'auto', minHeight: '800px' }}
                   className="block"
                 />
               </div>
