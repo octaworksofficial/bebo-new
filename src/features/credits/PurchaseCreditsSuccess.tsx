@@ -38,7 +38,7 @@ function SuccessContent() {
       }
 
       try {
-        const result = await processSuccessfulCreditPurchase(merchantOid, 10);
+        const result = await processSuccessfulCreditPurchase(merchantOid);
         setProcessingResult(result);
       } catch (error) {
         console.error('Credit processing error:', error);

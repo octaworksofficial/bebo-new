@@ -5,18 +5,17 @@ import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 
 import { db } from '@/libs/DB';
-import { userSchema } from '@/models/Schema';
+import { orderSchema, userSchema } from '@/models/Schema';
 
 // Geçici kredi işlemi kayıt sistemi - merchant_oid bazlı güvenlik
 const processedTransactions = new Set<string>();
 
 /**
  * PayTR'den gelen merchant_oid ile güvenli kredi yükleme
- * Merchant_oid'yi kullanarak aynı işlemin tekrar edilmesini önler
+ * Order tablosundan gerçek kredi miktarını alır ve yükler
  */
 export async function processSuccessfulCreditPurchase(
   merchantOid: string,
-  creditAmount: number = 10,
 ): Promise<{
     success: boolean;
     message: string;
@@ -48,6 +47,45 @@ export async function processSuccessfulCreditPurchase(
       };
     }
 
+    // Order'ı bul ve gerçek kredi miktarını al
+    const orderRecord = await db
+      .select({
+        userId: orderSchema.userId,
+        paymentAmount: orderSchema.paymentAmount,
+        paymentStatus: orderSchema.paymentStatus,
+      })
+      .from(orderSchema)
+      .where(eq(orderSchema.merchantOid, merchantOid))
+      .limit(1);
+
+    if (orderRecord.length === 0) {
+      return {
+        success: false,
+        message: 'Sipariş bulunamadı',
+      };
+    }
+
+    const order = orderRecord[0]!;
+    
+    // Kullanıcı ID'si kontrol et
+    if (order.userId !== userId) {
+      return {
+        success: false,
+        message: 'Bu sipariş size ait değil',
+      };
+    }
+
+    // Sipariş durumu kontrol et
+    if (order.paymentStatus === 'success') {
+      return {
+        success: false,
+        message: 'Bu siparişin kredileri zaten hesabınıza yüklenmiş',
+      };
+    }
+
+    // Gerçek kredi miktarını hesapla (paymentAmount kuruş cinsinden, 150 kuruş = 1 kredi)
+    const creditAmount = Math.floor(order.paymentAmount / 150);
+
     // Kullanıcının mevcut kredilerini getir
     const userRecord = await db
       .select()
@@ -72,6 +110,16 @@ export async function processSuccessfulCreditPurchase(
         })
         .where(eq(userSchema.id, userId));
     }
+
+    // Order'ı başarılı olarak güncelle
+    await db
+      .update(orderSchema)
+      .set({
+        paymentStatus: 'success',
+        paidAt: new Date(),
+        updatedAt: new Date(),
+      })
+      .where(eq(orderSchema.merchantOid, merchantOid));
 
     // İşlemi tamamlandı olarak kaydet
     processedTransactions.add(merchantOid);
