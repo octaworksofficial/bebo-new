@@ -81,21 +81,31 @@ export function OrdersList({ initialOrders }: OrdersListProps) {
             <div className="flex flex-col gap-6 lg:flex-row">
               {/* Ürün Görseli */}
               <div className="shrink-0">
-                {order.imageUrl
+                {order.orderType === 'credit'
                   ? (
                       <Image
-                        src={order.imageUrl}
-                        alt={order.productName || 'Ürün'}
+                        src="/assets/images/birebiro-art-credit.jpg"
+                        alt="Sanat Kredisi"
                         width={150}
                         height={150}
                         className="rounded-lg object-cover"
                       />
                     )
-                  : (
-                      <div className="flex size-[150px] items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-700">
-                        <Package className="size-12 text-gray-400" />
-                      </div>
-                    )}
+                  : order.imageUrl
+                    ? (
+                        <Image
+                          src={order.imageUrl}
+                          alt={order.productName || 'Ürün'}
+                          width={150}
+                          height={150}
+                          className="rounded-lg object-cover"
+                        />
+                      )
+                    : (
+                        <div className="flex size-[150px] items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-700">
+                          <Package className="size-12 text-gray-400" />
+                        </div>
+                      )}
               </div>
 
               {/* Sipariş Bilgileri */}
@@ -103,7 +113,9 @@ export function OrdersList({ initialOrders }: OrdersListProps) {
                 <div className="flex items-start justify-between">
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                      {order.productName || 'Ürün'}
+                      {order.orderType === 'credit'
+                        ? `Sanat Kredisi (${Math.floor((order.paymentAmount || 0) / 100)} Kredi)`
+                        : order.productName || 'Ürün'}
                     </h3>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
                       Sipariş No:
@@ -114,28 +126,51 @@ export function OrdersList({ initialOrders }: OrdersListProps) {
                   {getStatusBadge(order.paymentStatus || 'pending')}
                 </div>
 
-                <div className="grid gap-2 text-sm sm:grid-cols-2">
-                  <div>
-                    <span className="text-gray-600 dark:text-gray-400">Boyut:</span>
-                    <span className="ml-2 font-medium text-gray-900 dark:text-white">
-                      {order.sizeName || order.sizeDimensions || '-'}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-gray-600 dark:text-gray-400">Çerçeve:</span>
-                    <span className="ml-2 font-medium text-gray-900 dark:text-white">
-                      {order.frameName || 'Yok'}
-                    </span>
-                  </div>
-                  <div>
-                    <span className="text-gray-600 dark:text-gray-400">Tutar:</span>
-                    <span className="ml-2 font-medium text-gray-900 dark:text-white">
-                      {((order.paymentAmount || 0) / 100).toFixed(2)}
-                      {' '}
-                      TL
-                    </span>
-                  </div>
-                </div>
+                {order.orderType === 'credit'
+                  ? (
+                      <div className="grid gap-2 text-sm sm:grid-cols-2">
+                        <div>
+                          <span className="text-gray-600 dark:text-gray-400">Kredi Sayısı:</span>
+                          <span className="ml-2 font-medium text-gray-900 dark:text-white">
+                            {Math.floor((order.paymentAmount || 0) / 100)}
+                            {' '}
+                            Kredi
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-gray-600 dark:text-gray-400">Tutar:</span>
+                          <span className="ml-2 font-medium text-gray-900 dark:text-white">
+                            {((order.paymentAmount || 0) / 100).toFixed(2)}
+                            {' '}
+                            TL
+                          </span>
+                        </div>
+                      </div>
+                    )
+                  : (
+                      <div className="grid gap-2 text-sm sm:grid-cols-2">
+                        <div>
+                          <span className="text-gray-600 dark:text-gray-400">Boyut:</span>
+                          <span className="ml-2 font-medium text-gray-900 dark:text-white">
+                            {order.sizeName || order.sizeDimensions || '-'}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-gray-600 dark:text-gray-400">Çerçeve:</span>
+                          <span className="ml-2 font-medium text-gray-900 dark:text-white">
+                            {order.frameName || 'Yok'}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="text-gray-600 dark:text-gray-400">Tutar:</span>
+                          <span className="ml-2 font-medium text-gray-900 dark:text-white">
+                            {((order.paymentAmount || 0) / 100).toFixed(2)}
+                            {' '}
+                            TL
+                          </span>
+                        </div>
+                      </div>
+                    )}
 
                 <div className="text-xs text-gray-500 dark:text-gray-400">
                   {order.createdAt && (
@@ -153,8 +188,8 @@ export function OrdersList({ initialOrders }: OrdersListProps) {
                   )}
                 </div>
 
-                {/* Kargo Takip Bilgisi */}
-                {order.trackingNumber && (
+                {/* Kargo Takip Bilgisi - Sadece ürün siparişleri için */}
+                {order.orderType !== 'credit' && order.trackingNumber && (
                   <div className="rounded-lg border-l-4 border-blue-500 bg-blue-50 p-3 dark:bg-blue-900/20">
                     <h4 className="mb-1 text-sm font-semibold text-blue-900 dark:text-blue-100">
                       🚚 Kargo Takip
@@ -177,8 +212,8 @@ export function OrdersList({ initialOrders }: OrdersListProps) {
                   </div>
                 )}
 
-                {/* Teslimat Bilgileri */}
-                {order.customerName && (
+                {/* Teslimat Bilgileri - Sadece ürün siparişleri için */}
+                {order.orderType !== 'credit' && order.customerName && (
                   <div className="rounded-lg bg-gray-50 p-3 dark:bg-gray-700/50">
                     <h4 className="mb-2 text-sm font-semibold text-gray-900 dark:text-white">
                       Teslimat Bilgileri
@@ -201,6 +236,7 @@ export function OrdersList({ initialOrders }: OrdersListProps) {
       {totalPages > 1 && (
         <div className="flex items-center justify-center gap-2">
           <button
+            type="button"
             onClick={() => goToPage(currentPage - 1)}
             disabled={currentPage === 1}
             className="flex items-center gap-1 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
@@ -213,6 +249,7 @@ export function OrdersList({ initialOrders }: OrdersListProps) {
             {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
               <button
                 key={page}
+                type="button"
                 onClick={() => goToPage(page)}
                 className={`size-10 rounded-lg text-sm font-medium transition-colors ${
                   currentPage === page
@@ -226,6 +263,7 @@ export function OrdersList({ initialOrders }: OrdersListProps) {
           </div>
 
           <button
+            type="button"
             onClick={() => goToPage(currentPage + 1)}
             disabled={currentPage === totalPages}
             className="flex items-center gap-1 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"

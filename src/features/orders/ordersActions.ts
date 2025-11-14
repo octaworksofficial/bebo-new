@@ -33,6 +33,7 @@ export async function getUserOrders() {
         currency: orderSchema.currency,
         paymentStatus: orderSchema.paymentStatus,
         paymentType: orderSchema.paymentType,
+        orderType: orderSchema.orderType, // Kredi vs ürün siparişi için
         customerName: orderSchema.customerName,
         customerEmail: orderSchema.customerEmail,
         customerPhone: orderSchema.customerPhone,
@@ -65,9 +66,6 @@ export async function getUserOrders() {
       )
       .where(eq(orderSchema.userId, userId))
       .orderBy(desc(orderSchema.createdAt));
-
-    console.log('📊 Total orders found:', orders.length);
-    console.log('🔍 First order:', orders[0]);
 
     return orders;
   } catch (error) {

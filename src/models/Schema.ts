@@ -170,6 +170,7 @@ export const orderSchema = pgTable('order', {
   paymentStatus: varchar('payment_status', { length: 20 }).default('pending').notNull(), // pending, success, failed
   paymentType: varchar('payment_type', { length: 20 }), // card, eft
   paytrToken: text('paytr_token'), // PayTR iframe token
+  orderType: varchar('order_type', { length: 20 }).default('product').notNull(), // 'product' | 'credit'
   failedReasonCode: varchar('failed_reason_code', { length: 10 }), // Başarısız ödeme kodu
   failedReasonMsg: text('failed_reason_msg'), // Başarısız ödeme mesajı
   customerName: text('customer_name').notNull(),
