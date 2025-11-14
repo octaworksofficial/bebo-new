@@ -3,11 +3,7 @@
 import { Buffer } from 'node:buffer';
 import { createHmac } from 'node:crypto';
 
-import { eq } from 'dr    // Toplam tutarı hesapla (kuruş cinsinden)
-    const totalAmount = creditAmount * settings.pricePerCredit;
-
-    // Benzersiz sipariş numarası oluştur - user ID'sini de içer (PayTR callback için)
-    const merchantOid = `CRD${Date.now()}_${userId}`;-orm';
+import { eq } from 'drizzle-orm';
 
 import { db } from '@/libs/DB';
 import { Env } from '@/libs/Env';
