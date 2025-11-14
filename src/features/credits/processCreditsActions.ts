@@ -40,8 +40,8 @@ export async function processSuccessfulCreditPurchase(
       };
     }
 
-    // Merchant_oid format kontrolü (PayTR formatı: kullanıcıID_timestamp formatında olmalı)
-    if (!merchantOid || !merchantOid.includes(userId)) {
+    // Merchant_oid format kontrolü (PayTR formatı: CRD ile başlamalı)
+    if (!merchantOid || !merchantOid.startsWith('CRD')) {
       return {
         success: false,
         message: 'Geçersiz işlem numarası',

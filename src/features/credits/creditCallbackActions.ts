@@ -1,13 +1,14 @@
 'use server';
 
+import { createHmac } from 'node:crypto';
+
 import { eq } from 'drizzle-orm';
-import { createHmac } from 'crypto';
 
 import { db } from '@/libs/DB';
-import { userSchema } from '@/models/Schema';
 import { Env } from '@/libs/Env';
+import { orderSchema, userSchema } from '@/models/Schema';
 
-interface PayTRCreditCallbackPayload {
+type PayTRCreditCallbackPayload = {
   merchant_oid: string;
   status: string;
   total_amount: string;
@@ -15,7 +16,7 @@ interface PayTRCreditCallbackPayload {
   payment_type?: string;
   failed_reason_code?: string;
   failed_reason_msg?: string;
-}
+};
 
 /**
  * PayTR kredi ödeme callback'ini doğrular ve kredileri yükler
@@ -45,15 +46,31 @@ export async function validatePayTRCreditCallback(
 
     // Ödeme başarılıysa kredileri yükle
     if (status === '1') { // PayTR'de 1 = başarılı
-      const creditAmount = Math.floor(parseInt(total_amount, 10) / 150); // 1.5 TL = 1 kredi
-      
-      // merchant_oid'den user ID'sini çıkar (format: CRD{timestamp}_{userId} veya sadece userId'yi al)
-      // Güvenlik için: merchant_oid içinde user bilgisi olmalı
-      const userId = merchant_oid.replace(/^CRD\d+_?/, ''); // CRD ve timestamp'i kaldır
-      
-      if (!userId) {
-        return { success: false, error: 'Cannot extract user ID from merchant_oid' };
+      // merchant_oid ile order'ı bul ve user ID'yi al (güvenli yöntem)
+      const orderRecord = await db
+        .select({
+          userId: orderSchema.userId,
+          paymentStatus: orderSchema.paymentStatus,
+          paymentAmount: orderSchema.paymentAmount,
+        })
+        .from(orderSchema)
+        .where(eq(orderSchema.merchantOid, merchant_oid))
+        .limit(1);
+
+      if (orderRecord.length === 0) {
+        return { success: false, error: 'Order not found for merchant_oid' };
       }
+
+      const order = orderRecord[0]!;
+      const { userId } = order;
+      
+      // Sipariş zaten işlendiyse tekrar işleme
+      if (order.paymentStatus === 'success') {
+        return { success: true, error: 'Order already processed' };
+      }
+
+      // Kredi miktarını hesapla (paymentAmount kuruş cinsinden, 150 kuruş = 1 kredi)
+      const creditAmount = Math.floor(order.paymentAmount / 150);
 
       // Kullanıcının kredilerini güncelle
       const userRecord = await db
@@ -80,13 +97,33 @@ export async function validatePayTRCreditCallback(
           .where(eq(userSchema.id, userId));
       }
 
+      // Order'ı başarılı olarak güncelle
+      await db
+        .update(orderSchema)
+        .set({
+          paymentStatus: 'success',
+          paidAt: new Date(),
+          updatedAt: new Date(),
+        })
+        .where(eq(orderSchema.merchantOid, merchant_oid));
+
       return {
         success: true,
         creditsAdded: creditAmount,
       };
     }
 
-    // Ödeme başarısız
+    // Ödeme başarısız - order'ı failed olarak güncelle
+    await db
+      .update(orderSchema)
+      .set({
+        paymentStatus: 'failed',
+        failedReasonCode: payload.failed_reason_code || null,
+        failedReasonMsg: payload.failed_reason_msg || null,
+        updatedAt: new Date(),
+      })
+      .where(eq(orderSchema.merchantOid, merchant_oid));
+
     return {
       success: true, // Callback olarak başarılı (PayTR'a OK döndür)
       error: `Payment failed: ${payload.failed_reason_msg || 'Unknown error'}`,
