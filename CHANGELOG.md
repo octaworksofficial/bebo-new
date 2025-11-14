@@ -1,3 +1,22 @@
+# [1.2.0](https://github.com/octaworksofficial/bebo-new/compare/v1.1.0...v1.2.0) (2025-11-14)
+
+
+### Bug Fixes
+
+* Add French translations and Suspense boundary for purchase credits ([b4a2c5f](https://github.com/octaworksofficial/bebo-new/commit/b4a2c5f0ed2facb6e50b7e7ea1863a899d79e969))
+* dynamic credit amount loading instead of hardcoded 10 credits ([725e931](https://github.com/octaworksofficial/bebo-new/commit/725e93196c8aa90a3ff9c912485fae934860991d))
+* make merchant_oid alphanumeric for PayTR compliance ([8b6c8eb](https://github.com/octaworksofficial/bebo-new/commit/8b6c8eb1b757d91758ea2922679a29156f10265c))
+* PayTR callback support for credit purchases ([d9961e2](https://github.com/octaworksofficial/bebo-new/commit/d9961e2d13875adcef2e1a3ad9a3e22d7993d268))
+* resolve syntax errors in purchaseCreditActions.ts ([7561a34](https://github.com/octaworksofficial/bebo-new/commit/7561a34a9a771919a18661ebdd3e4e813d70f3d1))
+* Use direct value assignment instead of SQL increment for credits ([df7326c](https://github.com/octaworksofficial/bebo-new/commit/df7326c241b585fb014f0adefd5f4ab3611b6bb0))
+
+
+### Features
+
+* add credit purchase image display in orders list ([a572367](https://github.com/octaworksofficial/bebo-new/commit/a572367b1db2008c7315019dde852c06d006c74c))
+* Add detailed credit increment logging for debugging ([68f2f0c](https://github.com/octaworksofficial/bebo-new/commit/68f2f0cb940d9cbbd444793ae33ba754fd53be90))
+* implement secure credit loading system after PayTR success ([c857696](https://github.com/octaworksofficial/bebo-new/commit/c8576962f04b081ed479b4e03c36fdfe587c22a8))
+
 # [1.1.0](https://github.com/octaworksofficial/bebo-new/compare/v1.0.0...v1.1.0) (2025-11-13)
 
 
