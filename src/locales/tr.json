@@ -94,6 +94,7 @@
     "company": "İletişim",
     "terms_of_service": "Şart ve Koşullar",
     "privacy_policy": "Gizlilik Politikası",
+    "legal_documents": "Yasal Metinler",
     "designed_by": "© 2025, BİREBİRO, Özboya Group Global Markasıdır. Tüm Hakları Saklıdır."
   },
   "ProtectFallback": {
@@ -189,6 +190,7 @@
     "meta_description": "Hayalinizdeki tasarım için ürün, boyut ve çerçeve seçin",
     "page_title": "Ürününüzü Seçin",
     "page_description": "Tasarımınızı hangi ürün üzerinde görmek istersiniz?",
+    "loading": "Yükleniyor...",
     "product_wall_art": "Duvar Tablosu",
     "product_wall_art_description": "Özel tasarımınızla benzersiz bir duvar dekoru oluşturun",
     "starting_from": "Başlangıç",
@@ -328,5 +330,13 @@
     "failed_title": "Ödeme Başarısız",
     "failed_message": "Ödeme işleminiz tamamlanamadı. Lütfen tekrar deneyin veya müşteri hizmetlerimizle iletişime geçin.",
     "try_again": "Tekrar Dene"
+  },
+  "Legal": {
+    "meta_title": "Yasal Metinler",
+    "meta_description": "Gizlilik Politikası, Kullanım Koşulları ve diğer yasal metinler",
+    "page_title": "Yasal Metinler",
+    "page_description": "Birebiro ile ilgili tüm yasal metinleri bu sayfadan inceleyebilirsiniz",
+    "no_documents": "Henüz yasal metin bulunmamaktadır",
+    "last_updated": "Son Güncelleme"
   }
 }

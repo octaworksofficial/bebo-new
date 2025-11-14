@@ -82,6 +82,8 @@ export const productSchema = pgTable('product', {
   description: text('description').notNull(),
   descriptionEn: text('description_en'),
   descriptionFr: text('description_fr'),
+  imageSquareUrl: text('image_square_url'), // Square product image (1080x1080)
+  imageWideUrl: text('image_wide_url'), // Wide product image (1920x1080)
   sizeLabel: text('size_label').default('Boyut Seçin').notNull(), // "Boyut Seçin" etiketi
   sizeLabelEn: text('size_label_en').default('Select Size'),
   sizeLabelFr: text('size_label_fr').default('Sélectionner la taille'),
@@ -199,4 +201,20 @@ export const artCreditSettingsSchema = pgTable('art_credit_settings', {
     .defaultNow()
     .$onUpdate(() => new Date()),
   createdAt: timestamp('created_at', { mode: 'date' }).defaultNow(),
+});
+
+// Legal Documents Schema - for privacy policy, terms of service, etc.
+export const legalDocumentSchema = pgTable('legal_documents', {
+  id: serial('id').primaryKey(),
+  slug: varchar('slug', { length: 100 }).notNull().unique(),
+  title: text('title').notNull(),
+  content: text('content').notNull(),
+  isActive: boolean('is_active').default(true).notNull(),
+  sortOrder: integer('sort_order').default(0).notNull(),
+  language: varchar('language', { length: 5 }).default('tr').notNull(), // 'tr', 'en', 'fr'
+  createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
+  updatedAt: timestamp('updated_at', { mode: 'date' })
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
 });

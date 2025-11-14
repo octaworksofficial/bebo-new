@@ -94,6 +94,7 @@
     "company": "Company",
     "terms_of_service": "Terms Of Service",
     "privacy_policy": "Privacy Policy",
+    "legal_documents": "Legal Documents",
     "designed_by": "Designed by <author></author>."
   },
   "ProtectFallback": {
@@ -189,6 +190,7 @@
     "meta_description": "Choose your product, size and frame for your dream design",
     "page_title": "Choose Your Product",
     "page_description": "Which product would you like to see your design on?",
+    "loading": "Loading...",
     "product_wall_art": "Wall Art",
     "product_wall_art_description": "Create a unique wall decoration with your custom design",
     "starting_from": "Starting from",
@@ -328,5 +330,13 @@
     "failed_title": "Payment Failed",
     "failed_message": "Your payment could not be completed. Please try again or contact customer support.",
     "try_again": "Try Again"
+  },
+  "Legal": {
+    "meta_title": "Legal Documents",
+    "meta_description": "Privacy Policy, Terms of Service and other legal documents",
+    "page_title": "Legal Documents",
+    "page_description": "Review all legal documents related to Birebiro",
+    "no_documents": "No legal documents available yet",
+    "last_updated": "Last Updated"
   }
 }

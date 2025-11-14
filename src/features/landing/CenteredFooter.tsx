@@ -7,6 +7,7 @@ export const CenteredFooter = (props: {
   iconList: React.ReactNode;
   legalLinks: React.ReactNode;
   children: React.ReactNode;
+  bankCards?: React.ReactNode;
 }) => {
   const t = useTranslations('Footer');
 
@@ -21,6 +22,12 @@ export const CenteredFooter = (props: {
       <ul className="mt-4 flex flex-row gap-x-5 text-muted-foreground [&_svg:hover]:text-primary [&_svg:hover]:opacity-100 [&_svg]:size-5 [&_svg]:fill-current [&_svg]:opacity-60">
         {props.iconList}
       </ul>
+
+      {props.bankCards && (
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+          {props.bankCards}
+        </div>
+      )}
 
       <div className="mt-6 flex w-full items-center justify-between gap-y-2 border-t pt-3 text-sm text-muted-foreground max-md:flex-col">
         <div>

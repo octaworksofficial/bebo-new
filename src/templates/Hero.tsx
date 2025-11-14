@@ -1,6 +1,5 @@
 'use client';
 
-import { TwitterLogoIcon } from '@radix-ui/react-icons';
 import { Loader2, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -24,7 +23,7 @@ export const Hero = () => {
   };
 
   return (
-    <Section className="bg-gray-900 py-36 dark:bg-gray-950">
+    <Section className="bg-gray-900 py-48 dark:bg-gray-950">
       <CenteredHero
         banner={(
           <a
@@ -33,7 +32,6 @@ export const Hero = () => {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <TwitterLogoIcon className="mr-1 size-5" />
             {' '}
             {t('follow_twitter')}
           </a>

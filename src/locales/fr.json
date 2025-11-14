@@ -93,6 +93,7 @@
     "company": "Entreprise",
     "terms_of_service": "Conditions d'utilisation",
     "privacy_policy": "Politique de confidentialité",
+    "legal_documents": "Documents Légaux",
     "designed_by": "Designé by <author></author>."
   },
   "ProtectFallback": {
@@ -188,6 +189,7 @@
     "meta_description": "Choisissez votre produit, taille et cadre pour votre design de rêve",
     "page_title": "Choisissez votre produit",
     "page_description": "Sur quel produit aimeriez-vous voir votre design ?",
+    "loading": "Chargement...",
     "product_wall_art": "Art Mural",
     "product_wall_art_description": "Créez une décoration murale unique avec votre design personnalisé",
     "starting_from": "À partir de",
@@ -274,5 +276,13 @@
     "failed_title": "Paiement Échoué",
     "failed_message": "Votre paiement n'a pas pu être complété. Veuillez réessayer ou contacter le support client.",
     "try_again": "Réessayer"
+  },
+  "Legal": {
+    "meta_title": "Documents Légaux",
+    "meta_description": "Politique de Confidentialité, Conditions d'Utilisation et autres documents légaux",
+    "page_title": "Documents Légaux",
+    "page_description": "Consultez tous les documents légaux relatifs à Birebiro",
+    "no_documents": "Aucun document légal disponible pour le moment",
+    "last_updated": "Dernière Mise à Jour"
   }
 }

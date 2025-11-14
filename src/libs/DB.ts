@@ -4,7 +4,6 @@ import { PGlite } from '@electric-sql/pglite';
 import { drizzle as drizzlePg } from 'drizzle-orm/node-postgres';
 import { migrate as migratePg } from 'drizzle-orm/node-postgres/migrator';
 import { drizzle as drizzlePglite, type PgliteDatabase } from 'drizzle-orm/pglite';
-import { migrate as migratePglite } from 'drizzle-orm/pglite/migrator';
 import { PHASE_PRODUCTION_BUILD } from 'next/dist/shared/lib/constants';
 import { Client } from 'pg';
 
@@ -21,36 +20,49 @@ if (process.env.NEXT_PHASE === PHASE_PRODUCTION_BUILD) {
   drizzle = null as any;
 } else if (process.env.DATABASE_URL) {
   // Production/Development with real PostgreSQL
+  // eslint-disable-next-line no-console
   console.log('🔌 Connecting to PostgreSQL database...');
   client = new Client({
     connectionString: process.env.DATABASE_URL,
   });
   await client.connect();
+  // eslint-disable-next-line no-console
   console.log('✅ Connected to PostgreSQL');
 
   drizzle = drizzlePg(client, { schema });
+  // eslint-disable-next-line no-console
   console.log('🚀 Running migrations...');
   await migratePg(drizzle, {
     migrationsFolder: path.join(process.cwd(), 'migrations'),
   });
+  // eslint-disable-next-line no-console
   console.log('✅ Migrations completed');
 } else {
   // Local development with PGlite (in-memory database)
+  // eslint-disable-next-line no-console
   console.log('⚠️  No DATABASE_URL found, using PGlite in-memory database');
   // Stores the db connection in the global scope to prevent multiple instances due to hot reloading with Next.js
-  const global = globalThis as unknown as { client: PGlite; drizzle: PgliteDatabase<typeof schema> };
+  const global = globalThis as unknown as { client: PGlite; drizzle: PgliteDatabase<typeof schema>; migrated: boolean };
 
   if (!global.client) {
     global.client = new PGlite();
     await global.client.waitReady;
 
     global.drizzle = drizzlePglite(global.client, { schema });
+    global.migrated = false;
   }
 
   drizzle = global.drizzle;
-  await migratePglite(global.drizzle, {
-    migrationsFolder: path.join(process.cwd(), 'migrations'),
-  });
+
+  // Skip migrations for PGlite as it doesn't support DO $$ blocks in migrations
+  // If you need migrations with PGlite, you'll need to manually run them or use a PostgreSQL database
+  if (!global.migrated) {
+    // eslint-disable-next-line no-console
+    console.log('⚠️  Skipping migrations for PGlite (not supported with DO $$ blocks)');
+    // eslint-disable-next-line no-console
+    console.log('💡 For full functionality, please set DATABASE_URL to use PostgreSQL');
+    global.migrated = true;
+  }
 }
 
 export const db = drizzle;
