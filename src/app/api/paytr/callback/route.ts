@@ -2,6 +2,7 @@ import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
 import { validatePayTRCallback } from '@/features/checkout/paytrActions';
+import { validatePayTRCreditCallback } from '@/features/credits/creditCallbackActions';
 
 // Force dynamic rendering for this API route
 export const dynamic = 'force-dynamic';
@@ -34,8 +35,15 @@ export async function POST(request: NextRequest) {
       status: payload.status,
     });
 
-    // Callback'i doğrula ve siparişi güncelle
-    const result = await validatePayTRCallback(payload);
+    // Kredi ödeme kontrolü - merchant_oid CRD ile başlıyor
+    let result;
+    if (payload.merchant_oid.startsWith('CRD')) {
+      // Kredi ödeme callback'i
+      result = await validatePayTRCreditCallback(payload);
+    } else {
+      // Ürün ödeme callback'i
+      result = await validatePayTRCallback(payload);
+    }
 
     if (!result.success) {
       console.error('PayTR callback validation failed:', result.error);

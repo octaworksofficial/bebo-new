@@ -31,7 +31,7 @@ function SuccessContent() {
       if (!merchantOid) {
         setProcessingResult({
           success: false,
-          message: 'Geçersiz ödeme bilgisi',
+          message: `Geçersiz ödeme bilgisi - merchant_oid bulunamadı. URL: ${window.location.href}`,
         });
         setIsProcessing(false);
         return;

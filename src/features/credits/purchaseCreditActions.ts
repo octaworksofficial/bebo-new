@@ -3,7 +3,11 @@
 import { Buffer } from 'node:buffer';
 import { createHmac } from 'node:crypto';
 
-import { eq } from 'drizzle-orm';
+import { eq } from 'dr    // Toplam tutarı hesapla (kuruş cinsinden)
+    const totalAmount = creditAmount * settings.pricePerCredit;
+
+    // Benzersiz sipariş numarası oluştur - user ID'sini de içer (PayTR callback için)
+    const merchantOid = `CRD${Date.now()}_${userId}`;-orm';
 
 import { db } from '@/libs/DB';
 import { Env } from '@/libs/Env';
@@ -119,8 +123,8 @@ export async function createCreditPurchase(
     // Toplam tutarı hesapla (kuruş cinsinden)
     const totalAmount = creditAmount * settings.pricePerCredit;
 
-    // Benzersiz sipariş numarası oluştur
-    const merchantOid = `CRD${Date.now()}${Math.floor(Math.random() * 1000)}`;
+    // Benzersiz sipariş numarası oluştur - user ID'sini de içer (PayTR callback için)
+    const merchantOid = `CRD${Date.now()}_${userId}`;
 
     // PayTR API bilgileri
     const merchantId = Env.PAYTR_MERCHANT_ID;
@@ -132,8 +136,8 @@ export async function createCreditPurchase(
       ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}`
       : 'http://localhost:3001';
 
-    const merchantOkUrl = `${appUrl}/purchase-credits/success`;
-    const merchantFailUrl = `${appUrl}/purchase-credits/failed`;
+    const merchantOkUrl = `${appUrl}/purchase-credits/success?merchant_oid=${merchantOid}`;
+    const merchantFailUrl = `${appUrl}/purchase-credits/failed?merchant_oid=${merchantOid}`;
 
     // User basket (sepet içeriği) - PayTR formatında
     const userBasket = Buffer.from(JSON.stringify([
