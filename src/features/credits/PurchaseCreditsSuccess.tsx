@@ -1,9 +1,8 @@
 'use client';
 
-import { Suspense, useEffect, useState } from 'react';
-
 import { CheckCircle, Loader2, X } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense, useEffect, useState } from 'react';
 
 import { Footer } from '@/templates/Footer';
 import { Navbar } from '@/templates/Navbar';
@@ -13,7 +12,7 @@ import { processSuccessfulCreditPurchase } from './processCreditsActions';
 function SuccessContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  
+
   const [countdown, setCountdown] = useState(5);
   const [isProcessing, setIsProcessing] = useState(true);
   const [processingResult, setProcessingResult] = useState<{
@@ -80,7 +79,7 @@ function SuccessContent() {
 
       <div className="flex h-[60vh] items-center justify-center px-4">
         <div className="w-full max-w-md text-center">
-          
+
           {/* Loading State */}
           {isProcessing && (
             <>
@@ -106,11 +105,11 @@ function SuccessContent() {
                   <CheckCircle className="size-20 text-white" strokeWidth={2.5} />
                 </div>
               </div>
-              
+
               <h2 className="mb-2 text-xl font-semibold text-gray-900 dark:text-gray-100">
                 Ödeme Başarılı!
               </h2>
-              
+
               <p className="mb-4 text-gray-600 dark:text-gray-400">
                 {processingResult.message}
               </p>
@@ -142,11 +141,11 @@ function SuccessContent() {
                   <X className="size-20 text-white" strokeWidth={2.5} />
                 </div>
               </div>
-              
+
               <h2 className="mb-2 text-xl font-semibold text-gray-900 dark:text-gray-100">
                 İşlem Başarısız
               </h2>
-              
+
               <p className="mb-6 text-gray-600 dark:text-gray-400">
                 {processingResult.message}
               </p>

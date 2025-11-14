@@ -1,6 +1,7 @@
+import fs from 'node:fs';
+import path from 'node:path';
+
 import { Client } from 'pg';
-import fs from 'fs';
-import path from 'path';
 
 async function runMigration() {
   const client = new Client({
@@ -15,10 +16,10 @@ async function runMigration() {
     const sql = fs.readFileSync(migrationPath, 'utf-8');
 
     console.log('🚀 Running migration...');
-    
+
     // Split by statement breakpoint and execute one by one
     const statements = sql.split('--> statement-breakpoint').map(s => s.trim()).filter(s => s);
-    
+
     for (let i = 0; i < statements.length; i++) {
       const stmt = statements[i];
       if (stmt) {

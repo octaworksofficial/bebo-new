@@ -17,6 +17,8 @@ export async function getProducts(locale: string = 'tr') {
     slug: product.slug,
     name: locale === 'en' ? (product.nameEn || product.name) : locale === 'fr' ? (product.nameFr || product.name) : product.name,
     description: locale === 'en' ? (product.descriptionEn || product.description) : locale === 'fr' ? (product.descriptionFr || product.description) : product.description,
+    imageSquareUrl: product.imageSquareUrl,
+    imageWideUrl: product.imageWideUrl,
   }));
 }
 
@@ -48,6 +50,8 @@ export async function getProductDetails(productSlug: string, locale: string = 't
     slug: product.slug,
     name: locale === 'en' ? (product.nameEn || product.name) : locale === 'fr' ? (product.nameFr || product.name) : product.name,
     description: locale === 'en' ? (product.descriptionEn || product.description) : locale === 'fr' ? (product.descriptionFr || product.description) : product.description,
+    imageSquareUrl: product.imageSquareUrl,
+    imageWideUrl: product.imageWideUrl,
     sizeLabel: locale === 'en' ? (product.sizeLabelEn || product.sizeLabel || 'Select Size') : locale === 'fr' ? (product.sizeLabelFr || product.sizeLabel || 'Sélectionner la taille') : (product.sizeLabel || 'Boyut Seçin'),
     frameLabel: locale === 'en' ? (product.frameLabelEn || product.frameLabel || 'Select Frame') : locale === 'fr' ? (product.frameLabelFr || product.frameLabel || 'Sélectionner le cadre') : (product.frameLabel || 'Çerçeve Seçin'),
     sizes: sizes.map((size: typeof productSizeSchema.$inferSelect) => ({
@@ -62,6 +66,9 @@ export async function getProductDetails(productSlug: string, locale: string = 't
       slug: frame.slug,
       name: locale === 'en' ? (frame.nameEn || frame.name) : locale === 'fr' ? (frame.nameFr || frame.name) : frame.name,
       price: frame.priceAmount / 100, // Convert from cents to TL
+      colorCode: frame.colorCode,
+      frameImage: frame.frameImage,
+      frameImageLarge: frame.frameImageLarge,
     })),
   };
 }
@@ -110,4 +117,30 @@ export async function getProductIdsFromSlugs(params: {
     sizeId,
     frameId,
   };
+}
+
+export async function getProductBySlug(productSlug: string, locale: string = 'tr') {
+  const [product] = await db
+    .select()
+    .from(productSchema)
+    .where(eq(productSchema.slug, productSlug))
+    .limit(1);
+
+  if (!product) {
+    return null;
+  }
+
+  const result = {
+    id: product.id,
+    slug: product.slug,
+    name: locale === 'en' ? (product.nameEn || product.name) : locale === 'fr' ? (product.nameFr || product.name) : product.name,
+    description: locale === 'en' ? (product.descriptionEn || product.description) : locale === 'fr' ? (product.descriptionFr || product.description) : product.description,
+    imageSquareUrl: product.imageSquareUrl,
+    imageWideUrl: product.imageWideUrl,
+  };
+
+  // eslint-disable-next-line no-console
+  console.log('getProductBySlug result:', result);
+
+  return result;
 }

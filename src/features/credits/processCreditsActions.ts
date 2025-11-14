@@ -66,7 +66,7 @@ export async function processSuccessfulCreditPurchase(
     }
 
     const order = orderRecord[0]!;
-    
+
     // Kullanıcı ID'si kontrol et
     if (order.userId !== userId) {
       return {

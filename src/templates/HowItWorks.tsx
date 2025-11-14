@@ -1,5 +1,5 @@
+import { Package, ShoppingCart, Sparkles } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { Package, Sparkles, ShoppingCart } from 'lucide-react';
 
 const HowItWorks = () => {
   const t = useTranslations('HowItWorks');
@@ -53,7 +53,7 @@ const HowItWorks = () => {
                 {/* Connecting Line (hidden on mobile, shown on desktop between cards) */}
                 {index < steps.length - 1 && (
                   <div className="absolute left-full top-1/3 hidden h-0.5 w-full -translate-y-1/2 md:block">
-                    <div className="h-full w-full bg-gradient-to-r from-primary/50 to-transparent" />
+                    <div className="size-full bg-gradient-to-r from-primary/50 to-transparent" />
                   </div>
                 )}
 

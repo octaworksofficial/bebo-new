@@ -34,6 +34,26 @@ export default withSentryConfig(
             hostname: 'i.ibb.co',
             pathname: '/**',
           },
+          {
+            protocol: 'https',
+            hostname: 'fansee.com.au',
+            pathname: '/**',
+          },
+          {
+            protocol: 'https',
+            hostname: 'www.immerse.education',
+            pathname: '/**',
+          },
+          {
+            protocol: 'https',
+            hostname: '**.cloudinary.com',
+            pathname: '/**',
+          },
+          {
+            protocol: 'https',
+            hostname: '**.amazonaws.com',
+            pathname: '/**',
+          },
         ],
       },
     }),

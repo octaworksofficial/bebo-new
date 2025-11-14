@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
+import { ProductImage } from '@/components/ProductImage';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/utils/Helpers';
 
@@ -15,6 +16,8 @@ type Product = {
   slug: string;
   name: string;
   description: string;
+  imageSquareUrl?: string | null;
+  imageWideUrl?: string | null;
 };
 
 type Size = {
@@ -25,11 +28,14 @@ type Size = {
   price: number;
 };
 
-type Frame = {
+type ProductFrame = {
   id: number;
   slug: string;
   name: string;
   price: number;
+  colorCode?: string | null;
+  frameImage?: string | null;
+  frameImageLarge?: string | null;
 };
 
 type ProductConfig = {
@@ -47,14 +53,30 @@ export const ProductSelection = ({ products, locale }: Props) => {
   const router = useRouter();
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
   const [sizes, setSizes] = useState<Size[]>([]);
-  const [frames, setFrames] = useState<Frame[]>([]);
+  const [frames, setFrames] = useState<ProductFrame[]>([]);
   const [sizeLabel, setSizeLabel] = useState<string>('');
   const [frameLabel, setFrameLabel] = useState<string>('');
   const [loading, setLoading] = useState(false);
+  const [navigating, setNavigating] = useState(false);
+  const [productFrames, setProductFrames] = useState<Record<string, ProductFrame[]>>({});
   const [config, setConfig] = useState<ProductConfig>({
     frame: null,
     size: null,
   });
+
+  // Load frames for all products on mount
+  useEffect(() => {
+    products.forEach((product) => {
+      getProductDetails(product.slug, locale).then((details) => {
+        if (details) {
+          setProductFrames((prev) => ({
+            ...prev,
+            [product.slug]: details.frames,
+          }));
+        }
+      });
+    });
+  }, [products, locale]);
 
   useEffect(() => {
     if (selectedProduct) {
@@ -78,6 +100,7 @@ export const ProductSelection = ({ products, locale }: Props) => {
 
   const handleContinue = () => {
     if (config.frame && config.size && selectedProduct) {
+      setNavigating(true);
       const params = new URLSearchParams({
         product: selectedProduct,
         size: config.size,
@@ -102,6 +125,7 @@ export const ProductSelection = ({ products, locale }: Props) => {
 
   const isConfigComplete = config.frame !== null && config.size !== null;
   const currentProduct = products.find(p => p.slug === selectedProduct);
+  const selectedFrame = frames.find(f => f.slug === config.frame);
 
   return (
     <div className="min-h-screen bg-background px-3 py-8">
@@ -126,6 +150,7 @@ export const ProductSelection = ({ products, locale }: Props) => {
           {products.map((product) => {
             const isSelected = selectedProduct === product.slug;
             const isHidden = selectedProduct && !isSelected;
+            const productFramesList = productFrames[product.slug] || [];
 
             if (isHidden) {
               return null;
@@ -138,26 +163,19 @@ export const ProductSelection = ({ products, locale }: Props) => {
                   'group relative cursor-pointer overflow-hidden rounded-2xl border bg-card shadow-sm transition-all duration-500',
                   isSelected
                     ? 'col-span-full'
-                    : 'hover:shadow-lg hover:scale-[1.02]',
+                    : 'hover:shadow-lg hover:scale-[1.10]',
                 )}
                 onClick={() => !selectedProduct && handleProductClick(product.slug)}
               >
                 {/* Product Image */}
-                <div className={cn(
-                  'relative overflow-hidden bg-gradient-to-br from-purple-500/10 to-pink-500/10',
-                  isSelected ? 'h-64 md:h-80' : 'h-64',
-                )}
-                >
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <Frame className="size-24 text-muted-foreground/20" />
-                  </div>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-center">
-                      <Frame className="mx-auto mb-4 size-16 text-primary" />
-                      <h3 className="text-2xl font-bold">{product.name}</h3>
-                    </div>
-                  </div>
-                </div>
+                <ProductImage
+                  imageUrl={isSelected && selectedFrame?.frameImageLarge ? selectedFrame.frameImageLarge : (isSelected ? product.imageWideUrl : product.imageSquareUrl)}
+                  productName={product.name}
+                  variant={isSelected ? 'wide' : 'square'}
+                  className={isSelected ? 'h-48 md:h-64' : undefined}
+                />
+
+
 
                 {/* Product Info (when not selected) */}
                 {!isSelected && (
@@ -166,6 +184,25 @@ export const ProductSelection = ({ products, locale }: Props) => {
                     <p className="mb-4 text-sm text-muted-foreground">
                       {product.description}
                     </p>
+                    
+                    {/* Color Options Display - Show available colors */}
+                    {productFramesList.length > 0 && productFramesList.some(f => f.colorCode) && (
+                      <div className="mb-3 flex items-center gap-2">
+                        <div className="flex gap-1.5">
+                          {productFramesList
+                            .filter(frame => frame.colorCode)
+                            .map(frame => (
+                              <div
+                                key={frame.id}
+                                className="size-5 rounded-full border border-gray-300 dark:border-gray-600"
+                                style={{ backgroundColor: frame.colorCode || '#gray' }}
+                                title={frame.name}
+                              />
+                            ))}
+                        </div>
+                      </div>
+                    )}
+                    
                     <div className="flex items-center justify-between">
                       <span className="text-lg font-bold text-primary">
                         {t('starting_from')}
@@ -195,104 +232,118 @@ export const ProductSelection = ({ products, locale }: Props) => {
                       </Button>
                     </div>
 
-                    {loading ? (
-                      <div className="py-12 text-center text-muted-foreground">
-                        {t('loading') || 'Yükleniyor...'}
-                      </div>
-                    ) : (
-                      <div className="grid gap-8 md:grid-cols-2">
-                        {/* Size Selection */}
-                        <div>
-                          <div className="mb-4 flex items-center gap-2">
-                            <Maximize2 className="size-5 text-primary" />
-                            <h4 className="text-lg font-semibold">{sizeLabel || t('select_size')}</h4>
+                    {loading
+                      ? (
+                          <div className="py-12 text-center text-muted-foreground">
+                            {t('loading') || 'Yükleniyor...'}
                           </div>
-                          <div className="grid gap-3">
-                            {sizes.map(size => (
-                              <button
-                                key={size.id}
-                                type="button"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setConfig(prev => ({ ...prev, size: size.slug }));
-                                }}
-                                className={cn(
-                                  'rounded-lg border-2 p-4 text-left transition-all',
-                                  config.size === size.slug
-                                    ? 'border-primary bg-primary/5'
-                                    : 'border-border hover:border-primary/50',
-                                )}
-                              >
-                                <div className="flex items-center justify-between">
-                                  <div>
-                                    <div className="font-semibold">{size.name}</div>
-                                    <div className="text-sm text-muted-foreground">
-                                      {size.dimensions}
-                                    </div>
-                                  </div>
-                                  <div className="font-bold text-primary">
-                                    {size.price}
-                                    ₺
-                                  </div>
-                                </div>
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-
-                        {/* Frame Selection */}
-                        <div>
-                          <div className="mb-4 flex items-center gap-2">
-                            <Frame className="size-5 text-primary" />
-                            <h4 className="text-lg font-semibold">{frameLabel || t('select_frame')}</h4>
-                          </div>
-                          <div className="grid gap-3">
-                            {frames.map(frame => (
-                              <button
-                                key={frame.id}
-                                type="button"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setConfig(prev => ({ ...prev, frame: frame.slug }));
-                                }}
-                                className={cn(
-                                  'rounded-lg border-2 p-4 text-left transition-all',
-                                  config.frame === frame.slug
-                                    ? 'border-primary bg-primary/5'
-                                    : 'border-border hover:border-primary/50',
-                                )}
-                              >
-                                <div className="flex items-center gap-4">
-                                  {/* Frame Preview */}
-                                  <div className={cn(
-                                    'relative flex size-16 shrink-0 items-center justify-center rounded',
-                                    frame.slug === 'no-frame' && 'bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900',
-                                    frame.slug === 'black' && 'bg-black p-1',
-                                    frame.slug === 'white' && 'bg-white p-1 ring-2 ring-gray-200',
-                                    frame.slug === 'wood' && 'bg-gradient-to-br from-amber-700 to-amber-900 p-1',
-                                  )}
-                                  >
-                                    <div className={cn(
-                                      'size-full rounded-sm bg-gradient-to-br from-purple-400 to-pink-400',
-                                      frame.slug !== 'no-frame' && 'ring-1 ring-white/20',
+                        )
+                      : (
+                          <div className="grid gap-8 md:grid-cols-2">
+                            {/* Size Selection */}
+                            <div>
+                              <div className="mb-4 flex items-center gap-2">
+                                <Maximize2 className="size-5 text-primary" />
+                                <h4 className="text-lg font-semibold">{sizeLabel || t('select_size')}</h4>
+                              </div>
+                              <div className="grid gap-3">
+                                {sizes.map(size => (
+                                  <button
+                                    key={size.id}
+                                    type="button"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setConfig(prev => ({ ...prev, size: size.slug }));
+                                    }}
+                                    className={cn(
+                                      'rounded-lg border-2 p-4 text-left transition-all',
+                                      config.size === size.slug
+                                        ? 'border-primary bg-primary/5'
+                                        : 'border-border hover:border-primary/50',
                                     )}
-                                    />
-                                  </div>
-
-                                  {/* Frame Info */}
-                                  <div className="flex flex-1 items-center justify-between">
-                                    <div className="font-semibold">{frame.name}</div>
-                                    <div className="font-bold text-primary">
-                                      {frame.price > 0 ? `+${frame.price}₺` : t('free')}
+                                  >
+                                    <div className="flex items-center justify-between">
+                                      <div>
+                                        <div className="font-semibold">{size.name}</div>
+                                        <div className="text-sm text-muted-foreground">
+                                          {size.dimensions}
+                                        </div>
+                                      </div>
+                                      <div className="font-bold text-primary">
+                                        {size.price}
+                                        ₺
+                                      </div>
                                     </div>
-                                  </div>
-                                </div>
-                              </button>
-                            ))}
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+
+                            {/* Frame Selection */}
+                            <div>
+                              <div className="mb-4 flex items-center gap-2">
+                                <Frame className="size-5 text-primary" />
+                                <h4 className="text-lg font-semibold">{frameLabel || t('select_frame')}</h4>
+                              </div>
+                              <div className="grid gap-3">
+                                {frames.map(frame => (
+                                  <button
+                                    key={frame.id}
+                                    type="button"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setConfig(prev => ({ ...prev, frame: frame.slug }));
+                                    }}
+                                    className={cn(
+                                      'rounded-lg border-2 p-4 text-left transition-all',
+                                      config.frame === frame.slug
+                                        ? 'border-primary bg-primary/5'
+                                        : 'border-border hover:border-primary/50',
+                                    )}
+                                  >
+                                    <div className="flex items-center gap-4">
+                                      {/* Frame Preview */}
+                                      <div className="relative size-16 shrink-0 overflow-hidden rounded">
+                                        {frame.frameImage
+                                          ? (
+                                              <img
+                                                src={frame.frameImage}
+                                                alt={frame.name}
+                                                className="size-full object-cover"
+                                              />
+                                            )
+                                          : (
+                                              <div className={cn(
+                                                'flex size-full items-center justify-center',
+                                                frame.slug === 'no-frame' && 'bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900',
+                                                frame.slug === 'black' && 'bg-black p-1',
+                                                frame.slug === 'white' && 'bg-white p-1 ring-2 ring-gray-200',
+                                                frame.slug === 'wood' && 'bg-gradient-to-br from-amber-700 to-amber-900 p-1',
+                                              )}
+                                              >
+                                                <div className={cn(
+                                                  'size-full rounded-sm bg-gradient-to-br from-purple-400 to-pink-400',
+                                                  frame.slug !== 'no-frame' && 'ring-1 ring-white/20',
+                                                )}
+                                                />
+                                              </div>
+                                            )}
+                                      </div>
+
+                                      {/* Frame Info */}
+                                      <div className="flex flex-1 items-center justify-between">
+                                        <div className="font-semibold">{frame.name}</div>
+                                        <div className="font-bold text-primary">
+                                          {frame.price > 0 ? `+${frame.price}₺` : t('free')}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                    )}
+                        )}
 
                     {/* Total & Continue Button */}
                     {isConfigComplete && (
@@ -311,9 +362,19 @@ export const ProductSelection = ({ products, locale }: Props) => {
                             e.stopPropagation();
                             handleContinue();
                           }}
+                          disabled={navigating}
                         >
-                          {t('continue')}
-                          <ChevronRight className="ml-2 size-5" />
+                          {navigating ? (
+                            <>
+                              <span className="mr-2 size-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                              {t('loading') || 'Yükleniyor...'}
+                            </>
+                          ) : (
+                            <>
+                              {t('continue')}
+                              <ChevronRight className="ml-2 size-5" />
+                            </>
+                          )}
                         </Button>
                       </div>
                     )}

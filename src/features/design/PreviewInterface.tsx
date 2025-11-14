@@ -1,10 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { ArrowLeft, Check, Frame as FrameIcon, Package, Ruler, Sparkles } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { useEffect, useState } from 'react';
+
 import { useRouter } from '@/libs/i18nNavigation';
-import { ArrowLeft, Sparkles, Package, Ruler, Frame as FrameIcon, Check } from 'lucide-react';
-import { getGeneratedImage, getUserGeneratedImages, type GeneratedImageResponse } from './chatActions';
+
+import { type GeneratedImageResponse, getGeneratedImage, getUserGeneratedImages } from './chatActions';
 import { getProductPricing, type ProductPriceData } from './productPriceActions';
 
 type PreviewInterfaceProps = {
@@ -34,16 +36,16 @@ export function PreviewInterface({
       setIsLoading(true);
       try {
         console.log('Loading image with generationId:', generationId);
-        
+
         // Try getUserGeneratedImages first to get all user's images
         const userImagesResult = await getUserGeneratedImages();
-        
+
         if (userImagesResult.success && userImagesResult.data) {
           // Find the image with matching generation_id
           const matchedImage = userImagesResult.data.find(
-            (img) => img.generation_id === generationId
+            img => img.generation_id === generationId,
           );
-          
+
           if (matchedImage) {
             console.log('Found image in user history:', matchedImage);
             setImageData(matchedImage);
@@ -51,12 +53,12 @@ export function PreviewInterface({
             return;
           }
         }
-        
+
         // Fallback: try getGeneratedImage API
         const result = await getGeneratedImage(generationId);
-        
+
         console.log('Result from API:', result);
-        
+
         if (result.success && result.data) {
           const data = Array.isArray(result.data) ? result.data[0] : result.data;
           console.log('Image data:', data);
@@ -79,7 +81,7 @@ export function PreviewInterface({
       setIsPriceLoading(true);
       try {
         const result = await getProductPricing(productSlug, sizeSlug, frameSlug);
-        
+
         if (result.success && result.data) {
           setPriceData(result.data);
         } else {
@@ -100,7 +102,7 @@ export function PreviewInterface({
   const handleContinueToCheckout = () => {
     // Checkout sayfasına yönlendir
     router.push(
-      `/checkout?generationId=${generationId}&product=${productSlug}&size=${sizeSlug}&frame=${frameSlug}`
+      `/checkout?generationId=${generationId}&product=${productSlug}&size=${sizeSlug}&frame=${frameSlug}`,
     );
   };
 
@@ -153,13 +155,15 @@ export function PreviewInterface({
           {/* User's Prompt */}
           <div className="rounded-xl border border-gray-200 bg-gradient-to-br from-purple-50 to-pink-50 p-6 dark:border-gray-700 dark:from-purple-900/20 dark:to-pink-900/20">
             <div className="flex items-start gap-3">
-              <Sparkles className="mt-1 size-6 flex-shrink-0 text-purple-600 dark:text-purple-400" />
+              <Sparkles className="mt-1 size-6 shrink-0 text-purple-600 dark:text-purple-400" />
               <div>
                 <h3 className="mb-2 text-sm font-semibold text-gray-700 dark:text-gray-300">
                   {t('your_feelings')}
                 </h3>
                 <p className="text-base leading-relaxed text-gray-800 dark:text-gray-200">
-                  "{imageData.text_prompt}"
+                  "
+                  {imageData.text_prompt}
+                  "
                 </p>
               </div>
             </div>
@@ -208,13 +212,12 @@ export function PreviewInterface({
                   </p>
                 </div>
                 <p className="font-semibold text-gray-900 dark:text-white">
-                  {isPriceLoading 
-                    ? '...' 
-                    : (priceData?.framePrice === 0 
-                        ? tProducts('free') 
+                  {isPriceLoading
+                    ? '...'
+                    : (priceData?.framePrice === 0
+                        ? tProducts('free')
                         : `₺${((priceData?.framePrice || 0) / 100).toFixed(2)}`
-                      )
-                  }
+                      )}
                 </p>
               </div>
             </div>
@@ -228,7 +231,8 @@ export function PreviewInterface({
                 {tProducts('total')}
               </span>
               <span className="text-3xl font-bold text-purple-600 dark:text-purple-400">
-                ₺{formattedPrice}
+                ₺
+                {formattedPrice}
               </span>
             </div>
 

@@ -124,6 +124,9 @@ export const productFrameSchema = pgTable('product_frame', {
   nameEn: text('name_en'),
   nameFr: text('name_fr'),
   priceAmount: integer('price_amount').notNull(), // in cents (kuruş)
+  colorCode: varchar('color_code', { length: 7 }), // Hex color code (e.g., #000000)
+  frameImage: text('frame_image'), // Frame preview image URL
+  frameImageLarge: text('frame_image_large'), // Large frame banner image URL
   sortOrder: integer('sort_order').default(0).notNull(),
   updatedAt: timestamp('updated_at', { mode: 'date' })
     .defaultNow()

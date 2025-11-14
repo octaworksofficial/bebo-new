@@ -26,7 +26,6 @@ async function checkProducts() {
     const frames = await client.query('SELECT * FROM product_frame');
     console.log('=== PRODUCT FRAMES ===');
     console.log(frames.rows);
-
   } catch (error) {
     console.error('Error:', error.message);
   } finally {

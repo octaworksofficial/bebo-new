@@ -1,13 +1,14 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useTranslations } from 'next-intl';
-import { useRouter, useSearchParams } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
-import { ArrowLeft, Package, CreditCard, Shield, Loader2 } from 'lucide-react';
-import { getProductPricing, type ProductPriceData } from '@/features/design/productPriceActions';
-import { getGeneratedImage, getUserGeneratedImages, type GeneratedImageResponse } from '@/features/design/chatActions';
+import { ArrowLeft, CreditCard, Loader2, Package, Shield } from 'lucide-react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+import { useEffect, useState } from 'react';
+
 import { getPayTRToken } from '@/features/checkout/paytrActions';
+import { type GeneratedImageResponse, getGeneratedImage, getUserGeneratedImages } from '@/features/design/chatActions';
+import { getProductPricing, type ProductPriceData } from '@/features/design/productPriceActions';
 
 type CheckoutInterfaceProps = {
   locale: string;
@@ -47,7 +48,7 @@ export function CheckoutInterface({ }: CheckoutInterfaceProps) {
         const userImagesResult = await getUserGeneratedImages();
         if (userImagesResult.success && userImagesResult.data) {
           const matchedImage = userImagesResult.data.find(
-            (img) => img.generation_id === generationId
+            img => img.generation_id === generationId,
           );
           if (matchedImage) {
             setImageData(matchedImage);
@@ -99,7 +100,7 @@ export function CheckoutInterface({ }: CheckoutInterfaceProps) {
       // PayTR'den gelen mesajları kontrol et
       if (event.origin === 'https://www.paytr.com') {
         console.log('✅ PayTR confirmed message:', event.data);
-        
+
         // Ödeme başarılı
         if (event.data === 'success' || event.data?.status === 'success') {
           console.log('🎉 Payment SUCCESS - Redirecting...');
@@ -109,8 +110,7 @@ export function CheckoutInterface({ }: CheckoutInterfaceProps) {
         else if (event.data === 'failed' || event.data?.status === 'failed') {
           console.log('❌ Payment FAILED - Redirecting...');
           router.push('/checkout/failed');
-        }
-        else {
+        } else {
           console.log('⚠️ Unknown PayTR message format:', event.data);
         }
       }
@@ -160,8 +160,8 @@ export function CheckoutInterface({ }: CheckoutInterfaceProps) {
         [
           `${priceData.productName} - ${priceData.sizeName} - ${priceData.frameName}`,
           (priceData.totalPrice / 100).toFixed(2),
-          1
-        ]
+          1,
+        ],
       ];
       const userBasket = btoa(JSON.stringify(basketItems));
 
@@ -268,7 +268,7 @@ export function CheckoutInterface({ }: CheckoutInterfaceProps) {
                     <input
                       type="text"
                       value={customerName}
-                      onChange={(e) => setCustomerName(e.target.value)}
+                      onChange={e => setCustomerName(e.target.value)}
                       placeholder={t('full_name_placeholder')}
                       className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
                     />
@@ -281,7 +281,7 @@ export function CheckoutInterface({ }: CheckoutInterfaceProps) {
                     <input
                       type="email"
                       value={customerEmail}
-                      onChange={(e) => setCustomerEmail(e.target.value)}
+                      onChange={e => setCustomerEmail(e.target.value)}
                       placeholder={t('email_placeholder')}
                       className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
                     />
@@ -294,7 +294,7 @@ export function CheckoutInterface({ }: CheckoutInterfaceProps) {
                     <input
                       type="tel"
                       value={customerPhone}
-                      onChange={(e) => setCustomerPhone(e.target.value)}
+                      onChange={e => setCustomerPhone(e.target.value)}
                       placeholder={t('phone_placeholder')}
                       className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
                     />
@@ -306,7 +306,7 @@ export function CheckoutInterface({ }: CheckoutInterfaceProps) {
                     </label>
                     <textarea
                       value={customerAddress}
-                      onChange={(e) => setCustomerAddress(e.target.value)}
+                      onChange={e => setCustomerAddress(e.target.value)}
                       placeholder={t('address_placeholder')}
                       rows={3}
                       className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
@@ -403,7 +403,8 @@ export function CheckoutInterface({ }: CheckoutInterfaceProps) {
               <div className="flex justify-between">
                 <span className="text-gray-600 dark:text-gray-400">{t('subtotal')}</span>
                 <span className="font-medium text-gray-900 dark:text-white">
-                  ₺{(priceData.totalPrice / 100).toFixed(2)}
+                  ₺
+                  {(priceData.totalPrice / 100).toFixed(2)}
                 </span>
               </div>
               <div className="flex justify-between">
@@ -420,7 +421,8 @@ export function CheckoutInterface({ }: CheckoutInterfaceProps) {
                 {t('total')}
               </span>
               <span className="text-2xl font-bold text-purple-600 dark:text-purple-400">
-                ₺{(priceData.totalPrice / 100).toFixed(2)}
+                ₺
+                {(priceData.totalPrice / 100).toFixed(2)}
               </span>
             </div>
 
@@ -431,17 +433,19 @@ export function CheckoutInterface({ }: CheckoutInterfaceProps) {
                 disabled={isProcessing}
                 className="mt-6 flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 px-6 py-4 text-lg font-semibold text-white transition-all hover:from-purple-700 hover:to-pink-700 disabled:opacity-50"
               >
-                {isProcessing ? (
-                  <>
-                    <Loader2 className="size-5 animate-spin" />
-                    {t('processing_payment')}
-                  </>
-                ) : (
-                  <>
-                    <CreditCard className="size-5" />
-                    {t('complete_payment')}
-                  </>
-                )}
+                {isProcessing
+                  ? (
+                      <>
+                        <Loader2 className="size-5 animate-spin" />
+                        {t('processing_payment')}
+                      </>
+                    )
+                  : (
+                      <>
+                        <CreditCard className="size-5" />
+                        {t('complete_payment')}
+                      </>
+                    )}
               </button>
             )}
           </div>

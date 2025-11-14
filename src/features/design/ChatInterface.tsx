@@ -22,7 +22,7 @@ type Message = {
 };
 
 type ChatInterfaceProps = {
-  locale: string;
+  locale?: string;
   productSlug?: string;
   sizeSlug?: string;
   frameSlug?: string;
@@ -358,78 +358,80 @@ export function ChatInterface({
   return (
     <div className="mx-auto max-w-7xl px-4 pb-4 pt-8">
       {/* Header with Product Info & Mode Toggle */}
-      <div className="mb-6 rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800">
-        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          {/* Product Info */}
-          {productSlug && (
-            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
-              <span className="font-medium">
-                {t('selected_product')}
+      <div className="mb-6 rounded-xl border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
+        <div className="p-6">
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            {/* Product Info */}
+            {productSlug && (
+              <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
+                <span className="font-medium">
+                  {t('selected_product')}
+                  :
+                </span>
+                <span className="rounded-full bg-purple-100 px-3 py-1 dark:bg-purple-900">
+                  {productSlug}
+                </span>
+                {sizeSlug && (
+                  <span className="rounded-full bg-blue-100 px-3 py-1 dark:bg-blue-900">
+                    {sizeSlug}
+                  </span>
+                )}
+                {frameSlug && frameSlug !== 'none' && (
+                  <span className="rounded-full bg-green-100 px-3 py-1 dark:bg-green-900">
+                    {frameSlug}
+                  </span>
+                )}
+              </div>
+            )}
+
+            {/* Art Credits Display */}
+            <div className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-yellow-50 to-amber-50 px-4 py-2 dark:from-yellow-900/20 dark:to-amber-900/20">
+              <Sparkles className="size-5 text-yellow-600 dark:text-yellow-400" />
+              <span className="text-sm font-semibold text-gray-800 dark:text-gray-200">
+                {t('art_credits')}
                 :
+                {' '}
+                <span className="text-yellow-600 dark:text-yellow-400">{artCredits}</span>
               </span>
-              <span className="rounded-full bg-purple-100 px-3 py-1 dark:bg-purple-900">
-                {productSlug}
-              </span>
-              {sizeSlug && (
-                <span className="rounded-full bg-blue-100 px-3 py-1 dark:bg-blue-900">
-                  {sizeSlug}
-                </span>
-              )}
-              {frameSlug && frameSlug !== 'none' && (
-                <span className="rounded-full bg-green-100 px-3 py-1 dark:bg-green-900">
-                  {frameSlug}
-                </span>
-              )}
+              <button
+                type="button"
+                onClick={() => router.push('/purchase-credits')}
+                className="ml-2 flex items-center gap-1 rounded-md bg-yellow-600 px-3 py-1 text-xs font-medium text-white transition-all hover:bg-yellow-700 dark:bg-yellow-500 dark:hover:bg-yellow-600"
+                title={t('buy_credits_title')}
+              >
+                <ShoppingCart className="size-3.5" />
+                {t('buy_credits')}
+              </button>
             </div>
-          )}
 
-          {/* Art Credits Display */}
-          <div className="flex items-center gap-2 rounded-lg bg-gradient-to-r from-yellow-50 to-amber-50 px-4 py-2 dark:from-yellow-900/20 dark:to-amber-900/20">
-            <Sparkles className="size-5 text-yellow-600 dark:text-yellow-400" />
-            <span className="text-sm font-semibold text-gray-800 dark:text-gray-200">
-              {t('art_credits')}
-              :
-              {' '}
-              <span className="text-yellow-600 dark:text-yellow-400">{artCredits}</span>
-            </span>
-            <button
-              type="button"
-              onClick={() => router.push('/purchase-credits')}
-              className="ml-2 flex items-center gap-1 rounded-md bg-yellow-600 px-3 py-1 text-xs font-medium text-white transition-all hover:bg-yellow-700 dark:bg-yellow-500 dark:hover:bg-yellow-600"
-              title={t('buy_credits_title')}
-            >
-              <ShoppingCart className="size-3.5" />
-              {t('buy_credits')}
-            </button>
-          </div>
-
-          {/* Mode Toggle */}
-          <div className="flex items-center gap-4">
-            <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
-              {isGenerateMode ? t('mode_generate') : t('mode_inspiration')}
-            </span>
-            <button
-              onClick={() => setIsGenerateMode(!isGenerateMode)}
-              className={`relative inline-flex h-8 w-16 items-center rounded-full transition-colors ${
-                isGenerateMode
-                  ? 'bg-gradient-to-r from-purple-500 to-pink-500'
-                  : 'bg-gray-300 dark:bg-gray-600'
-              }`}
-            >
-              <span
-                className={`inline-block size-6 rounded-full bg-white shadow-lg transition-transform ${
-                  isGenerateMode ? 'translate-x-9' : 'translate-x-1'
+            {/* Mode Toggle */}
+            <div className="flex items-center gap-4">
+              <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
+                {isGenerateMode ? t('mode_generate') : t('mode_inspiration')}
+              </span>
+              <button
+                onClick={() => setIsGenerateMode(!isGenerateMode)}
+                className={`relative inline-flex h-8 w-16 items-center rounded-full transition-colors ${
+                  isGenerateMode
+                    ? 'bg-gradient-to-r from-purple-500 to-pink-500'
+                    : 'bg-gray-300 dark:bg-gray-600'
                 }`}
               >
-                {isGenerateMode
-                  ? (
-                      <ImageIcon className="size-6 p-1 text-purple-500" />
-                    )
-                  : (
-                      <Sparkles className="size-6 p-1 text-gray-500" />
-                    )}
-              </span>
-            </button>
+                <span
+                  className={`inline-block size-6 rounded-full bg-white shadow-lg transition-transform ${
+                    isGenerateMode ? 'translate-x-9' : 'translate-x-1'
+                  }`}
+                >
+                  {isGenerateMode
+                    ? (
+                        <ImageIcon className="size-6 p-1 text-purple-500" />
+                      )
+                    : (
+                        <Sparkles className="size-6 p-1 text-gray-500" />
+                      )}
+                </span>
+              </button>
+            </div>
           </div>
         </div>
       </div>

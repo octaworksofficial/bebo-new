@@ -1,13 +1,13 @@
 import '@/styles/global.css';
 
-import type { Metadata } from 'next';
 import { enUS, frFR, trTR } from '@clerk/localizations';
 import { ClerkProvider } from '@clerk/nextjs';
+import type { Metadata } from 'next';
 import { NextIntlClientProvider, useMessages } from 'next-intl';
 import { unstable_setRequestLocale } from 'next-intl/server';
 
 import { DemoBadge } from '@/components/DemoBadge';
-import { AppConfig, AllLocales } from '@/utils/AppConfig';
+import { AllLocales, AppConfig } from '@/utils/AppConfig';
 
 export const metadata: Metadata = {
   icons: [
