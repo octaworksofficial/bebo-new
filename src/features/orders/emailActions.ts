@@ -35,13 +35,13 @@ type PostOrderEmailPayload = {
   variables: EmailVariables;
 };
 
-export async function sendPostOrderEmail(orderId: number) {
+export async function sendPostOrderEmail(merchantOid: string) {
   try {
-    // Sipariş bilgilerini getir
+    // Sipariş bilgilerini merchant_oid ile getir
     const order = await db
       .select()
       .from(orderSchema)
-      .where(eq(orderSchema.id, orderId))
+      .where(eq(orderSchema.merchantOid, merchantOid))
       .limit(1);
 
     if (order.length === 0) {
@@ -57,8 +57,8 @@ export async function sendPostOrderEmail(orderId: number) {
     const fullName = orderData.customerName || '';
     const firstName = fullName.split(' ')[0] || 'Değerli Müşteri';
 
-    // Sipariş numarasını formatla
-    const orderNumber = `BB-${new Date().getFullYear()}-${String(orderId).padStart(6, '0')}`;
+    // Sipariş numarasını formatla - merchant_oid zaten var, onu kullan
+    const orderNumber = merchantOid;
 
     // Tarihi formatla
     const orderDate = new Date(orderData.createdAt).toLocaleDateString('tr-TR');
@@ -105,9 +105,9 @@ export async function sendPostOrderEmail(orderId: number) {
         item_quantity: 1,
         item_line_total: formatPrice(subtotalWithoutTax),
         artwork_image_url: orderData.generatedImageUrl || '',
-        order_detail_url: `https://birebiro.com/dashboard/orders/${orderId}`,
+        order_detail_url: `https://birebiro.com/dashboard/orders/${orderData.id}`,
         support_url: 'https://birebiro.com/contact',
-        order_qr_image_url: `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(`https://birebiro.com/dashboard/orders/${orderId}`)}`,
+        order_qr_image_url: `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(`https://birebiro.com/dashboard/orders/${orderData.id}`)}`,
         support_email: 'destek@birebiro.com',
         current_year: new Date().getFullYear().toString(),
       },

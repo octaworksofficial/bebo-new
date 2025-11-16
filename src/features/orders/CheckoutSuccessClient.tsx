@@ -12,20 +12,13 @@ export function CheckoutSuccessClient() {
   useEffect(() => {
     const sendEmail = async () => {
       if (merchantOid) {
-        // merchant_oid'den order ID'yi çıkar
-        // Örneğin: "BB-2025-000123" formatından 123'ü çıkar
-        const orderIdMatch = merchantOid.match(/(\d+)$/);
-        if (orderIdMatch?.[1]) {
-          const orderId = Number.parseInt(orderIdMatch[1], 10);
-
-          try {
-            const result = await sendPostOrderEmail(orderId);
-            if (!result.success) {
-              console.error('E-posta gönderimi hatası:', result.error);
-            }
-          } catch (error) {
-            console.error('E-posta gönderimi hatası:', error);
+        try {
+          const result = await sendPostOrderEmail(merchantOid);
+          if (!result.success) {
+            console.error('E-posta gönderimi hatası:', result.error);
           }
+        } catch (error) {
+          console.error('E-posta gönderimi hatası:', error);
         }
       }
     };
