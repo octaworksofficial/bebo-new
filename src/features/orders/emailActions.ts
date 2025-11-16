@@ -1,0 +1,135 @@
+'use server';
+
+import { eq } from 'drizzle-orm';
+
+import { db } from '@/libs/DB';
+import { orderSchema } from '@/models/Schema';
+
+type EmailVariables = {
+  customer_first_name: string;
+  order_number: string;
+  order_date: string;
+  payment_status: string;
+  shipping_method: string;
+  shipping_address: string;
+  subtotal_amount: string;
+  shipping_amount: string;
+  tax_amount: string;
+  total_amount: string;
+  item_product_name: string;
+  item_variant_name: string;
+  item_quantity: number;
+  item_line_total: string;
+  artwork_image_url: string;
+  order_detail_url: string;
+  support_url: string;
+  order_qr_image_url: string;
+  support_email: string;
+  current_year: string;
+};
+
+type PostOrderEmailPayload = {
+  to: string;
+  subject: string;
+  template_id: string;
+  variables: EmailVariables;
+};
+
+export async function sendPostOrderEmail(orderId: number) {
+  try {
+    // Sipariş bilgilerini getir
+    const order = await db
+      .select()
+      .from(orderSchema)
+      .where(eq(orderSchema.id, orderId))
+      .limit(1);
+
+    if (order.length === 0) {
+      throw new Error('Sipariş bulunamadı');
+    }
+
+    const orderData = order[0];
+    if (!orderData) {
+      throw new Error('Sipariş verileri eksik');
+    }
+
+    // Müşteri adını parse et
+    const fullName = orderData.customerName || '';
+    const firstName = fullName.split(' ')[0] || 'Değerli Müşteri';
+
+    // Sipariş numarasını formatla
+    const orderNumber = `BB-${new Date().getFullYear()}-${String(orderId).padStart(6, '0')}`;
+
+    // Tarihi formatla
+    const orderDate = new Date(orderData.createdAt).toLocaleDateString('tr-TR');
+
+    // Fiyatları formatla
+    const formatPrice = (amount: number) => `${amount.toLocaleString('tr-TR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} TL`;
+
+    // Ürün bilgilerini hazırla
+    const productName = orderData.productType === 'wall_art' ? 'Özel Tasarım Duvar Tablosu' : 'Özel Tasarım Ürün';
+    const variantInfo = `${orderData.productSize || 'Standart Boyut'}${orderData.productFrame ? ` - ${orderData.productFrame} Çerçeve` : ' - Çerçevesiz'}`;
+
+    // KDV hesapla (varsayılan %18)
+    const subtotal = orderData.totalAmount || 0;
+    const shipping = 0; // Varsayılan ücretsiz kargo
+    const taxRate = 0.18;
+    const taxAmount = subtotal * taxRate / (1 + taxRate);
+    const subtotalWithoutTax = subtotal - taxAmount;
+
+    // Teslimat adresini formatla
+    const shippingAddress = [
+      orderData.customerName,
+      orderData.customerAddress,
+      'Türkiye',
+    ].filter(Boolean).join('\n');
+
+    // E-posta payload'ını oluştur
+    const emailPayload: PostOrderEmailPayload = {
+      to: orderData.customerEmail || '',
+      subject: 'birebiro • Siparişiniz alındı 🎨',
+      template_id: 'order_confirmation_v1',
+      variables: {
+        customer_first_name: firstName,
+        order_number: orderNumber,
+        order_date: orderDate,
+        payment_status: orderData.paymentStatus === 'SUCCESS' ? 'Ödeme alındı' : 'Ödeme beklemede',
+        shipping_method: 'Standart kargo (2-4 iş günü)',
+        shipping_address: shippingAddress,
+        subtotal_amount: formatPrice(subtotalWithoutTax),
+        shipping_amount: formatPrice(shipping),
+        tax_amount: formatPrice(taxAmount),
+        total_amount: formatPrice(subtotal),
+        item_product_name: productName,
+        item_variant_name: variantInfo,
+        item_quantity: 1,
+        item_line_total: formatPrice(subtotalWithoutTax),
+        artwork_image_url: orderData.generatedImageUrl || '',
+        order_detail_url: `https://birebiro.com/dashboard/orders/${orderId}`,
+        support_url: 'https://birebiro.com/contact',
+        order_qr_image_url: `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(`https://birebiro.com/dashboard/orders/${orderId}`)}`,
+        support_email: 'destek@birebiro.com',
+        current_year: new Date().getFullYear().toString(),
+      },
+    };
+
+    // API'ye istek gönder
+    const response = await fetch('https://n8n-production-14b9.up.railway.app/webhook/send-post-order-email', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(emailPayload),
+    });
+
+    if (!response.ok) {
+      throw new Error(`E-posta gönderimi başarısız: ${response.status}`);
+    }
+
+    const result = await response.json();
+    return { success: true, data: result };
+  } catch (error) {
+    console.error('E-posta gönderimi hatası:', error);
+    return { success: false, error: error instanceof Error ? error.message : 'Bilinmeyen hata' };
+  }
+}

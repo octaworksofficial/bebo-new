@@ -47,12 +47,12 @@ export const Hero = () => {
         buttons={(
           <div className="relative p-6">
             {/* Light Box Background - Daha görünür */}
-            <div className="absolute inset-0 bg-white/30 backdrop-blur-md rounded-2xl -z-10 rotate-1 scale-105 shadow-xl" />
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-400/40 via-purple-400/40 to-pink-400/40 rounded-2xl -z-10 -rotate-1 scale-110 shadow-lg" />
-            <div className="absolute inset-0 bg-white/20 rounded-2xl -z-10 scale-100 animate-pulse" />
-            
+            <div className="absolute inset-0 -z-10 rotate-1 scale-105 rounded-2xl bg-white/30 shadow-xl backdrop-blur-md" />
+            <div className="absolute inset-0 -z-10 -rotate-1 scale-110 rounded-2xl bg-gradient-to-r from-blue-400/40 via-purple-400/40 to-pink-400/40 shadow-lg" />
+            <div className="absolute inset-0 -z-10 scale-100 animate-pulse rounded-2xl bg-white/20" />
+
             <Link
-              className={`${buttonVariants({ size: 'lg' })} relative group shadow-2xl bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-700 hover:via-purple-700 hover:to-pink-700 border-0`}
+              className={`${buttonVariants({ size: 'lg' })} group relative border-0 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 shadow-2xl hover:from-indigo-700 hover:via-purple-700 hover:to-pink-700`}
               href="/products"
               onClick={handleStartDesigning}
             >
@@ -65,7 +65,7 @@ export const Hero = () => {
                   )
                 : (
                     <>
-                      <Sparkles className="mr-2 size-5 group-hover:animate-pulse text-yellow-200" />
+                      <Sparkles className="mr-2 size-5 text-yellow-200 group-hover:animate-pulse" />
                       {t('primary_button')}
                     </>
                   )}

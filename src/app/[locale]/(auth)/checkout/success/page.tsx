@@ -2,6 +2,8 @@ import { CheckCircle, Home, Package, Truck } from 'lucide-react';
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 
+import { CheckoutSuccessClient } from '@/features/orders/CheckoutSuccessClient';
+
 // Force dynamic rendering
 export const dynamic = 'force-dynamic';
 
@@ -31,6 +33,7 @@ export default async function CheckoutSuccessPage(props: {
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-16">
+      <CheckoutSuccessClient />
       <div className="text-center">
         <div className="mx-auto mb-6 flex size-20 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30">
           <CheckCircle className="size-12 text-green-600 dark:text-green-400" />

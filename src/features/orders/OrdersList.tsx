@@ -2,6 +2,7 @@
 
 import { ChevronLeft, ChevronRight, Package, ShoppingBag } from 'lucide-react';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
 import type { getUserOrders } from '@/features/orders/ordersActions';
@@ -15,6 +16,7 @@ type OrdersListProps = {
 const ITEMS_PER_PAGE = 5;
 
 export function OrdersList({ initialOrders }: OrdersListProps) {
+  const t = useTranslations('Orders');
   const orders = initialOrders;
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -224,6 +226,19 @@ export function OrdersList({ initialOrders }: OrdersListProps) {
                       <p>{order.customerPhone}</p>
                       <p>{order.customerAddress}</p>
                     </div>
+                  </div>
+                )}
+
+                {/* Detay Butonu - Sadece ürün siparişleri için */}
+                {order.orderType !== 'credit' && order.generationId && (
+                  <div className="flex justify-end pt-3">
+                    <a
+                      href={`/dashboard/orders/${order.id}`}
+                      className="inline-flex items-center gap-2 rounded-lg bg-purple-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-purple-700"
+                    >
+                      <Package className="size-4" />
+                      {t('detail_button')}
+                    </a>
                   </div>
                 )}
               </div>

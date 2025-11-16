@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
 import { useTranslations } from 'next-intl';
+import { useState } from 'react';
 
 import { submitContactForm } from '@/features/contact/contactActions';
 
@@ -10,7 +10,7 @@ export default function ContactForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState('');
-  
+
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -40,7 +40,7 @@ export default function ContactForm() {
       formDataToSend.append('message', formData.message);
 
       const result = await submitContactForm(formDataToSend);
-      
+
       if (result && !result.success) {
         setError(result.error || 'Bir hata oluştu');
       } else {
@@ -92,18 +92,18 @@ export default function ContactForm() {
       <h2 className="mb-6 text-2xl font-bold text-gray-900">
         {t('form_title')}
       </h2>
-      
+
       {error && (
         <div className="mb-4 rounded-md border border-red-200 bg-red-50 p-4">
           <p className="text-red-700">{error}</p>
         </div>
       )}
-      
+
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Ad Soyad */}
         <div>
           <label htmlFor="fullName" className="mb-2 block text-sm font-medium text-gray-700">
-            {t('full_name')} 
+            {t('full_name')}
             <span className="text-red-500">*</span>
           </label>
           <input
@@ -121,7 +121,7 @@ export default function ContactForm() {
         {/* E-posta */}
         <div>
           <label htmlFor="email" className="mb-2 block text-sm font-medium text-gray-700">
-            {t('email')} 
+            {t('email')}
             <span className="text-red-500">*</span>
           </label>
           <input
@@ -171,7 +171,7 @@ export default function ContactForm() {
         {/* Mesaj */}
         <div>
           <label htmlFor="message" className="mb-2 block text-sm font-medium text-gray-700">
-            {t('message')} 
+            {t('message')}
             <span className="text-red-500">*</span>
           </label>
           <textarea
