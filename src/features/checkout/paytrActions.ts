@@ -20,6 +20,13 @@ export type PayTRTokenRequest = {
   customerEmail: string;
   customerPhone: string;
   customerAddress: string;
+  customerCity?: string; // İl
+  customerDistrict?: string; // İlçe
+  isCorporateInvoice?: boolean; // Kurumsal fatura flag
+  companyName?: string; // Ünvan
+  taxNumber?: string; // Vergi kimlik no
+  taxOffice?: string; // Vergi dairesi
+  companyAddress?: string; // Şirket adresi
   userBasket: string; // Base64 encoded JSON
   userIp: string;
 };
@@ -137,6 +144,13 @@ export async function getPayTRToken(
         customerEmail: request.customerEmail,
         customerPhone: request.customerPhone,
         customerAddress: request.customerAddress,
+        customerCity: request.customerCity,
+        customerDistrict: request.customerDistrict,
+        isCorporateInvoice: request.isCorporateInvoice || false,
+        companyName: request.companyName,
+        taxNumber: request.taxNumber,
+        taxOffice: request.taxOffice,
+        companyAddress: request.companyAddress,
       });
 
       return {

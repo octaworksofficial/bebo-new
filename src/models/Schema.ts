@@ -182,6 +182,13 @@ export const orderSchema = pgTable('order', {
   customerEmail: text('customer_email').notNull(),
   customerPhone: varchar('customer_phone', { length: 20 }).notNull(),
   customerAddress: text('customer_address').notNull(),
+  customerCity: varchar('customer_city', { length: 100 }), // İl
+  customerDistrict: varchar('customer_district', { length: 100 }), // İlçe
+  isCorporateInvoice: boolean('is_corporate_invoice').default(false).notNull(), // Kurumsal fatura isteniyor mu?
+  companyName: text('company_name'), // Ünvan (şirket adı)
+  taxNumber: varchar('tax_number', { length: 11 }), // Vergi kimlik numarası
+  taxOffice: varchar('tax_office', { length: 100 }), // Vergi dairesi
+  companyAddress: text('company_address'), // Şirket adresi
   shippingStatus: varchar('shipping_status', { length: 20 }).default('pending').notNull(), // pending, preparing, shipped, delivered
   trackingNumber: varchar('tracking_number', { length: 100 }),
   notes: text('notes'), // Admin notları
@@ -221,3 +228,79 @@ export const legalDocumentSchema = pgTable('legal_documents', {
     .$onUpdate(() => new Date())
     .notNull(),
 });
+
+// About Page Content Schema - for dynamic about page management
+export const aboutContentSchema = pgTable('about_content', {
+  id: serial('id').primaryKey(),
+  language: varchar('language', { length: 5 }).default('tr').notNull(), // 'tr', 'en', 'fr'
+
+  // Section 1 content
+  image1: text('image1'), // URL to first section image
+  title1: text('title1').notNull(),
+  body1: text('body1').notNull(),
+
+  // Section 2 content
+  image2: text('image2'), // URL to second section image
+  title2: text('title2').notNull(),
+  body2: text('body2').notNull(),
+
+  // Section 3 content
+  image3: text('image3'), // URL to third section image
+  title3: text('title3').notNull(),
+  body3: text('body3').notNull(),
+
+  // Mission and Vision
+  mission: text('mission').notNull(),
+  vision: text('vision').notNull(),
+
+  // Metadata
+  createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
+  updatedAt: timestamp('updated_at', { mode: 'date' })
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
+});
+
+// Contact Form Submissions Schema - for managing contact form entries
+export const contactSubmissionsSchema = pgTable('contact_submissions', {
+  id: serial('id').primaryKey(),
+  fullName: varchar('full_name', { length: 255 }).notNull(),
+  email: varchar('email', { length: 255 }).notNull(),
+  phone: varchar('phone', { length: 20 }),
+  subject: varchar('subject', { length: 500 }),
+  message: text('message').notNull(),
+  ipAddress: text('ip_address'),
+  userAgent: text('user_agent'),
+  isRead: boolean('is_read').default(false).notNull(),
+  isReplied: boolean('is_replied').default(false).notNull(),
+  createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
+  updatedAt: timestamp('updated_at', { mode: 'date' })
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
+});
+
+// Newsletter Subscribers Schema - for managing email newsletter subscriptions
+export const newsletterSubscribersSchema = pgTable(
+  'newsletter_subscribers',
+  {
+    id: serial('id').primaryKey(),
+    email: varchar('email', { length: 255 }).unique().notNull(),
+    name: varchar('name', { length: 255 }),
+    status: varchar('status', { length: 20 }).default('active').notNull(), // active, unsubscribed, bounced
+    subscriptionSource: varchar('subscription_source', { length: 100 }).default('website'),
+    ipAddress: text('ip_address'), // INET type olarak tutulacak ama drizzle'da text olarak tanımlanıyor
+    userAgent: text('user_agent'),
+    verifiedAt: timestamp('verified_at', { withTimezone: true, mode: 'date' }),
+    unsubscribedAt: timestamp('unsubscribed_at', { withTimezone: true, mode: 'date' }),
+    unsubscribeToken: varchar('unsubscribe_token', { length: 100 }).unique(),
+    preferences: text('preferences').default('{}'), // JSONB olarak tutulacak ama drizzle'da text olarak
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'date' }).defaultNow().notNull(),
+    updatedAt: timestamp('updated_at', { withTimezone: true, mode: 'date' }).defaultNow().notNull(),
+  },
+  (table) => {
+    return {
+      emailIdx: uniqueIndex('idx_newsletter_email').on(table.email),
+    };
+  },
+);

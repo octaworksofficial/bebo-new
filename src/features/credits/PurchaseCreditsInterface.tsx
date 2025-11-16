@@ -9,7 +9,6 @@ import { useEffect, useRef, useState } from 'react';
 import { Footer } from '@/templates/Footer';
 import { Navbar } from '@/templates/Navbar';
 
-import { debugAddCredits } from './debugCreditActions';
 import { createCreditPurchase, type CreditSettings, getCreditSettings } from './purchaseCreditActions';
 
 export function PurchaseCreditsInterface() {
@@ -292,35 +291,6 @@ export function PurchaseCreditsInterface() {
         >
           <Sparkles className="size-6" />
           {isProcessing ? t('processing') : t('buy_button')}
-        </button>
-
-        {/* DEBUG: Geçici Test Butonu */}
-        <button
-          type="button"
-          onClick={async () => {
-            if (!user?.id) {
-              return;
-            }
-
-            // Krediyi direkt artır (test için)
-            const amount = isCustom ? Number.parseInt(customAmount, 10) || 0 : selectedAmount;
-
-            try {
-              const result = await debugAddCredits(user.id, amount);
-
-              if (result.success) {
-                // Başarılı sayfasına yönlendir
-                router.push('/tr/purchase-credits/success');
-              } else {
-                console.error('Test başarısız oldu:', result.error);
-              }
-            } catch (error) {
-              console.error('Test error:', error);
-            }
-          }}
-          className="mt-2 w-full text-center text-xs text-gray-500 hover:text-gray-600"
-        >
-          🔧 DEBUG: Başarılı Olmuş Gibi Yap (Test)
         </button>
 
         {/* Footer Note */}

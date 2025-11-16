@@ -7,6 +7,7 @@ import { Footer } from '@/templates/Footer';
 import { Hero } from '@/templates/Hero';
 import { HowItWorks } from '@/templates/HowItWorks';
 import { Navbar } from '@/templates/Navbar';
+import { Newsletter } from '@/templates/Newsletter';
 import { Pricing } from '@/templates/Pricing';
 import { Sponsors } from '@/templates/Sponsors';
 
@@ -34,6 +35,7 @@ const IndexPage = (props: { params: { locale: string } }) => {
       <Features />
       <Pricing />
       <FAQ />
+      <Newsletter />
       <CTA />
       <Footer />
     </>

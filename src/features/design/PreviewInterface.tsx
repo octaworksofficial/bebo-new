@@ -185,7 +185,7 @@ export function PreviewInterface({
                 <div>
                   <p className="text-sm text-gray-500 dark:text-gray-400">Ürün</p>
                   <p className="font-semibold text-gray-900 dark:text-white">
-                    {tProducts(`product_${productSlug}`)}
+                    {priceData?.productName || tProducts(`product_${productSlug.replace(/-/g, '_')}`)}
                   </p>
                 </div>
               </div>

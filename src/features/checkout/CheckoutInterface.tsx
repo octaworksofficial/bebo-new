@@ -38,6 +38,13 @@ export function CheckoutInterface({ }: CheckoutInterfaceProps) {
   const [customerEmail, setCustomerEmail] = useState(user?.primaryEmailAddress?.emailAddress || '');
   const [customerPhone, setCustomerPhone] = useState('');
   const [customerAddress, setCustomerAddress] = useState('');
+  const [customerCity, setCustomerCity] = useState('');
+  const [customerDistrict, setCustomerDistrict] = useState('');
+  const [wantsCorporateInvoice, setWantsCorporateInvoice] = useState(false);
+  const [companyName, setCompanyName] = useState('');
+  const [taxNumber, setTaxNumber] = useState('');
+  const [taxOffice, setTaxOffice] = useState('');
+  const [companyAddress, setCompanyAddress] = useState('');
 
   // Görsel ve fiyat verilerini yükle
   useEffect(() => {
@@ -185,6 +192,13 @@ export function CheckoutInterface({ }: CheckoutInterfaceProps) {
         customerEmail,
         customerPhone,
         customerAddress,
+        customerCity,
+        customerDistrict,
+        isCorporateInvoice: wantsCorporateInvoice,
+        companyName: wantsCorporateInvoice ? companyName : undefined,
+        taxNumber: wantsCorporateInvoice ? taxNumber : undefined,
+        taxOffice: wantsCorporateInvoice ? taxOffice : undefined,
+        companyAddress: wantsCorporateInvoice ? companyAddress : undefined,
         userBasket,
         userIp,
       });
@@ -300,6 +314,34 @@ export function CheckoutInterface({ }: CheckoutInterfaceProps) {
                     />
                   </div>
 
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <div>
+                      <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        İl
+                      </label>
+                      <input
+                        type="text"
+                        value={customerCity}
+                        onChange={e => setCustomerCity(e.target.value)}
+                        placeholder="Örn: İstanbul"
+                        className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        İlçe
+                      </label>
+                      <input
+                        type="text"
+                        value={customerDistrict}
+                        onChange={e => setCustomerDistrict(e.target.value)}
+                        placeholder="Örn: Kadıköy"
+                        className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                      />
+                    </div>
+                  </div>
+
                   <div>
                     <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
                       {t('address')}
@@ -312,6 +354,85 @@ export function CheckoutInterface({ }: CheckoutInterfaceProps) {
                       className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
                     />
                   </div>
+
+                  {/* Kurumsal Fatura Seçeneği */}
+                  <div className="border-t border-gray-200 pt-4 dark:border-gray-700">
+                    <label className="flex cursor-pointer items-center gap-3">
+                      <input
+                        type="checkbox"
+                        checked={wantsCorporateInvoice}
+                        onChange={e => setWantsCorporateInvoice(e.target.checked)}
+                        className="size-5 rounded border-gray-300 text-purple-600 focus:ring-2 focus:ring-purple-500/20"
+                      />
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                        Kurumsal Fatura İstiyorum
+                      </span>
+                    </label>
+                  </div>
+
+                  {/* Kurumsal Fatura Formu */}
+                  {wantsCorporateInvoice && (
+                    <div className="space-y-4 rounded-lg bg-purple-50 p-4 dark:bg-purple-900/10">
+                      <h3 className="font-semibold text-gray-900 dark:text-white">
+                        Kurumsal Fatura Bilgileri
+                      </h3>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                          Ünvan (Şirket Adı)
+                        </label>
+                        <input
+                          type="text"
+                          value={companyName}
+                          onChange={e => setCompanyName(e.target.value)}
+                          placeholder="Örn: ABC Teknoloji A.Ş."
+                          className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                        />
+                      </div>
+
+                      <div className="grid gap-4 md:grid-cols-2">
+                        <div>
+                          <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            Vergi Kimlik No
+                          </label>
+                          <input
+                            type="text"
+                            value={taxNumber}
+                            onChange={e => setTaxNumber(e.target.value)}
+                            placeholder="10 haneli numara"
+                            maxLength={10}
+                            className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            Vergi Dairesi
+                          </label>
+                          <input
+                            type="text"
+                            value={taxOffice}
+                            onChange={e => setTaxOffice(e.target.value)}
+                            placeholder="Örn: Kadıköy"
+                            className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                          Şirket Adresi
+                        </label>
+                        <textarea
+                          value={companyAddress}
+                          onChange={e => setCompanyAddress(e.target.value)}
+                          placeholder="Şirket fatura adresini giriniz"
+                          rows={3}
+                          className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/20 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
 

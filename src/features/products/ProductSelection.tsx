@@ -69,7 +69,7 @@ export const ProductSelection = ({ products, locale }: Props) => {
     products.forEach((product) => {
       getProductDetails(product.slug, locale).then((details) => {
         if (details) {
-          setProductFrames((prev) => ({
+          setProductFrames(prev => ({
             ...prev,
             [product.slug]: details.frames,
           }));
@@ -175,8 +175,6 @@ export const ProductSelection = ({ products, locale }: Props) => {
                   className={isSelected ? 'h-48 md:h-64' : undefined}
                 />
 
-
-
                 {/* Product Info (when not selected) */}
                 {!isSelected && (
                   <div className="p-6">
@@ -184,7 +182,7 @@ export const ProductSelection = ({ products, locale }: Props) => {
                     <p className="mb-4 text-sm text-muted-foreground">
                       {product.description}
                     </p>
-                    
+
                     {/* Color Options Display - Show available colors */}
                     {productFramesList.length > 0 && productFramesList.some(f => f.colorCode) && (
                       <div className="mb-3 flex items-center gap-2">
@@ -202,7 +200,7 @@ export const ProductSelection = ({ products, locale }: Props) => {
                         </div>
                       </div>
                     )}
-                    
+
                     <div className="flex items-center justify-between">
                       <span className="text-lg font-bold text-primary">
                         {t('starting_from')}
@@ -364,17 +362,19 @@ export const ProductSelection = ({ products, locale }: Props) => {
                           }}
                           disabled={navigating}
                         >
-                          {navigating ? (
-                            <>
-                              <span className="mr-2 size-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                              {t('loading') || 'Yükleniyor...'}
-                            </>
-                          ) : (
-                            <>
-                              {t('continue')}
-                              <ChevronRight className="ml-2 size-5" />
-                            </>
-                          )}
+                          {navigating
+                            ? (
+                                <>
+                                  <span className="mr-2 size-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                                  {t('loading') || 'Yükleniyor...'}
+                                </>
+                              )
+                            : (
+                                <>
+                                  {t('continue')}
+                                  <ChevronRight className="ml-2 size-5" />
+                                </>
+                              )}
                         </Button>
                       </div>
                     )}

@@ -155,7 +155,13 @@ export const Navbar = () => {
         </li>
 
         <li>
-          <Link href="/sign-up">{t('company')}</Link>
+          <Link href="/about" className="transition-colors hover:text-foreground/80">
+            Hakkımızda
+          </Link>
+        </li>
+
+        <li>
+          <Link href="/contact">{t('company')}</Link>
         </li>
       </CenteredMenu>
     </Section>

@@ -177,7 +177,7 @@ export const Footer = () => {
         </li>
 
         <li>
-          <Link href="/sign-up">{tNavbar('company')}</Link>
+          <Link href="/contact">{tNavbar('company')}</Link>
         </li>
       </CenteredFooter>
     </Section>
