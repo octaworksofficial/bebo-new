@@ -1,5 +1,5 @@
 import { useTranslations } from 'next-intl';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
 
 import { getAboutContent } from '@/features/about/aboutActions';
 import { Footer } from '@/templates/Footer';
@@ -25,16 +25,17 @@ export async function generateMetadata(props: AboutPageProps) {
 export default async function AboutPage(props: AboutPageProps) {
   const { locale } = await props.params;
 
+  unstable_setRequestLocale(locale);
+
   // Get dynamic content from database
   const aboutContent = await getAboutContent(locale);
 
-  // Debug: Test if we can get all content
+  // Get about content from database
   try {
     const { getAllAboutContent } = await import('@/features/about/aboutActions');
-    const allContent = await getAllAboutContent();
-    console.log('All About Content from DB:', allContent);
-  } catch (error) {
-    console.error('Error testing DB:', error);
+    await getAllAboutContent();
+  } catch {
+    // Handle error silently or log to monitoring service
   }
 
   return <AboutContent aboutContent={aboutContent} />;
