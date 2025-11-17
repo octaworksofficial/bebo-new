@@ -70,12 +70,12 @@ export async function sendPostOrderEmail(merchantOid: string) {
     const productName = orderData.productType === 'wall_art' ? 'Özel Tasarım Duvar Tablosu' : 'Özel Tasarım Ürün';
     const variantInfo = `${orderData.productSize || 'Standart Boyut'}${orderData.productFrame ? ` - ${orderData.productFrame} Çerçeve` : ' - Çerçevesiz'}`;
 
-    // KDV hesapla (varsayılan %18)
-    const subtotal = orderData.totalAmount || 0;
+    // KDV hesapla (%20) - müşteri KDV dahil fiyat ödüyor
+    const totalWithTax = orderData.totalAmount || 0; // KDV dahil toplam (müşterinin ödediği)
     const shipping = 0; // Varsayılan ücretsiz kargo
-    const taxRate = 0.18;
-    const taxAmount = subtotal * taxRate / (1 + taxRate);
-    const subtotalWithoutTax = subtotal - taxAmount;
+    const taxRate = 0.20;
+    const subtotalWithoutTax = totalWithTax / (1 + taxRate); // KDV hariç tutar
+    const taxAmount = totalWithTax - subtotalWithoutTax; // KDV tutarı
 
     // Teslimat adresini formatla
     const shippingAddress = [
@@ -99,7 +99,7 @@ export async function sendPostOrderEmail(merchantOid: string) {
         subtotal_amount: formatPrice(subtotalWithoutTax),
         shipping_amount: formatPrice(shipping),
         tax_amount: formatPrice(taxAmount),
-        total_amount: formatPrice(subtotal),
+        total_amount: formatPrice(totalWithTax),
         item_product_name: productName,
         item_variant_name: variantInfo,
         item_quantity: 1,
