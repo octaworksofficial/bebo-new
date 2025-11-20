@@ -107,12 +107,12 @@ export const ProductSelection = ({ products, locale, imageUrl }: Props) => {
         size: config.size,
         frame: config.frame,
       });
-      
+
       // Add imageUrl if provided
       if (imageUrl) {
         params.set('imageUrl', imageUrl);
       }
-      
+
       router.push(`/${locale}/design?${params.toString()}`);
     }
   };
