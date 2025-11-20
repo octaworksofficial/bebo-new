@@ -2,7 +2,9 @@
 
 import { useUser } from '@clerk/nextjs';
 import { ArrowLeft, CreditCard, Loader2, Package, Shield } from 'lucide-react';
+import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
+import Script from 'next/script';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
@@ -19,12 +21,12 @@ type CheckoutInterfaceProps = {
   frameSlug?: string;
 };
 
-export function CheckoutInterface({ 
-  generationId: propGenerationId, 
-  imageUrl, 
-  productSlug: propProductSlug, 
-  sizeSlug: propSizeSlug, 
-  frameSlug: propFrameSlug 
+export function CheckoutInterface({
+  generationId: propGenerationId,
+  imageUrl,
+  productSlug: propProductSlug,
+  sizeSlug: propSizeSlug,
+  frameSlug: propFrameSlug,
 }: CheckoutInterfaceProps) {
   const t = useTranslations('Checkout');
   const router = useRouter();
@@ -60,7 +62,6 @@ export function CheckoutInterface({
   // Görsel ve fiyat verilerini yükle
   useEffect(() => {
     async function loadData() {
-
       setIsLoading(true);
       try {
         // Görseli yükle
@@ -75,10 +76,15 @@ export function CheckoutInterface({
             product_size_id: 0,
             product_frame_id: 0,
             text_prompt: 'Kullanıcı tarafından yüklenen görsel',
+            improved_prompt: '',
             image_url: imageUrl,
-            status: 'completed',
-            created_at: new Date(),
-            updated_at: new Date(),
+            uploaded_image_url: imageUrl,
+            user_generation_intent: '',
+            is_generate_mode: false,
+            credit_used: 0,
+            is_selected: true,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
           };
           setImageData(mockImageData);
         } else if (generationId) {
@@ -144,9 +150,8 @@ export function CheckoutInterface({
         if (event.data === 'success' || event.data?.status === 'success') {
           console.log('🎉 Payment SUCCESS - Redirecting...');
           router.push('/checkout/success');
-        }
-        // Ödeme başarısız
-        else if (event.data === 'failed' || event.data?.status === 'failed') {
+        } else if (event.data === 'failed' || event.data?.status === 'failed') {
+          // Ödeme başarısız
           console.log('❌ Payment FAILED - Redirecting...');
           router.push('/checkout/failed');
         } else {
@@ -265,6 +270,7 @@ export function CheckoutInterface({
         <div className="text-center">
           <h1 className="text-2xl font-bold">Ürün bulunamadı</h1>
           <button
+            type="button"
             onClick={() => router.back()}
             className="mt-4 text-purple-600 hover:underline"
           >
@@ -280,6 +286,7 @@ export function CheckoutInterface({
       {/* Header */}
       <div className="mb-8">
         <button
+          type="button"
           onClick={() => router.back()}
           className="mb-4 flex items-center gap-2 text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
         >
@@ -308,10 +315,11 @@ export function CheckoutInterface({
 
                 <div className="space-y-4">
                   <div>
-                    <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <label htmlFor="customer-name" className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
                       {t('full_name')}
                     </label>
                     <input
+                      id="customer-name"
                       type="text"
                       value={customerName}
                       onChange={e => setCustomerName(e.target.value)}
@@ -321,10 +329,11 @@ export function CheckoutInterface({
                   </div>
 
                   <div>
-                    <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <label htmlFor="customer-email" className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
                       {t('email')}
                     </label>
                     <input
+                      id="customer-email"
                       type="email"
                       value={customerEmail}
                       onChange={e => setCustomerEmail(e.target.value)}
@@ -334,10 +343,11 @@ export function CheckoutInterface({
                   </div>
 
                   <div>
-                    <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <label htmlFor="customer-phone" className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
                       {t('phone')}
                     </label>
                     <input
+                      id="customer-phone"
                       type="tel"
                       value={customerPhone}
                       onChange={e => setCustomerPhone(e.target.value)}
@@ -348,10 +358,11 @@ export function CheckoutInterface({
 
                   <div className="grid gap-4 md:grid-cols-2">
                     <div>
-                      <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                      <label htmlFor="customer-city" className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
                         İl
                       </label>
                       <input
+                        id="customer-city"
                         type="text"
                         value={customerCity}
                         onChange={e => setCustomerCity(e.target.value)}
@@ -361,10 +372,11 @@ export function CheckoutInterface({
                     </div>
 
                     <div>
-                      <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                      <label htmlFor="customer-district" className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
                         İlçe
                       </label>
                       <input
+                        id="customer-district"
                         type="text"
                         value={customerDistrict}
                         onChange={e => setCustomerDistrict(e.target.value)}
@@ -375,10 +387,11 @@ export function CheckoutInterface({
                   </div>
 
                   <div>
-                    <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <label htmlFor="customer-address" className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
                       {t('address')}
                     </label>
                     <textarea
+                      id="customer-address"
                       value={customerAddress}
                       onChange={e => setCustomerAddress(e.target.value)}
                       placeholder={t('address_placeholder')}
@@ -410,10 +423,11 @@ export function CheckoutInterface({
                       </h3>
 
                       <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        <label htmlFor="company-name" className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
                           Ünvan (Şirket Adı)
                         </label>
                         <input
+                          id="company-name"
                           type="text"
                           value={companyName}
                           onChange={e => setCompanyName(e.target.value)}
@@ -424,10 +438,11 @@ export function CheckoutInterface({
 
                       <div className="grid gap-4 md:grid-cols-2">
                         <div>
-                          <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                          <label htmlFor="tax-number" className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
                             Vergi Kimlik No
                           </label>
                           <input
+                            id="tax-number"
                             type="text"
                             value={taxNumber}
                             onChange={e => setTaxNumber(e.target.value)}
@@ -438,10 +453,11 @@ export function CheckoutInterface({
                         </div>
 
                         <div>
-                          <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                          <label htmlFor="tax-office" className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
                             Vergi Dairesi
                           </label>
                           <input
+                            id="tax-office"
                             type="text"
                             value={taxOffice}
                             onChange={e => setTaxOffice(e.target.value)}
@@ -452,10 +468,11 @@ export function CheckoutInterface({
                       </div>
 
                       <div>
-                        <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                        <label htmlFor="company-address" className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
                           Şirket Adresi
                         </label>
                         <textarea
+                          id="company-address"
                           value={companyAddress}
                           onChange={e => setCompanyAddress(e.target.value)}
                           placeholder="Şirket fatura adresini giriniz"
@@ -490,18 +507,25 @@ export function CheckoutInterface({
                 <CreditCard className="size-6 text-purple-600" />
                 {t('payment_form')}
               </h2>
-              <script src="https://www.paytr.com/js/iframeResizer.min.js"></script>
+              <Script
+                src="https://www.paytr.com/js/iframeResizer.min.js"
+                strategy="afterInteractive"
+              />
               <div className="overflow-hidden rounded-lg">
                 <iframe
                   src={`https://www.paytr.com/odeme/guvenli/${paytrToken}`}
                   id="paytriframe"
+                  title="PayTR Payment Form"
+                  sandbox="allow-forms allow-scripts allow-same-origin allow-top-navigation"
                   frameBorder="0"
                   scrolling="no"
                   style={{ width: '100%', height: 'auto', minHeight: '800px' }}
                   className="block"
                 />
               </div>
-              <script
+              <Script
+                id="paytr-iframe-resize"
+                strategy="afterInteractive"
                 dangerouslySetInnerHTML={{
                   __html: `iFrameResize({},'#paytriframe');`,
                 }}
@@ -522,10 +546,13 @@ export function CheckoutInterface({
               <p className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                 {t('your_design')}
               </p>
-              <img
+              <Image
                 src={imageData.image_url}
                 alt={imageData.text_prompt}
+                width={600}
+                height={600}
                 className="w-full rounded-lg"
+                unoptimized
               />
             </div>
 
@@ -582,6 +609,7 @@ export function CheckoutInterface({
             {/* Ödeme Butonu - Sadece token yokken göster */}
             {!paytrToken && (
               <button
+                type="button"
                 onClick={handleCompletePayment}
                 disabled={isProcessing}
                 className="mt-6 flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 px-6 py-4 text-lg font-semibold text-white transition-all hover:from-purple-700 hover:to-pink-700 disabled:opacity-50"

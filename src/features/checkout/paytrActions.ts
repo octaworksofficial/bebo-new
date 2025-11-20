@@ -260,6 +260,7 @@ export async function validatePayTRCallback(payload: {
         const newCreditAmount = currentUser.artCredits + existingOrder.creditAmount;
 
         console.log(`💰 Adding ${existingOrder.creditAmount} credits to user ${existingOrder.userId}`);
+
         console.log(`� Current: ${currentUser.artCredits} → New: ${newCreditAmount}`);
 
         // Kredileri güncelle - SQL expression yerine direkt değer kullan

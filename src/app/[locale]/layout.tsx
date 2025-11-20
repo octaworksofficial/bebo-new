@@ -9,6 +9,7 @@ import { unstable_setRequestLocale } from 'next-intl/server';
 import { AllLocales, AppConfig } from '@/utils/AppConfig';
 
 export const metadata: Metadata = {
+  manifest: '/site.webmanifest',
   icons: [
     {
       rel: 'apple-touch-icon',
