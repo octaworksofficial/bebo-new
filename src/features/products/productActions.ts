@@ -52,6 +52,7 @@ export async function getProductDetails(productSlug: string, locale: string = 't
     description: locale === 'en' ? (product.descriptionEn || product.description) : locale === 'fr' ? (product.descriptionFr || product.description) : product.description,
     imageSquareUrl: product.imageSquareUrl,
     imageWideUrl: product.imageWideUrl,
+    imageDimensions: product.imageDimensions || '1920x1080', // Required image dimensions
     sizeLabel: locale === 'en' ? (product.sizeLabelEn || product.sizeLabel || 'Select Size') : locale === 'fr' ? (product.sizeLabelFr || product.sizeLabel || 'Sélectionner la taille') : (product.sizeLabel || 'Boyut Seçin'),
     frameLabel: locale === 'en' ? (product.frameLabelEn || product.frameLabel || 'Select Frame') : locale === 'fr' ? (product.frameLabelFr || product.frameLabel || 'Sélectionner le cadre') : (product.frameLabel || 'Çerçeve Seçin'),
     sizes: sizes.map((size: typeof productSizeSchema.$inferSelect) => ({

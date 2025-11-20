@@ -88,18 +88,5 @@ export const SponsorLogos = () => (
         height="38"
       />
     </a>
-
-    <a
-      href="https://nextjs-boilerplate.com/pro-saas-starter-kit"
-      target="_blank"
-      rel="noopener"
-    >
-      <Image
-        src="/assets/images/nextjs-boilerplate-saas.png"
-        alt="Nextjs SaaS Boilerplate"
-        width="128"
-        height="30"
-      />
-    </a>
   </LogoCloud>
 );

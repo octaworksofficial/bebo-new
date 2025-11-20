@@ -84,6 +84,7 @@ export const productSchema = pgTable('product', {
   descriptionFr: text('description_fr'),
   imageSquareUrl: text('image_square_url'), // Square product image (1080x1080)
   imageWideUrl: text('image_wide_url'), // Wide product image (1920x1080)
+  imageDimensions: varchar('image_dimensions', { length: 50 }).default('1920x1080').notNull(), // Required image dimensions (e.g., "1920x1080")
   sizeLabel: text('size_label').default('Boyut Seçin').notNull(), // "Boyut Seçin" etiketi
   sizeLabelEn: text('size_label_en').default('Select Size'),
   sizeLabelFr: text('size_label_fr').default('Sélectionner la taille'),

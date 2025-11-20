@@ -172,7 +172,7 @@ export const ProductSelection = ({ products, locale }: Props) => {
                   imageUrl={isSelected && selectedFrame?.frameImageLarge ? selectedFrame.frameImageLarge : (isSelected ? product.imageWideUrl : product.imageSquareUrl)}
                   productName={product.name}
                   variant={isSelected ? 'wide' : 'square'}
-                  className={isSelected ? 'h-48 md:h-64' : undefined}
+                  className={isSelected ? 'h-48 md:h-64 lg:h-80 xl:h-96' : undefined}
                 />
 
                 {/* Product Info (when not selected) */}

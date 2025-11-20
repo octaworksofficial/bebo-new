@@ -11,7 +11,8 @@ import { getProductPricing, type ProductPriceData } from './productPriceActions'
 
 type PreviewInterfaceProps = {
   locale: string;
-  generationId: string;
+  generationId?: string;
+  imageUrl?: string;
   productSlug: string;
   sizeSlug: string;
   frameSlug: string;
@@ -19,6 +20,7 @@ type PreviewInterfaceProps = {
 
 export function PreviewInterface({
   generationId,
+  imageUrl,
   productSlug,
   sizeSlug,
   frameSlug,
@@ -35,36 +37,57 @@ export function PreviewInterface({
     async function loadImageData() {
       setIsLoading(true);
       try {
-        console.log('Loading image with generationId:', generationId);
-
-        // Try getUserGeneratedImages first to get all user's images
-        const userImagesResult = await getUserGeneratedImages();
-
-        if (userImagesResult.success && userImagesResult.data) {
-          // Find the image with matching generation_id
-          const matchedImage = userImagesResult.data.find(
-            img => img.generation_id === generationId,
-          );
-
-          if (matchedImage) {
-            console.log('Found image in user history:', matchedImage);
-            setImageData(matchedImage);
-            setIsLoading(false);
-            return;
-          }
+        // If we have a direct imageUrl (user uploaded image), create mock data
+        if (imageUrl) {
+          const mockImageData: GeneratedImageResponse = {
+            id: Date.now(),
+            user_id: '',
+            chat_session_id: '',
+            generation_id: `user-upload-${Date.now()}`,
+            product_id: 0,
+            product_size_id: 0,
+            product_frame_id: 0,
+            text_prompt: 'Kullanıcı tarafından yüklenen görsel',
+            improved_prompt: '',
+            image_url: imageUrl,
+            uploaded_image_url: imageUrl,
+            user_generation_intent: '',
+            is_generate_mode: false,
+            credit_used: 0,
+            is_selected: false,
+            updated_at: new Date().toISOString(),
+            created_at: new Date().toISOString(),
+          };
+          setImageData(mockImageData);
+          setIsLoading(false);
+          return;
         }
 
-        // Fallback: try getGeneratedImage API
-        const result = await getGeneratedImage(generationId);
+        // If we have generationId, load from database
+        if (generationId) {
+          // Try getUserGeneratedImages first to get all user's images
+          const userImagesResult = await getUserGeneratedImages();
 
-        console.log('Result from API:', result);
+          if (userImagesResult.success && userImagesResult.data) {
+            // Find the image with matching generation_id
+            const matchedImage = userImagesResult.data.find(
+              img => img.generation_id === generationId,
+            );
 
-        if (result.success && result.data) {
-          const data = Array.isArray(result.data) ? result.data[0] : result.data;
-          console.log('Image data:', data);
-          setImageData(data!);
-        } else {
-          console.error('No data in result:', result);
+            if (matchedImage) {
+              setImageData(matchedImage);
+              setIsLoading(false);
+              return;
+            }
+          }
+
+          // Fallback: try getGeneratedImage API
+          const result = await getGeneratedImage(generationId);
+
+          if (result.success && result.data) {
+            const data = Array.isArray(result.data) ? result.data[0] : result.data;
+            setImageData(data!);
+          }
         }
       } catch (error) {
         console.error('Failed to load image:', error);
@@ -73,7 +96,7 @@ export function PreviewInterface({
     }
 
     loadImageData();
-  }, [generationId]);
+  }, [generationId, imageUrl]);
 
   // Load pricing data from database
   useEffect(() => {
