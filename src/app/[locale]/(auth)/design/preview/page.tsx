@@ -9,14 +9,16 @@ export default function PreviewPage(props: {
   params: { locale: string };
   searchParams: {
     generationId?: string;
+    imageUrl?: string;
     product?: string;
     size?: string;
     frame?: string;
   };
 }) {
-  const { generationId, product, size, frame } = props.searchParams;
+  const { generationId, imageUrl, product, size, frame } = props.searchParams;
 
-  if (!generationId || !product || !size || !frame) {
+  // Check if we have either generationId OR imageUrl, and required product params
+  if ((!generationId && !imageUrl) || !product || !size || !frame) {
     // Redirect to products if missing params
     return (
       <>
@@ -25,6 +27,7 @@ export default function PreviewPage(props: {
           <div className="text-center">
             <h1 className="text-2xl font-bold">Geçersiz önizleme</h1>
             <p className="mt-2 text-gray-600">Lütfen ürün seçimi yapın</p>
+
           </div>
         </div>
         <Footer />
@@ -38,6 +41,7 @@ export default function PreviewPage(props: {
       <PreviewInterface
         locale={props.params.locale}
         generationId={generationId}
+        imageUrl={imageUrl}
         productSlug={product}
         sizeSlug={size}
         frameSlug={frame}

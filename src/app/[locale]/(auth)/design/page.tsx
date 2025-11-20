@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic';
 
 export default function DesignPage(props: {
   params: { locale: string };
-  searchParams: { product?: string; size?: string; frame?: string };
+  searchParams: { product?: string; size?: string; frame?: string; imageUrl?: string };
 }) {
   return (
     <>
@@ -17,6 +17,7 @@ export default function DesignPage(props: {
         productSlug={props.searchParams.product}
         sizeSlug={props.searchParams.size}
         frameSlug={props.searchParams.frame}
+        initialImageUrl={props.searchParams.imageUrl}
       />
       <Footer />
     </>

@@ -182,7 +182,6 @@ export async function createCreditPurchase(
       lang: 'tr',
     });
 
-    // eslint-disable-next-line no-console
     console.log('PayTR Credit Purchase Request:', {
       merchantOid,
       creditAmount,
@@ -201,7 +200,6 @@ export async function createCreditPurchase(
 
     const result = await response.json() as { status: string; token?: string; reason?: string };
 
-    // eslint-disable-next-line no-console
     console.log('PayTR Response:', result);
 
     if (result.status === 'success' && result.token) {

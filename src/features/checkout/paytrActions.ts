@@ -213,7 +213,6 @@ export async function validatePayTRCallback(payload: {
 
     const existingOrder = order[0]!;
 
-    // eslint-disable-next-line no-console
     console.log('PayTR Callback - Order Details:', {
       merchantOid: payload.merchant_oid,
       orderType: existingOrder.orderType,
@@ -260,9 +259,7 @@ export async function validatePayTRCallback(payload: {
         // Yeni kredi miktarını hesapla
         const newCreditAmount = currentUser.artCredits + existingOrder.creditAmount;
 
-        // eslint-disable-next-line no-console
         console.log(`💰 Adding ${existingOrder.creditAmount} credits to user ${existingOrder.userId}`);
-        // eslint-disable-next-line no-console
         console.log(`� Current: ${currentUser.artCredits} → New: ${newCreditAmount}`);
 
         // Kredileri güncelle - SQL expression yerine direkt değer kullan
@@ -273,10 +270,8 @@ export async function validatePayTRCallback(payload: {
           })
           .where(eq(userSchema.id, existingOrder.userId));
 
-        // eslint-disable-next-line no-console
         console.log(`✅ Successfully updated credits for user ${existingOrder.userId}`);
       } else {
-        // eslint-disable-next-line no-console
         console.log('⚠️ NOT A CREDIT ORDER or creditAmount is null:', {
           orderType: existingOrder.orderType,
           creditAmount: existingOrder.creditAmount,

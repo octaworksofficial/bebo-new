@@ -97,33 +97,19 @@ export const Footer = () => {
         )}
         bankCards={(
           <>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img loading="lazy" src="https://images.hepsiburada.net/assets/footer/bonus-card.svg" width="76" alt="Bonus Card" />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img loading="lazy" src="https://images.hepsiburada.net/assets/footer/maximum.svg" width="62" alt="Maximum" />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img loading="lazy" src="https://images.hepsiburada.net/assets/footer/world.svg" width="62" alt="World" />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img loading="lazy" src="https://images.hepsiburada.net/assets/footer/ziraat.svg" width="58" alt="Ziraat" />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img loading="lazy" src="https://images.hepsiburada.net/assets/footer/card-finans.svg" width="64" alt="Card Finans" />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img loading="lazy" src="https://images.hepsiburada.net/assets/footer/axess.svg" width="43" alt="Axess" />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img loading="lazy" src="https://images.hepsiburada.net/assets/footer/kuveyt-turk.svg" width="76" alt="Kuveyt Türk" />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img loading="lazy" src="https://images.hepsiburada.net/assets/footer/hsbc.svg" width="134" alt="HSBC" />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img loading="lazy" src="https://images.hepsiburada.net/assets/footer/union-pay.svg" width="26" alt="Union Pay" />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img loading="lazy" src="https://images.hepsiburada.net/assets/footer/paraf.svg" width="32" alt="Paraf" />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img loading="lazy" src="https://images.hepsiburada.net/assets/footer/visa.svg" width="51" alt="Visa" />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img loading="lazy" src="https://images.hepsiburada.net/assets/footer/master-card.svg" width="31" alt="MasterCard" />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img loading="lazy" src="https://images.hepsiburada.net/assets/footer/american-express.svg" width="27" alt="American Express" />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img loading="lazy" src="https://images.hepsiburada.net/assets/footer/troy.svg" width="42" alt="Troy" />
           </>
         )}

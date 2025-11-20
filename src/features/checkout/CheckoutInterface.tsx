@@ -14,7 +14,7 @@ type CheckoutInterfaceProps = {
   locale: string;
 };
 
-export function CheckoutInterface({ }: CheckoutInterfaceProps) {
+export function CheckoutInterface(_props: CheckoutInterfaceProps) {
   const t = useTranslations('Checkout');
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -71,7 +71,6 @@ export function CheckoutInterface({ }: CheckoutInterfaceProps) {
         const pricingResult = await getProductPricing(productSlug, sizeSlug, frameSlug);
         if (pricingResult.success && pricingResult.data) {
           setPriceData(pricingResult.data);
-          console.log('Price Data Loaded:', pricingResult.data);
         } else {
           console.error('Failed to load pricing:', pricingResult.error);
         }
@@ -112,9 +111,8 @@ export function CheckoutInterface({ }: CheckoutInterfaceProps) {
         if (event.data === 'success' || event.data?.status === 'success') {
           console.log('🎉 Payment SUCCESS - Redirecting...');
           router.push('/checkout/success');
-        }
-        // Ödeme başarısız
-        else if (event.data === 'failed' || event.data?.status === 'failed') {
+        } else if (event.data === 'failed' || event.data?.status === 'failed') {
+          // Ödeme başarısız
           console.log('❌ Payment FAILED - Redirecting...');
           router.push('/checkout/failed');
         } else {
@@ -233,6 +231,7 @@ export function CheckoutInterface({ }: CheckoutInterfaceProps) {
         <div className="text-center">
           <h1 className="text-2xl font-bold">Ürün bulunamadı</h1>
           <button
+            type="button"
             onClick={() => router.back()}
             className="mt-4 text-purple-600 hover:underline"
           >
@@ -248,6 +247,7 @@ export function CheckoutInterface({ }: CheckoutInterfaceProps) {
       {/* Header */}
       <div className="mb-8">
         <button
+          type="button"
           onClick={() => router.back()}
           className="mb-4 flex items-center gap-2 text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
         >
@@ -467,6 +467,7 @@ export function CheckoutInterface({ }: CheckoutInterfaceProps) {
                   scrolling="no"
                   style={{ width: '100%', height: 'auto', minHeight: '800px' }}
                   className="block"
+                  title="PayTR Payment Form"
                 />
               </div>
               <script
@@ -550,6 +551,7 @@ export function CheckoutInterface({ }: CheckoutInterfaceProps) {
             {/* Ödeme Butonu - Sadece token yokken göster */}
             {!paytrToken && (
               <button
+                type="button"
                 onClick={handleCompletePayment}
                 disabled={isProcessing}
                 className="mt-6 flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 px-6 py-4 text-lg font-semibold text-white transition-all hover:from-purple-700 hover:to-pink-700 disabled:opacity-50"

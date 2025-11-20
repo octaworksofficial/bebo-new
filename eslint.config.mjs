@@ -64,18 +64,9 @@ export default antfu({
     'node/prefer-global/process': 'off', // Allow using `process.env`
     'test/padding-around-all': 'error', // Add padding in test files
     'test/prefer-lowercase-title': 'off', // Allow using uppercase titles in test titles
-    'no-console': 'off', // Allow console statements for debugging
-    'no-alert': 'off', // Allow alert statements
-    'react/button-has-type': 'off', // Allow button without explicit type
-    '@next/next/no-img-element': 'off', // Allow img tag
-    '@next/next/no-sync-scripts': 'off', // Allow sync scripts
-    'jsx-a11y/label-has-associated-control': 'off', // Allow labels without control
-    'jsx-a11y/no-static-element-interactions': 'off', // Allow click handlers on div
-    'jsx-a11y/no-noninteractive-element-interactions': 'off', // Allow interactive elements
-    'jsx-a11y/click-events-have-key-events': 'off', // Allow click without keyboard events
-    'jsx-a11y/iframe-has-title': 'off', // Allow iframe without title
-    'react/no-danger': 'off', // Allow dangerouslySetInnerHTML
-    'unused-imports/no-unused-vars': 'off', // Allow unused variables temporarily
-    '@typescript-eslint/no-unused-vars': 'off', // Allow unused TypeScript variables
+    'no-console': 'off', // Allow console.log for debugging
+    'no-alert': 'off', // Allow alert for user notifications
+    'react/button-has-type': 'off', // Allow buttons without explicit type attribute
+    'unused-imports/no-unused-vars': 'warn', // Change to warning instead of error
   },
 });

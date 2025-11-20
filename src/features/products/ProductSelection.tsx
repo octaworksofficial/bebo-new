@@ -46,9 +46,10 @@ type ProductConfig = {
 type Props = {
   products: Product[];
   locale: string;
+  imageUrl?: string;
 };
 
-export const ProductSelection = ({ products, locale }: Props) => {
+export const ProductSelection = ({ products, locale, imageUrl }: Props) => {
   const t = useTranslations('Products');
   const router = useRouter();
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
@@ -106,6 +107,12 @@ export const ProductSelection = ({ products, locale }: Props) => {
         size: config.size,
         frame: config.frame,
       });
+      
+      // Add imageUrl if provided
+      if (imageUrl) {
+        params.set('imageUrl', imageUrl);
+      }
+      
       router.push(`/${locale}/design?${params.toString()}`);
     }
   };

@@ -20,7 +20,10 @@ export async function generateMetadata(props: { params: { locale: string } }) {
   };
 }
 
-const ProductsPage = async (props: { params: { locale: string } }) => {
+const ProductsPage = async (props: {
+  params: { locale: string };
+  searchParams: { imageUrl?: string };
+}) => {
   unstable_setRequestLocale(props.params.locale);
 
   const products = await getProducts(props.params.locale);
@@ -28,7 +31,11 @@ const ProductsPage = async (props: { params: { locale: string } }) => {
   return (
     <>
       <Navbar />
-      <ProductSelection products={products} locale={props.params.locale} />
+      <ProductSelection
+        products={products}
+        locale={props.params.locale}
+        imageUrl={props.searchParams.imageUrl}
+      />
       <Footer />
     </>
   );

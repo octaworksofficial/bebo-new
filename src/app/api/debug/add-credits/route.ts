@@ -35,9 +35,7 @@ export async function POST(request: Request) {
     // Yeni kredi miktarını hesapla
     const newCreditAmount = currentUser.artCredits + creditAmount;
 
-    // eslint-disable-next-line no-console
     console.log(`🔧 DEBUG: Adding ${creditAmount} credits to user ${userId}`);
-    // eslint-disable-next-line no-console
     console.log(`📊 DEBUG: Current: ${currentUser.artCredits} → New: ${newCreditAmount}`);
 
     // Kredileri güncelle
@@ -48,7 +46,6 @@ export async function POST(request: Request) {
       })
       .where(eq(userSchema.id, userId));
 
-    // eslint-disable-next-line no-console
     console.log(`✅ DEBUG: Successfully updated credits for user ${userId}`);
 
     return NextResponse.json({

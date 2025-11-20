@@ -140,7 +140,6 @@ export async function getProductBySlug(productSlug: string, locale: string = 'tr
     imageWideUrl: product.imageWideUrl,
   };
 
-  // eslint-disable-next-line no-console
   console.log('getProductBySlug result:', result);
 
   return result;

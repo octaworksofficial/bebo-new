@@ -156,6 +156,7 @@ export function PreviewInterface({
       {/* Header with Back Button */}
       <div className="mb-8">
         <button
+          type="button"
           onClick={() => router.back()}
           className="flex items-center gap-2 text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
         >
@@ -261,6 +262,7 @@ export function PreviewInterface({
 
             {/* Continue Button */}
             <button
+              type="button"
               onClick={handleContinueToCheckout}
               className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 px-8 py-4 text-lg font-semibold text-white shadow-lg transition-all hover:from-purple-700 hover:to-pink-700 hover:shadow-xl"
             >
