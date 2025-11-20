@@ -18,8 +18,27 @@ export async function generateMetadata(props: { params: Promise<{ locale: string
   };
 }
 
-export default async function CheckoutPage(props: { params: Promise<{ locale: string }> }) {
+export default async function CheckoutPage(props: { 
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{
+    generationId?: string;
+    imageUrl?: string;
+    product?: string;
+    size?: string;
+    frame?: string;
+  }>;
+}) {
   const { locale } = await props.params;
+  const { generationId, imageUrl, product, size, frame } = await props.searchParams;
 
-  return <CheckoutInterface locale={locale} />;
+  return (
+    <CheckoutInterface 
+      locale={locale}
+      generationId={generationId}
+      imageUrl={imageUrl}
+      productSlug={product}
+      sizeSlug={size}
+      frameSlug={frame}
+    />
+  );
 }

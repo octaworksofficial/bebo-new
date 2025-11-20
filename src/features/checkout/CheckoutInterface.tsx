@@ -12,19 +12,30 @@ import { getProductPricing, type ProductPriceData } from '@/features/design/prod
 
 type CheckoutInterfaceProps = {
   locale: string;
+  generationId?: string;
+  imageUrl?: string;
+  productSlug?: string;
+  sizeSlug?: string;
+  frameSlug?: string;
 };
 
-export function CheckoutInterface(_props: CheckoutInterfaceProps) {
+export function CheckoutInterface({ 
+  generationId: propGenerationId, 
+  imageUrl, 
+  productSlug: propProductSlug, 
+  sizeSlug: propSizeSlug, 
+  frameSlug: propFrameSlug 
+}: CheckoutInterfaceProps) {
   const t = useTranslations('Checkout');
   const router = useRouter();
   const searchParams = useSearchParams();
   const { user } = useUser();
 
-  // URL parametreleri
-  const generationId = searchParams.get('generationId') || '';
-  const productSlug = searchParams.get('product') || '';
-  const sizeSlug = searchParams.get('size') || '';
-  const frameSlug = searchParams.get('frame') || '';
+  // URL parametreleri (fallback olarak)
+  const generationId = propGenerationId || searchParams.get('generationId') || '';
+  const productSlug = propProductSlug || searchParams.get('product') || '';
+  const sizeSlug = propSizeSlug || searchParams.get('size') || '';
+  const frameSlug = propFrameSlug || searchParams.get('frame') || '';
 
   // State
   const [imageData, setImageData] = useState<GeneratedImageResponse | null>(null);
@@ -49,20 +60,41 @@ export function CheckoutInterface(_props: CheckoutInterfaceProps) {
   // Görsel ve fiyat verilerini yükle
   useEffect(() => {
     async function loadData() {
+
       setIsLoading(true);
       try {
         // Görseli yükle
-        const userImagesResult = await getUserGeneratedImages();
-        if (userImagesResult.success && userImagesResult.data) {
-          const matchedImage = userImagesResult.data.find(
-            img => img.generation_id === generationId,
-          );
-          if (matchedImage) {
-            setImageData(matchedImage);
-          } else {
-            const result = await getGeneratedImage(generationId);
-            if (result.success && result.data) {
-              setImageData(Array.isArray(result.data) ? result.data[0]! : result.data);
+        if (imageUrl) {
+          // User uploaded image - create mock data
+          const mockImageData: GeneratedImageResponse = {
+            id: Date.now(),
+            user_id: '',
+            chat_session_id: '',
+            generation_id: `user-upload-${Date.now()}`,
+            product_id: 0,
+            product_size_id: 0,
+            product_frame_id: 0,
+            text_prompt: 'Kullanıcı tarafından yüklenen görsel',
+            image_url: imageUrl,
+            status: 'completed',
+            created_at: new Date(),
+            updated_at: new Date(),
+          };
+          setImageData(mockImageData);
+        } else if (generationId) {
+          // Generated image
+          const userImagesResult = await getUserGeneratedImages();
+          if (userImagesResult.success && userImagesResult.data) {
+            const matchedImage = userImagesResult.data.find(
+              img => img.generation_id === generationId,
+            );
+            if (matchedImage) {
+              setImageData(matchedImage);
+            } else {
+              const result = await getGeneratedImage(generationId);
+              if (result.success && result.data) {
+                setImageData(Array.isArray(result.data) ? result.data[0]! : result.data);
+              }
             }
           }
         }
@@ -71,6 +103,7 @@ export function CheckoutInterface(_props: CheckoutInterfaceProps) {
         const pricingResult = await getProductPricing(productSlug, sizeSlug, frameSlug);
         if (pricingResult.success && pricingResult.data) {
           setPriceData(pricingResult.data);
+          console.log('Price Data Loaded:', pricingResult.data);
         } else {
           console.error('Failed to load pricing:', pricingResult.error);
         }
@@ -81,7 +114,7 @@ export function CheckoutInterface(_props: CheckoutInterfaceProps) {
     }
 
     loadData();
-  }, [generationId, productSlug, sizeSlug, frameSlug]);
+  }, [generationId, imageUrl, productSlug, sizeSlug, frameSlug]);
 
   // Kullanıcı email'ini otomatik doldur
   useEffect(() => {
@@ -111,8 +144,9 @@ export function CheckoutInterface(_props: CheckoutInterfaceProps) {
         if (event.data === 'success' || event.data?.status === 'success') {
           console.log('🎉 Payment SUCCESS - Redirecting...');
           router.push('/checkout/success');
-        } else if (event.data === 'failed' || event.data?.status === 'failed') {
-          // Ödeme başarısız
+        }
+        // Ödeme başarısız
+        else if (event.data === 'failed' || event.data?.status === 'failed') {
           console.log('❌ Payment FAILED - Redirecting...');
           router.push('/checkout/failed');
         } else {
@@ -231,7 +265,6 @@ export function CheckoutInterface(_props: CheckoutInterfaceProps) {
         <div className="text-center">
           <h1 className="text-2xl font-bold">Ürün bulunamadı</h1>
           <button
-            type="button"
             onClick={() => router.back()}
             className="mt-4 text-purple-600 hover:underline"
           >
@@ -247,7 +280,6 @@ export function CheckoutInterface(_props: CheckoutInterfaceProps) {
       {/* Header */}
       <div className="mb-8">
         <button
-          type="button"
           onClick={() => router.back()}
           className="mb-4 flex items-center gap-2 text-gray-600 transition-colors hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
         >
@@ -467,7 +499,6 @@ export function CheckoutInterface(_props: CheckoutInterfaceProps) {
                   scrolling="no"
                   style={{ width: '100%', height: 'auto', minHeight: '800px' }}
                   className="block"
-                  title="PayTR Payment Form"
                 />
               </div>
               <script
@@ -551,7 +582,6 @@ export function CheckoutInterface(_props: CheckoutInterfaceProps) {
             {/* Ödeme Butonu - Sadece token yokken göster */}
             {!paytrToken && (
               <button
-                type="button"
                 onClick={handleCompletePayment}
                 disabled={isProcessing}
                 className="mt-6 flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 px-6 py-4 text-lg font-semibold text-white transition-all hover:from-purple-700 hover:to-pink-700 disabled:opacity-50"
