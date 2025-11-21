@@ -137,6 +137,7 @@ export type GeneratedImageResponse = {
   text_prompt: string;
   improved_prompt: string;
   image_url: string;
+  thumbnail_url?: string; // Optional thumbnail URL for performance
   uploaded_image_url: string;
   user_generation_intent: string;
   is_generate_mode: boolean;
@@ -151,7 +152,7 @@ export async function getGeneratedImage(generationId: string) {
     // Convert generation_id to number
     const generationIdNumber = Number.parseInt(generationId, 10);
 
-    if (isNaN(generationIdNumber)) {
+    if (Number.isNaN(generationIdNumber)) {
       throw new TypeError('Invalid generation_id format');
     }
 

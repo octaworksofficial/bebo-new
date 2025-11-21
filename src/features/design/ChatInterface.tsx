@@ -789,98 +789,100 @@ export function ChatInterface({
                 {t('upload_own_image')}
               </h2>
 
-              {!userUploadedImageUrl ? (
-                <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-6 dark:border-gray-600">
-                  <input
-                    ref={userUploadFileInputRef}
-                    type="file"
-                    accept="image/*"
-                    onChange={handleUserImageUpload}
-                    className="hidden"
-                  />
-                  <Upload className="mb-3 size-12 text-gray-400" />
-                  <p className="mb-2 text-sm text-gray-600 dark:text-gray-300">
-                    {t('upload_description')}
-                  </p>
-                  <button
-                    type="button"
-                    onClick={() => userUploadFileInputRef.current?.click()}
-                    disabled={isUploadingUserImage}
-                    className="flex items-center gap-2 rounded-lg bg-green-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-green-600 disabled:opacity-50"
-                  >
-                    {isUploadingUserImage
-                      ? (
-                          <>
-                            <Loader2 className="size-4 animate-spin" />
-                            {t('uploading')}
-                          </>
-                        )
-                      : (
-                          <>
-                            <Upload className="size-4" />
-                            {t('select_image')}
-                          </>
-                        )}
-                  </button>
-                  <p className="mt-2 text-xs text-gray-500">
-                    {t('max_file_size')}
-                  </p>
-                </div>
-              ) : (
-                <div className="space-y-4">
-                  <div className="group relative aspect-square overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700">
-                    <img
-                      src={userUploadedImageUrl}
-                      alt={t('uploaded_image')}
-                      className="size-full object-cover transition-transform group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 transition-opacity group-hover:opacity-100">
+              {!userUploadedImageUrl
+                ? (
+                    <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 p-6 dark:border-gray-600">
+                      <input
+                        ref={userUploadFileInputRef}
+                        type="file"
+                        accept="image/*"
+                        onChange={handleUserImageUpload}
+                        className="hidden"
+                      />
+                      <Upload className="mb-3 size-12 text-gray-400" />
+                      <p className="mb-2 text-sm text-gray-600 dark:text-gray-300">
+                        {t('upload_description')}
+                      </p>
                       <button
                         type="button"
-                        onClick={() => {
-                          if (!productSlug || !sizeSlug || !frameSlug) {
-                            // Navigate to product selection with uploaded image
-                            router.push(
-                              `/products?imageUrl=${encodeURIComponent(userUploadedImageUrl)}`,
-                            );
-                            return;
-                          }
-                          // Navigate to preview with uploaded image
-                          router.push(
-                            `/design/preview?imageUrl=${encodeURIComponent(userUploadedImageUrl)}&product=${productSlug}&size=${sizeSlug}&frame=${frameSlug}`,
-                          );
-                        }}
-                        className="absolute bottom-2 right-2 rounded-lg bg-white px-3 py-1 text-xs font-medium text-gray-800 transition-colors hover:bg-gray-100"
+                        onClick={() => userUploadFileInputRef.current?.click()}
+                        disabled={isUploadingUserImage}
+                        className="flex items-center gap-2 rounded-lg bg-green-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-green-600 disabled:opacity-50"
                       >
-                        {t('continue_order')}
+                        {isUploadingUserImage
+                          ? (
+                              <>
+                                <Loader2 className="size-4 animate-spin" />
+                                {t('uploading')}
+                              </>
+                            )
+                          : (
+                              <>
+                                <Upload className="size-4" />
+                                {t('select_image')}
+                              </>
+                            )}
                       </button>
+                      <p className="mt-2 text-xs text-gray-500">
+                        {t('max_file_size')}
+                      </p>
                     </div>
-                  </div>
-                  <div className="flex gap-2">
-                    <button
-                      type="button"
-                      onClick={() => userUploadFileInputRef.current?.click()}
-                      className="flex-1 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
-                    >
-                      {t('change_image')}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={removeUserUploadedImage}
-                      className="rounded-lg bg-red-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-600"
-                    >
-                      {t('remove')}
-                    </button>
-                  </div>
-                  <input
-                    ref={userUploadFileInputRef}
-                    type="file"
-                    accept="image/*"
-                    onChange={handleUserImageUpload}
-                    className="hidden"
-                  />
-                </div>
-              )}
+                  )
+                : (
+                    <div className="space-y-4">
+                      <div className="group relative aspect-square overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700">
+                        <img
+                          src={userUploadedImageUrl}
+                          alt={t('uploaded_image')}
+                          className="size-full object-cover transition-transform group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 transition-opacity group-hover:opacity-100">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (!productSlug || !sizeSlug || !frameSlug) {
+                                // Navigate to product selection with uploaded image
+                                router.push(
+                                  `/products?imageUrl=${encodeURIComponent(userUploadedImageUrl)}`,
+                                );
+                                return;
+                              }
+                              // Navigate to preview with uploaded image
+                              router.push(
+                                `/design/preview?imageUrl=${encodeURIComponent(userUploadedImageUrl)}&product=${productSlug}&size=${sizeSlug}&frame=${frameSlug}`,
+                              );
+                            }}
+                            className="absolute bottom-2 right-2 rounded-lg bg-white px-3 py-1 text-xs font-medium text-gray-800 transition-colors hover:bg-gray-100"
+                          >
+                            {t('continue_order')}
+                          </button>
+                        </div>
+                      </div>
+                      <div className="flex gap-2">
+                        <button
+                          type="button"
+                          onClick={() => userUploadFileInputRef.current?.click()}
+                          className="flex-1 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600"
+                        >
+                          {t('change_image')}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={removeUserUploadedImage}
+                          className="rounded-lg bg-red-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-600"
+                        >
+                          {t('remove')}
+                        </button>
+                      </div>
+                      <input
+                        ref={userUploadFileInputRef}
+                        type="file"
+                        accept="image/*"
+                        onChange={handleUserImageUpload}
+                        className="hidden"
+                      />
+                    </div>
+                  )}
             </div>
           </div>
         </div>
@@ -904,14 +906,23 @@ export function ChatInterface({
                     {historyImages.map(image => (
                       <div
                         key={image.id}
+                        role="button"
+                        tabIndex={0}
                         className="group relative aspect-square cursor-pointer overflow-hidden rounded-lg border border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-900"
                         onClick={() => {
                           setSelectedImageDetail(image);
                           setIsModalOpen(true);
                         }}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            setSelectedImageDetail(image);
+                            setIsModalOpen(true);
+                          }
+                        }}
                       >
                         <img
-                          src={image.image_url}
+                          src={image.thumbnail_url || image.image_url}
                           alt={image.text_prompt}
                           className="size-full object-cover transition-transform duration-300 group-hover:scale-110"
                         />
@@ -921,6 +932,7 @@ export function ChatInterface({
                               {image.text_prompt}
                             </p>
                             <button
+                              type="button"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 setSelectedImageDetail(image);
@@ -941,16 +953,19 @@ export function ChatInterface({
 
         {/* Image Detail Modal */}
         {isModalOpen && selectedImageDetail && (
+          // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
           <div
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm"
             onClick={() => setIsModalOpen(false)}
           >
+            {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
             <div
               className="relative max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-2xl bg-white p-6 shadow-2xl dark:bg-gray-800"
               onClick={e => e.stopPropagation()}
             >
               {/* Close Button */}
               <button
+                type="button"
                 onClick={() => setIsModalOpen(false)}
                 className="absolute right-4 top-4 rounded-full bg-gray-100 p-2 text-gray-500 transition-colors hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-400 dark:hover:bg-gray-600"
               >
@@ -996,6 +1011,7 @@ export function ChatInterface({
 
                 {/* Select Button */}
                 <button
+                  type="button"
                   onClick={() => {
                   // Navigate to preview page with all necessary params
                     router.push(`/design/preview?generationId=${selectedImageDetail.generation_id}&product=${productSlug}&size=${sizeSlug}&frame=${frameSlug}`);

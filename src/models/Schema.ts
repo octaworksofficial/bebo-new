@@ -148,6 +148,7 @@ export const generatedImageSchema = pgTable('generated_image', {
   textPrompt: text('text_prompt').notNull(), // User's original prompt
   improvedPrompt: text('improved_prompt'), // AI-improved prompt
   imageUrl: text('image_url').notNull(), // Generated image URL
+  thumbnailUrl: text('thumbnail_url'), // Thumbnail version of generated image for performance
   uploadedImageUrl: text('uploaded_image_url'), // User uploaded reference image
   userGenerationIntent: text('user_generation_intent'), // What user wants to create
   isGenerateMode: boolean('is_generate_mode').default(true).notNull(), // Generate vs inspiration mode
