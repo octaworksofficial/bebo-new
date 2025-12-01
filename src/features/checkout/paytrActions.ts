@@ -230,7 +230,8 @@ export async function validatePayTRCallback(payload: {
     }
 
     // Siparişi güncelle
-    if (payload.status === 'success') {
+    // PayTR'da status: '1' = Başarılı, '0' = Başarısız
+    if (payload.status === '1') {
       await db
         .update(orderSchema)
         .set({

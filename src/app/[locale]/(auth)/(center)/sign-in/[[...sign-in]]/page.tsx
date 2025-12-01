@@ -1,5 +1,5 @@
 import { SignIn } from '@clerk/nextjs';
-import { Sparkles } from 'lucide-react';
+import { Gift } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 
 import { getI18nPath } from '@/utils/Helpers';
@@ -18,15 +18,27 @@ export async function generateMetadata(props: { params: { locale: string } }) {
 
 const SignInPage = (props: { params: { locale: string } }) => (
   <div className="flex flex-col items-center px-4 sm:px-6">
-    {/* Promotional Banner */}
-    <div className="mb-6 w-full max-w-[400px] rounded-xl border-2 border-purple-200 bg-purple-50 p-4 text-center dark:border-purple-800 dark:bg-purple-950">
-      <div className="flex items-center justify-center gap-2 text-purple-900 dark:text-purple-100">
-        <Sparkles className="size-5" />
-        <h2 className="text-lg font-bold">Yeni misin? 1 Ücretsiz Sanat Hakkı Kazan!</h2>
+    {/* Welcome Offer Banner */}
+    <div className="mb-6 w-full max-w-[400px] overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 p-px shadow-lg">
+      <div className="rounded-2xl bg-white px-5 py-4 dark:bg-gray-900">
+        <div className="flex items-center gap-3">
+          <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-purple-600">
+            <Gift className="size-5 text-white" />
+          </div>
+          <div>
+            <p className="font-semibold text-gray-900 dark:text-white">
+              Hoş geldin hediyesi
+            </p>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Üye ol,
+              {' '}
+              <span className="font-medium text-purple-600 dark:text-purple-400">1 ücretsiz kredi</span>
+              {' '}
+              kazan
+            </p>
+          </div>
+        </div>
       </div>
-      <p className="mt-1 text-sm text-purple-700 dark:text-purple-300">
-        Üye ol ve ilk görselin bizden hediye! 🎨
-      </p>
     </div>
 
     <SignIn path={getI18nPath('/sign-in', props.params.locale)} />

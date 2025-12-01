@@ -6,6 +6,7 @@ import type { Metadata } from 'next';
 import { NextIntlClientProvider, useMessages } from 'next-intl';
 import { unstable_setRequestLocale } from 'next-intl/server';
 
+import { LoadingProvider } from '@/components/LoadingProvider';
 import { AllLocales, AppConfig } from '@/utils/AppConfig';
 
 export const metadata: Metadata = {
@@ -90,7 +91,9 @@ export default function RootLayout(props: {
             locale={props.params.locale}
             messages={messages}
           >
-            {props.children}
+            <LoadingProvider>
+              {props.children}
+            </LoadingProvider>
           </NextIntlClientProvider>
         </ClerkProvider>
       </body>
