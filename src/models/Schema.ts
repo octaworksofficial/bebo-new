@@ -128,6 +128,9 @@ export const productFrameSchema = pgTable('product_frame', {
   colorCode: varchar('color_code', { length: 7 }), // Hex color code (e.g., #000000)
   frameImage: text('frame_image'), // Frame preview image URL
   frameImageLarge: text('frame_image_large'), // Large frame banner image URL
+  // Mockup settings
+  mockupTemplate: text('mockup_template'), // Mockup PNG image URL (transparent frame)
+  mockupConfig: text('mockup_config').default('{}'), // JSON: { x, y, width, height, rotation }
   sortOrder: integer('sort_order').default(0).notNull(),
   updatedAt: timestamp('updated_at', { mode: 'date' })
     .defaultNow()

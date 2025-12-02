@@ -1,0 +1,172 @@
+'use client';
+
+/* eslint-disable @next/next/no-img-element */
+
+import type { MockupConfig, MockupType } from '@/utils/mockupUtils';
+
+type MockupPreviewProps = {
+  imageUrl: string; // Kullanıcının görseli
+  mockupTemplate?: string; // Mockup arka plan görseli
+  mockupType: MockupType;
+  mockupConfig: MockupConfig;
+  className?: string;
+};
+
+/**
+ * MockupPreview Component
+ *
+ * Kullanıcının görselini seçilen mockup şablonuna yerleştirir.
+ *
+ * Mockup Tipleri:
+ * - frame: Çerçeve PNG'si üstte, görsel arkada
+ * - overlay: Görsel üstte, mockup arkada (canvas, poster)
+ * - perspective: Perspektif dönüşümü ile (yastık, t-shirt)
+ * - none: Sadece görseli göster
+ */
+export function MockupPreview({
+  imageUrl,
+  mockupTemplate,
+  mockupType,
+  mockupConfig,
+  className = '',
+}: MockupPreviewProps) {
+  const {
+    x = 10,
+    y = 10,
+    width = 80,
+    height = 80,
+    rotation = 0,
+    perspective = 0,
+    skewX = 0,
+    skewY = 0,
+  } = mockupConfig;
+
+  // Perspektif transform stili
+  const perspectiveStyle = perspective > 0 || skewX !== 0 || skewY !== 0
+    ? {
+        transform: `perspective(${perspective || 1000}px) rotateY(${rotation}deg) skewX(${skewX}deg) skewY(${skewY}deg)`,
+        transformOrigin: 'center center',
+      }
+    : rotation !== 0
+      ? { transform: `rotate(${rotation}deg)` }
+      : {};
+
+  // Mockup tipi: none - sadece görseli göster
+  if (mockupType === 'none' || !mockupTemplate) {
+    return (
+      <div className={`relative overflow-hidden ${className}`}>
+        <img
+          src={imageUrl}
+          alt="Preview"
+          className="size-full object-contain"
+          style={perspectiveStyle}
+        />
+      </div>
+    );
+  }
+
+  // Mockup tipi: frame - görsel üstte, çerçeve arkada
+  if (mockupType === 'frame') {
+    return (
+      <div className={`relative overflow-hidden ${className}`}>
+        {/* Çerçeve (arkada) */}
+        <img
+          src={mockupTemplate}
+          alt="Frame"
+          className="relative z-0 size-full object-contain"
+        />
+        {/* Kullanıcı görseli (önde) */}
+        <div
+          className="absolute z-10"
+          style={{
+            left: `${x}%`,
+            top: `${y}%`,
+            width: `${width}%`,
+            height: `${height}%`,
+            ...perspectiveStyle,
+          }}
+        >
+          <img
+            src={imageUrl}
+            alt="Your artwork"
+            className="size-full object-cover"
+          />
+        </div>
+      </div>
+    );
+  }
+
+  // Mockup tipi: overlay - görsel üstte, mockup arkada (canvas tarzı)
+  if (mockupType === 'overlay') {
+    return (
+      <div className={`relative overflow-hidden ${className}`}>
+        {/* Mockup arka planı */}
+        <img
+          src={mockupTemplate}
+          alt="Background"
+          className="size-full object-contain"
+        />
+        {/* Kullanıcı görseli (üstte) */}
+        <div
+          className="absolute z-10"
+          style={{
+            left: `${x}%`,
+            top: `${y}%`,
+            width: `${width}%`,
+            height: `${height}%`,
+            ...perspectiveStyle,
+          }}
+        >
+          <img
+            src={imageUrl}
+            alt="Your artwork"
+            className="size-full object-cover"
+          />
+        </div>
+      </div>
+    );
+  }
+
+  // Mockup tipi: perspective - yastık, t-shirt gibi ürünler
+  if (mockupType === 'perspective') {
+    return (
+      <div className={`relative overflow-hidden ${className}`}>
+        {/* Mockup arka planı */}
+        <img
+          src={mockupTemplate}
+          alt="Product mockup"
+          className="relative z-10 size-full object-contain"
+        />
+        {/* Kullanıcı görseli (perspektif ile) */}
+        <div
+          className="absolute overflow-hidden"
+          style={{
+            left: `${x}%`,
+            top: `${y}%`,
+            width: `${width}%`,
+            height: `${height}%`,
+            transform: `perspective(${perspective || 800}px) rotateX(${skewY}deg) rotateY(${skewX}deg) rotate(${rotation}deg)`,
+            transformOrigin: 'center center',
+          }}
+        >
+          <img
+            src={imageUrl}
+            alt="Your artwork"
+            className="size-full object-cover"
+          />
+        </div>
+      </div>
+    );
+  }
+
+  // Fallback
+  return (
+    <div className={`relative overflow-hidden ${className}`}>
+      <img
+        src={imageUrl}
+        alt="Preview"
+        className="size-full object-contain"
+      />
+    </div>
+  );
+}

@@ -1,11 +1,13 @@
 'use client';
 
-import { ArrowLeft, Check, Frame as FrameIcon, Package, Ruler, Sparkles } from 'lucide-react';
+import { ArrowLeft, Check, Frame as FrameIcon, Image as ImageIcon, Package, RotateCcw, Ruler, Sparkles } from 'lucide-react';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
+import { MockupPreview } from '@/components/MockupPreview';
 import { useRouter } from '@/libs/i18nNavigation';
+import { parseMockupConfig } from '@/utils/mockupUtils';
 
 import { type GeneratedImageResponse, getGeneratedImage, getUserGeneratedImages } from './chatActions';
 import { getProductPricing, type ProductPriceData } from './productPriceActions';
@@ -33,6 +35,10 @@ export function PreviewInterface({
   const [isLoading, setIsLoading] = useState(true);
   const [priceData, setPriceData] = useState<ProductPriceData | null>(null);
   const [isPriceLoading, setIsPriceLoading] = useState(true);
+  const [isFlipped, setIsFlipped] = useState(false);
+
+  // Mockup varsa flip özelliğini aktif et
+  const hasMockup = Boolean(priceData?.mockupTemplate);
 
   useEffect(() => {
     async function loadImageData() {
@@ -179,17 +185,84 @@ export function PreviewInterface({
       </div>
 
       <div className="grid gap-8 lg:grid-cols-2">
-        {/* Left Side - Image Preview */}
+        {/* Left Side - Image Preview with Flip Animation */}
         <div className="space-y-6">
-          <div className="overflow-hidden rounded-2xl border-2 border-gray-200 bg-white p-8 shadow-xl dark:border-gray-700 dark:bg-gray-800">
-            <Image
-              src={imageData.image_url}
-              alt={imageData.text_prompt}
-              width={800}
-              height={800}
-              className="w-full rounded-xl"
-              unoptimized
-            />
+          {/* Flip Card Container */}
+          <div className="relative" style={{ perspective: '1000px' }}>
+            <div
+              className={`relative transition-transform duration-700 ${
+                isFlipped ? '' : ''
+              }`}
+              style={{
+                transformStyle: 'preserve-3d',
+                transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
+              }}
+            >
+              {/* Front - Original Image */}
+              <div style={{ backfaceVisibility: 'hidden' }}>
+                <div className="overflow-hidden rounded-2xl border-2 border-gray-200 bg-white p-4 shadow-xl dark:border-gray-700 dark:bg-gray-800">
+                  <div className="mb-2 flex items-center justify-between">
+                    <span className="flex items-center gap-2 text-sm font-medium text-gray-500 dark:text-gray-400">
+                      <Sparkles className="size-4 text-purple-500" />
+                      Orijinal Görsel
+                    </span>
+                    {hasMockup && (
+                      <button
+                        type="button"
+                        onClick={() => setIsFlipped(true)}
+                        className="flex items-center gap-2 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 px-3 py-1.5 text-xs font-medium text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl"
+                      >
+                        <RotateCcw className="size-3" />
+                        Önizlemesini Gör
+                      </button>
+                    )}
+                  </div>
+                  <Image
+                    src={imageData.image_url}
+                    alt={imageData.text_prompt}
+                    width={800}
+                    height={800}
+                    className="w-full rounded-xl"
+                    unoptimized
+                  />
+                </div>
+              </div>
+
+              {/* Back - Mockup Preview */}
+              {hasMockup && priceData?.mockupTemplate && (
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    backfaceVisibility: 'hidden',
+                    transform: 'rotateY(180deg)',
+                  }}
+                >
+                  <div className="overflow-hidden rounded-2xl border-2 border-gray-200 bg-white p-4 shadow-xl dark:border-gray-700 dark:bg-gray-800">
+                    <div className="mb-2 flex items-center justify-between">
+                      <span className="flex items-center gap-2 text-sm font-medium text-gray-500 dark:text-gray-400">
+                        <ImageIcon className="size-4 text-purple-500" />
+                        Ürün Önizlemesi
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setIsFlipped(false)}
+                        className="flex items-center gap-2 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-medium text-gray-700 transition-all hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+                      >
+                        <RotateCcw className="size-3" />
+                        Orijinale Dön
+                      </button>
+                    </div>
+                    <MockupPreview
+                      imageUrl={imageData.image_url}
+                      mockupTemplate={priceData.mockupTemplate}
+                      mockupType={parseMockupConfig(priceData.mockupConfig).type || 'frame'}
+                      mockupConfig={parseMockupConfig(priceData.mockupConfig)}
+                      className="aspect-square w-full rounded-xl"
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* User's Prompt */}
