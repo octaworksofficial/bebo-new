@@ -60,7 +60,7 @@ export async function sendChatMessage(params: {
     const requestBody: ChatRequest = {
       userId: user.id,
       chatSessionId: params.chatSessionId,
-      creditUsed: params.isGenerateMode ? 2 : 1, // Generate mode uses more credits
+      creditUsed: 1, // Her görsel üretimi 1 kredi
       imagePrompt: !!params.imagePromptUrl,
       imagePromptUrl: params.imagePromptUrl || '',
       textPrompt: params.textPrompt,

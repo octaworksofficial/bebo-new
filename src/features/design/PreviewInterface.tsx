@@ -171,7 +171,7 @@ export function PreviewInterface({
   }
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8">
+    <div className="mx-auto max-w-7xl px-4 pb-8 pt-24">
       {/* Header with Back Button */}
       <div className="mb-8">
         <button
