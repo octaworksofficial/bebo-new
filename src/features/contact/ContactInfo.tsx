@@ -106,11 +106,15 @@ export function ContactInfo() {
             <div className="text-gray-600">
               <p>
                 {t('weekdays')}
-                : 09:00 - 18:00
+                :
+                {' '}
+                {settings.business_hours_weekdays || '09:00 - 18:00'}
               </p>
               <p>
                 {t('weekend')}
-                : 10:00 - 16:00
+                :
+                {' '}
+                {settings.business_hours_weekend || '10:00 - 16:00'}
               </p>
             </div>
           </div>

@@ -11,6 +11,8 @@ export type SiteSettings = {
   support_email?: string;
   contact_phone?: string;
   whatsapp_number?: string;
+  business_hours_weekdays?: string;
+  business_hours_weekend?: string;
 
   // Şirket
   company_name?: string;
