@@ -310,3 +310,20 @@ export const newsletterSubscribersSchema = pgTable(
     };
   },
 );
+
+// Site ayarları - iletişim bilgileri, sosyal medya linkleri, şirket bilgileri
+export const siteSettingsSchema = pgTable('site_settings', {
+  id: serial('id').primaryKey(),
+  key: varchar('key', { length: 100 }).unique().notNull(), // 'contact_email', 'social_instagram', etc.
+  value: text('value'), // Değer
+  valueType: varchar('value_type', { length: 20 }).default('text').notNull(), // 'text', 'email', 'phone', 'url', 'json'
+  category: varchar('category', { length: 50 }).default('general').notNull(), // 'contact', 'social', 'company', 'general'
+  label: text('label'), // Admin panelinde gösterilecek etiket
+  description: text('description'), // Açıklama
+  isPublic: boolean('is_public').default(true).notNull(), // Frontend'de gösterilebilir mi?
+  updatedAt: timestamp('updated_at', { mode: 'date' })
+    .defaultNow()
+    .$onUpdate(() => new Date())
+    .notNull(),
+  createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
+});

@@ -7,7 +7,7 @@ import { eq } from 'drizzle-orm';
 
 import { db } from '@/libs/DB';
 import { Env } from '@/libs/Env';
-import { orderSchema, userSchema } from '@/models/Schema';
+import { generatedImageSchema, orderSchema, userSchema } from '@/models/Schema';
 
 export type PayTRTokenRequest = {
   generationId: string;
@@ -278,6 +278,16 @@ export async function validatePayTRCallback(payload: {
           orderType: existingOrder.orderType,
           creditAmount: existingOrder.creditAmount,
         });
+
+        // Ürün siparişiyse, görselin is_selected alanını true yap
+        if (existingOrder.generationId) {
+          await db
+            .update(generatedImageSchema)
+            .set({ isSelected: true })
+            .where(eq(generatedImageSchema.generationId, existingOrder.generationId));
+
+          console.log(`✅ Marked image as selected: ${existingOrder.generationId}`);
+        }
       }
 
       // TODO: Müşteriye email/SMS gönder

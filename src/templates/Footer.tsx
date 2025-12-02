@@ -4,7 +4,9 @@ import { Github, Instagram, Linkedin, Twitter, Youtube } from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
+import { useEffect, useState } from 'react';
 
+import { getSiteSettings, type SiteSettings } from '@/features/settings/siteSettingsActions';
 import { AppConfig } from '@/utils/AppConfig';
 
 import { Logo } from './Logo';
@@ -14,6 +16,11 @@ export const Footer = () => {
   const tNavbar = useTranslations('Navbar');
   const params = useParams();
   const locale = (params?.locale as string) || 'tr';
+  const [settings, setSettings] = useState<SiteSettings>({});
+
+  useEffect(() => {
+    getSiteSettings().then(setSettings);
+  }, []);
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -47,18 +54,18 @@ export const Footer = () => {
       title: 'Destek',
       links: [
         { label: tNavbar('community'), action: () => scrollToSection('sss') },
-        { label: 'E-posta', href: 'mailto:info@birebir.co' },
+        { label: 'E-posta', href: `mailto:${settings.contact_email || 'info@birebiro.com'}` },
       ],
     },
   ];
 
   const socialLinks = [
-    { icon: Twitter, href: '#', label: 'Twitter' },
-    { icon: Instagram, href: '#', label: 'Instagram' },
-    { icon: Linkedin, href: '#', label: 'LinkedIn' },
-    { icon: Youtube, href: '#', label: 'YouTube' },
+    { icon: Twitter, href: settings.social_twitter || '#', label: 'Twitter' },
+    { icon: Instagram, href: settings.social_instagram || '#', label: 'Instagram' },
+    { icon: Linkedin, href: settings.social_linkedin || '#', label: 'LinkedIn' },
+    { icon: Youtube, href: settings.social_youtube || '#', label: 'YouTube' },
     { icon: Github, href: '#', label: 'GitHub' },
-  ];
+  ].filter(link => link.href && link.href !== '#');
 
   const paymentLogos = [
     { src: 'https://images.hepsiburada.net/assets/footer/visa.svg', alt: 'Visa', width: 51 },
@@ -143,12 +150,7 @@ export const Footer = () => {
         <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
           {/* Copyright */}
           <p className="text-sm text-gray-500">
-            ©
-            {' '}
-            {new Date().getFullYear()}
-            {' '}
-            {AppConfig.name}
-            . Tüm hakları saklıdır.
+            {settings.copyright_text || `© ${new Date().getFullYear()} ${AppConfig.name}. Tüm hakları saklıdır.`}
           </p>
 
           {/* Payment Methods */}

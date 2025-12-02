@@ -3,7 +3,7 @@
 import { eq } from 'drizzle-orm';
 
 import { db } from '@/libs/DB';
-import { orderSchema } from '@/models/Schema';
+import { orderSchema, siteSettingsSchema } from '@/models/Schema';
 
 type EmailVariables = {
   customer_first_name: string;
@@ -52,6 +52,14 @@ export async function sendPostOrderEmail(merchantOid: string) {
     if (!orderData) {
       throw new Error('Sipariş verileri eksik');
     }
+
+    // Site ayarlarından destek e-postasını al
+    const supportEmailSetting = await db
+      .select({ value: siteSettingsSchema.value })
+      .from(siteSettingsSchema)
+      .where(eq(siteSettingsSchema.key, 'support_email'))
+      .limit(1);
+    const supportEmail = supportEmailSetting[0]?.value || 'destek@birebiro.com';
 
     // Müşteri adını parse et
     const fullName = orderData.customerName || '';
@@ -108,7 +116,7 @@ export async function sendPostOrderEmail(merchantOid: string) {
         order_detail_url: `https://birebiro.com/dashboard/orders/${orderData.id}`,
         support_url: 'https://birebiro.com/contact',
         order_qr_image_url: `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(`https://birebiro.com/dashboard/orders/${orderData.id}`)}`,
-        support_email: 'destek@birebiro.com',
+        support_email: supportEmail,
         current_year: new Date().getFullYear().toString(),
       },
     };
