@@ -4,7 +4,7 @@ import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
 
 import { getLegalDocumentBySlug } from '@/features/legal/legalActions';
 import { Footer } from '@/templates/Footer';
-import { Navbar } from '@/templates/Navbar';
+import { Navbar, NavbarSpacer } from '@/templates/Navbar';
 
 // Force dynamic rendering to prevent build-time database queries
 export const dynamic = 'force-dynamic';
@@ -54,6 +54,7 @@ const LegalDocumentDetailPage = async (props: Props) => {
   return (
     <>
       <Navbar />
+      <NavbarSpacer />
       <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-12">

@@ -4,7 +4,7 @@ import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
 import type { LegalDocumentListItem } from '@/features/legal/legalActions';
 import { getActiveLegalDocuments } from '@/features/legal/legalActions';
 import { Footer } from '@/templates/Footer';
-import { Navbar } from '@/templates/Navbar';
+import { Navbar, NavbarSpacer } from '@/templates/Navbar';
 
 // Force dynamic rendering to prevent build-time database queries
 export const dynamic = 'force-dynamic';
@@ -33,6 +33,7 @@ const LegalDocumentsPage = async (props: { params: { locale: string } }) => {
   return (
     <>
       <Navbar />
+      <NavbarSpacer />
       <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="mb-12 text-center">
           <h1 className="mb-4 text-4xl font-bold text-gray-900 dark:text-gray-100">

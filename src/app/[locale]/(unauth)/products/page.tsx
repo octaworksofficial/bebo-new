@@ -3,7 +3,7 @@ import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
 import { getProducts } from '@/features/products/productActions';
 import { ProductSelection } from '@/features/products/ProductSelection';
 import { Footer } from '@/templates/Footer';
-import { Navbar } from '@/templates/Navbar';
+import { Navbar, NavbarSpacer } from '@/templates/Navbar';
 
 // Force dynamic rendering to prevent build-time database queries
 export const dynamic = 'force-dynamic';
@@ -31,6 +31,7 @@ const ProductsPage = async (props: {
   return (
     <>
       <Navbar />
+      <NavbarSpacer />
       <ProductSelection
         products={products}
         locale={props.params.locale}

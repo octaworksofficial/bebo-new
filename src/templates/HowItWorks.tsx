@@ -10,83 +10,94 @@ const HowItWorks = () => {
       icon: Package,
       titleKey: 'step1_title',
       descriptionKey: 'step1_description',
-      color: 'from-purple-500 to-pink-500',
+      gradient: 'from-purple-500 to-pink-500',
+      glow: 'purple',
     },
     {
       number: '02',
       icon: Sparkles,
       titleKey: 'step2_title',
       descriptionKey: 'step2_description',
-      color: 'from-blue-500 to-cyan-500',
+      gradient: 'from-blue-500 to-cyan-500',
+      glow: 'blue',
     },
     {
       number: '03',
       icon: ShoppingCart,
       titleKey: 'step3_title',
       descriptionKey: 'step3_description',
-      color: 'from-green-500 to-emerald-500',
+      gradient: 'from-orange-500 to-pink-500',
+      glow: 'orange',
     },
   ];
 
   return (
-    <div id="nasil-calisir" className="bg-gradient-to-b from-background to-muted/20">
-      <div className="mx-auto max-w-screen-xl px-3 py-16 md:py-24">
+    <section id="nasil-calisir" className="relative bg-[#0a0a0f] py-24 md:py-32">
+      {/* Background elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute left-0 top-1/4 size-[400px] rounded-full bg-purple-500/10 blur-[100px]" />
+        <div className="absolute right-0 top-2/3 size-[300px] rounded-full bg-blue-500/10 blur-[80px]" />
+      </div>
+
+      <div className="relative mx-auto max-w-6xl px-6">
         {/* Header */}
-        <div className="mb-16 text-center">
-          <h2 className="mb-4 text-4xl font-bold tracking-tight md:text-5xl">
+        <div className="mb-20 text-center">
+          <p className="mb-4 text-sm uppercase tracking-widest text-purple-400">
+            Basit & Hızlı
+          </p>
+          <h2 className="mb-6 text-4xl font-bold tracking-tight text-white md:text-5xl lg:text-6xl">
             {t('section_title')}
           </h2>
-          <p className="mx-auto max-w-2xl text-lg text-muted-foreground">
+          <p className="mx-auto max-w-2xl text-lg text-gray-400">
             {t('section_subtitle')}
           </p>
         </div>
 
         {/* Steps */}
-        <div className="grid gap-8 md:grid-cols-3">
-          {steps.map((step, index) => {
+        <div className="relative grid gap-8 md:grid-cols-3">
+          {/* Connection line */}
+          <div className="absolute inset-x-[16.67%] top-24 hidden h-px bg-gradient-to-r from-transparent via-white/20 to-transparent md:block" />
+
+          {steps.map((step) => {
             const Icon = step.icon;
             return (
-              <div
-                key={step.number}
-                className="group relative"
-              >
-                {/* Connecting Line (hidden on mobile, shown on desktop between cards) */}
-                {index < steps.length - 1 && (
-                  <div className="absolute left-full top-1/3 hidden h-0.5 w-full -translate-y-1/2 md:block">
-                    <div className="size-full bg-gradient-to-r from-primary/50 to-transparent" />
-                  </div>
-                )}
-
+              <div key={step.number} className="group relative">
                 {/* Card */}
-                <div className="relative h-full rounded-2xl border bg-card p-8 shadow-sm transition-all duration-300 hover:shadow-lg">
-                  {/* Step Number */}
-                  <div className="mb-6">
-                    <span className={`bg-gradient-to-r ${step.color} bg-clip-text text-5xl font-bold text-transparent`}>
-                      {step.number}
-                    </span>
-                  </div>
-
-                  {/* Icon */}
-                  <div className="mb-6">
-                    <div className={`inline-flex rounded-xl bg-gradient-to-r ${step.color} p-3`}>
-                      <Icon className="size-8 text-white" />
-                    </div>
-                  </div>
+                <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-8 backdrop-blur-sm transition-all duration-500 hover:border-white/20 hover:bg-white/10">
+                  {/* Glow effect on hover */}
+                  <div
+                    className={`absolute -inset-px rounded-2xl bg-gradient-to-r ${step.gradient} opacity-0 blur transition-opacity duration-500 group-hover:opacity-20`}
+                  />
 
                   {/* Content */}
-                  <h3 className="mb-3 text-xl font-semibold">
-                    {t(step.titleKey)}
-                  </h3>
-                  <p className="text-muted-foreground">
-                    {t(step.descriptionKey)}
-                  </p>
+                  <div className="relative">
+                    {/* Number */}
+                    <span className={`mb-6 inline-block bg-gradient-to-r ${step.gradient} bg-clip-text text-6xl font-bold text-transparent`}>
+                      {step.number}
+                    </span>
+
+                    {/* Icon */}
+                    <div className="mb-6">
+                      <div className={`inline-flex rounded-xl bg-gradient-to-r ${step.gradient} p-3`}>
+                        <Icon className="size-7 text-white" />
+                      </div>
+                    </div>
+
+                    {/* Text */}
+                    <h3 className="mb-3 text-xl font-semibold text-white">
+                      {t(step.titleKey)}
+                    </h3>
+                    <p className="text-gray-400">
+                      {t(step.descriptionKey)}
+                    </p>
+                  </div>
                 </div>
               </div>
             );
           })}
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

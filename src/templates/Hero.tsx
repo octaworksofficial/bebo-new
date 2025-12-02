@@ -1,15 +1,10 @@
 'use client';
 
-import { Loader2, Sparkles } from 'lucide-react';
+import { ArrowRight, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
-
-import { badgeVariants } from '@/components/ui/badgeVariants';
-import { buttonVariants } from '@/components/ui/buttonVariants';
-import { CenteredHero } from '@/features/landing/CenteredHero';
-import { Section } from '@/features/landing/Section';
 
 export const Hero = () => {
   const t = useTranslations('Hero');
@@ -23,56 +18,98 @@ export const Hero = () => {
   };
 
   return (
-    <Section className="bg-gray-900 py-48 dark:bg-gray-950">
-      <CenteredHero
-        banner={(
-          <a
-            className={badgeVariants()}
-            href="https://twitter.com/ixartz"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {' '}
-            {t('follow_twitter')}
-          </a>
-        )}
-        title={t.rich('title', {
-          important: chunks => (
-            <span className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
-              {chunks}
-            </span>
-          ),
-        })}
-        description={t('description')}
-        buttons={(
-          <div className="relative p-6">
-            {/* Light Box Background - Daha görünür */}
-            <div className="absolute inset-0 -z-10 rotate-1 scale-105 rounded-2xl bg-white/30 shadow-xl backdrop-blur-md" />
-            <div className="absolute inset-0 -z-10 -rotate-1 scale-110 rounded-2xl bg-gradient-to-r from-blue-400/40 via-purple-400/40 to-pink-400/40 shadow-lg" />
-            <div className="absolute inset-0 -z-10 scale-100 animate-pulse rounded-2xl bg-white/20" />
+    <section className="relative min-h-screen overflow-hidden bg-[#0a0a0f]">
+      {/* Animated gradient background */}
+      <div className="absolute inset-0">
+        <div className="absolute left-1/4 top-0 size-[600px] -translate-x-1/2 rounded-full bg-purple-500/20 blur-[120px]" />
+        <div className="absolute right-1/4 top-1/3 size-[500px] rounded-full bg-pink-500/15 blur-[100px]" />
+        <div className="absolute bottom-0 left-1/2 size-[700px] -translate-x-1/2 rounded-full bg-blue-500/10 blur-[130px]" />
+      </div>
 
-            <Link
-              className={`${buttonVariants({ size: 'lg' })} group relative border-0 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 shadow-2xl hover:from-indigo-700 hover:via-purple-700 hover:to-pink-700`}
-              href="/products"
-              onClick={handleStartDesigning}
-            >
-              {isLoading
-                ? (
-                    <>
-                      <Loader2 className="mr-2 size-5 animate-spin" />
-                      Yükleniyor...
-                    </>
-                  )
-                : (
-                    <>
-                      <Sparkles className="mr-2 size-5 text-yellow-200 group-hover:animate-pulse" />
-                      {t('primary_button')}
-                    </>
-                  )}
-            </Link>
-          </div>
-        )}
+      {/* Subtle grid pattern */}
+      <div
+        className="absolute inset-0 opacity-[0.03]"
+        style={{
+          backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+                           linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
+          backgroundSize: '64px 64px',
+        }}
       />
-    </Section>
+
+      {/* Content */}
+      <div className="relative z-10 mx-auto flex min-h-screen max-w-6xl flex-col items-center justify-center px-6 py-32">
+        {/* Badge */}
+        <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-2 backdrop-blur-sm">
+          <Sparkles className="size-4 text-purple-400" />
+          <span className="text-sm text-gray-300">{t('follow_twitter')}</span>
+        </div>
+
+        {/* Main heading */}
+        <h1 className="mb-6 text-center text-5xl font-bold leading-tight tracking-tight text-white md:text-7xl lg:text-8xl">
+          {t.rich('title', {
+            important: chunks => (
+              <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent">
+                {chunks}
+              </span>
+            ),
+          })}
+        </h1>
+
+        {/* Description */}
+        <p className="mb-12 max-w-2xl text-center text-lg text-gray-400 md:text-xl">
+          {t('description')}
+        </p>
+
+        {/* CTA Buttons */}
+        <div className="flex flex-col items-center gap-4 sm:flex-row">
+          <Link
+            href="/products"
+            onClick={handleStartDesigning}
+            className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full bg-white px-8 py-4 text-base font-semibold text-black transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(168,85,247,0.4)]"
+          >
+            {isLoading
+              ? (
+                  <>
+                    <div className="size-5 animate-spin rounded-full border-2 border-black/20 border-t-black" />
+                    <span>Yükleniyor...</span>
+                  </>
+                )
+              : (
+                  <>
+                    <Sparkles className="size-5" />
+                    <span>{t('primary_button')}</span>
+                    <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+                  </>
+                )}
+          </Link>
+
+          <Link
+            href="#nasil-calisir"
+            className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-8 py-4 text-base font-medium text-white backdrop-blur-sm transition-all hover:border-white/40 hover:bg-white/10"
+          >
+            Nasıl Çalışır?
+          </Link>
+        </div>
+
+        {/* Stats */}
+        <div className="mt-20 grid grid-cols-3 gap-8 border-t border-white/10 pt-12 md:gap-16">
+          <div className="text-center">
+            <div className="text-3xl font-bold text-white md:text-4xl">10K+</div>
+            <div className="mt-1 text-sm text-gray-500">Mutlu Müşteri</div>
+          </div>
+          <div className="text-center">
+            <div className="text-3xl font-bold text-white md:text-4xl">50K+</div>
+            <div className="mt-1 text-sm text-gray-500">Tasarım Üretildi</div>
+          </div>
+          <div className="text-center">
+            <div className="text-3xl font-bold text-white md:text-4xl">4.9</div>
+            <div className="mt-1 text-sm text-gray-500">Kullanıcı Puanı</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom gradient fade */}
+      <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#0a0a0f] to-transparent" />
+    </section>
   );
 };

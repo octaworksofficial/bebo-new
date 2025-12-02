@@ -3,7 +3,7 @@ import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
 
 import ContactForm from '@/features/contact/ContactForm';
 import { Footer } from '@/templates/Footer';
-import { Navbar } from '@/templates/Navbar';
+import { Navbar, NavbarSpacer } from '@/templates/Navbar';
 
 export async function generateMetadata({
   params: { locale },
@@ -116,6 +116,7 @@ export default function ContactPage({
   return (
     <>
       <Navbar />
+      <NavbarSpacer />
       <div className="min-h-screen bg-gray-100 px-4 py-12 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
           {/* Başlık */}
