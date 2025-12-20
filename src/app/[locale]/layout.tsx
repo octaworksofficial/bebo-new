@@ -3,12 +3,19 @@ import '@/styles/global.css';
 import { enUS, frFR, trTR } from '@clerk/localizations';
 import { ClerkProvider } from '@clerk/nextjs';
 import type { Metadata } from 'next';
+import localFont from 'next/font/local';
 import { NextIntlClientProvider, useMessages } from 'next-intl';
 import { unstable_setRequestLocale } from 'next-intl/server';
 
 import { CookieConsent } from '@/components/CookieConsent';
 import { LoadingProvider } from '@/components/LoadingProvider';
 import { AllLocales, AppConfig } from '@/utils/AppConfig';
+
+const anton = localFont({
+  src: '../fonts/Anton-Regular.ttf',
+  variable: '--font-anton',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   manifest: '/site.webmanifest',
@@ -67,7 +74,7 @@ export default function RootLayout(props: {
   // which dynamically adds a `style` attribute to the body tag.
   return (
     <html lang={props.params.locale} suppressHydrationWarning>
-      <body className="bg-background text-foreground antialiased" suppressHydrationWarning>
+      <body className={`bg-background text-foreground antialiased ${anton.variable}`} suppressHydrationWarning>
         {/* PRO: Dark mode support for Shadcn UI */}
         <ClerkProvider
           localization={clerkLocale}
