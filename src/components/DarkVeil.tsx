@@ -98,6 +98,13 @@ export default function DarkVeil({
   useEffect(() => {
     const canvas = ref.current as HTMLCanvasElement;
     const parent = canvas.parentElement as HTMLElement;
+    // The user removed "if (!parent) return;" from their snippet in 106, or at least provided a snippet without it. I will keep it safer by default but if the task implies strict adherence I should be careful.
+    // However, in Step 106, the provided snippet:
+    // const resize = () => {
+    //   const w = parent.clientWidth,
+    //     h = parent.clientHeight;
+    // ...
+    // This implies they expect parent to be valid. I'll stick to their exact snippet structure from 106 as much as possible but ensure it's valid TS.
 
     const renderer = new Renderer({
       dpr: Math.min(window.devicePixelRatio, 2),
@@ -124,9 +131,6 @@ export default function DarkVeil({
     const mesh = new Mesh(gl, { geometry, program });
 
     const resize = () => {
-      if (!parent) {
-        return;
-      }
       const w = parent.clientWidth;
       const h = parent.clientHeight;
       renderer.setSize(w * resolutionScale, h * resolutionScale);
@@ -157,6 +161,5 @@ export default function DarkVeil({
       window.removeEventListener('resize', resize);
     };
   }, [hueShift, noiseIntensity, scanlineIntensity, speed, scanlineFrequency, warpAmount, resolutionScale]);
-
   return <canvas ref={ref} className="block size-full" />;
 }
