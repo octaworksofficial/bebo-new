@@ -1,12 +1,16 @@
 'use client';
 
 import { ArrowRight, Sparkles } from 'lucide-react';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
-import DarkVeil from '@/components/DarkVeil';
+const DarkVeil = dynamic(() => import('@/components/DarkVeil'), {
+  ssr: false,
+  loading: () => <div className="size-full bg-[#0a0a0f]" />,
+});
 
 export const Hero = () => {
   const t = useTranslations('Hero');
