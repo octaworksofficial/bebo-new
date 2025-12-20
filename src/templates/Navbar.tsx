@@ -66,14 +66,13 @@ export const Navbar = () => {
 
   return (
     <nav
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-        isLandingPage
-          ? isScrolled
-            ? 'border-b border-white/10 bg-[#0a0a0f]/80 backdrop-blur-xl'
-            : 'bg-transparent'
-          : isScrolled
-            ? 'border-b border-gray-200 bg-white/90 shadow-sm backdrop-blur-xl'
-            : 'border-b border-gray-100 bg-white/80 backdrop-blur-xl'
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${isLandingPage
+        ? isScrolled
+          ? 'border-b border-white/10 bg-[#0a0a0f]/80 backdrop-blur-xl'
+          : 'bg-transparent'
+        : isScrolled
+          ? 'border-b border-gray-200 bg-white/90 shadow-sm backdrop-blur-xl'
+          : 'border-b border-gray-100 bg-white/80 backdrop-blur-xl'
       }`}
     >
       <div className="mx-auto max-w-7xl px-6">
@@ -91,10 +90,9 @@ export const Navbar = () => {
                     <Link
                       key={link.id}
                       href={link.href}
-                      className={`rounded-full px-4 py-2 text-sm transition-colors ${
-                        isLandingPage
-                          ? 'text-gray-400 hover:bg-white/5 hover:text-white'
-                          : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                      className={`rounded-full px-4 py-2 text-sm transition-colors ${isLandingPage
+                        ? 'text-gray-400 hover:bg-white/5 hover:text-white'
+                        : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
                       }`}
                     >
                       {link.label}
@@ -105,10 +103,9 @@ export const Navbar = () => {
                       key={link.id}
                       type="button"
                       onClick={link.onClick}
-                      className={`rounded-full px-4 py-2 text-sm transition-colors ${
-                        isLandingPage
-                          ? 'text-gray-400 hover:bg-white/5 hover:text-white'
-                          : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                      className={`rounded-full px-4 py-2 text-sm transition-colors ${isLandingPage
+                        ? 'text-gray-400 hover:bg-white/5 hover:text-white'
+                        : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
                       }`}
                     >
                       {link.label}
@@ -120,26 +117,24 @@ export const Navbar = () => {
           {/* Right side */}
           <div className="flex items-center gap-4">
             <div className="hidden md:block">
-              <LocaleSwitcher />
+              <LocaleSwitcher variant={isLandingPage ? 'light' : 'dark'} />
             </div>
 
             <SignedOut>
               <Link
                 href="/sign-in"
-                className={`hidden text-sm transition-colors md:block ${
-                  isLandingPage
-                    ? 'text-gray-400 hover:text-white'
-                    : 'text-gray-600 hover:text-gray-900'
+                className={`hidden text-sm transition-colors md:block ${isLandingPage
+                  ? 'text-gray-400 hover:text-white'
+                  : 'text-gray-600 hover:text-gray-900'
                 }`}
               >
                 {t('sign_in')}
               </Link>
               <Link
                 href="/sign-up"
-                className={`rounded-full px-5 py-2 text-sm font-medium transition-all ${
-                  isLandingPage
-                    ? 'bg-white text-black hover:bg-gray-200'
-                    : 'bg-gray-900 text-white hover:bg-gray-800'
+                className={`rounded-full px-5 py-2 text-sm font-medium transition-all ${isLandingPage
+                  ? 'bg-white text-black hover:bg-gray-200'
+                  : 'bg-gray-900 text-white hover:bg-gray-800'
                 }`}
               >
                 {t('sign_up')}
@@ -184,10 +179,9 @@ export const Navbar = () => {
             <button
               type="button"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className={`rounded-lg p-2 md:hidden ${
-                isLandingPage
-                  ? 'text-gray-400 hover:bg-white/10 hover:text-white'
-                  : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+              className={`rounded-lg p-2 md:hidden ${isLandingPage
+                ? 'text-gray-400 hover:bg-white/10 hover:text-white'
+                : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
               }`}
             >
               {isMobileMenuOpen
@@ -200,8 +194,7 @@ export const Navbar = () => {
         {/* Mobile Navigation */}
         {isMobileMenuOpen && (
           <div
-            className={`border-t py-4 md:hidden ${
-              isLandingPage ? 'border-white/10' : 'border-gray-200'
+            className={`border-t py-4 md:hidden ${isLandingPage ? 'border-white/10' : 'border-gray-200'
             }`}
           >
             <div className="flex flex-col gap-2">
@@ -212,10 +205,9 @@ export const Navbar = () => {
                         key={link.id}
                         href={link.href}
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className={`rounded-lg px-4 py-3 transition-colors ${
-                          isLandingPage
-                            ? 'text-gray-400 hover:bg-white/5 hover:text-white'
-                            : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                        className={`rounded-lg px-4 py-3 transition-colors ${isLandingPage
+                          ? 'text-gray-400 hover:bg-white/5 hover:text-white'
+                          : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
                         }`}
                       >
                         {link.label}
@@ -226,10 +218,9 @@ export const Navbar = () => {
                         key={link.id}
                         type="button"
                         onClick={link.onClick}
-                        className={`rounded-lg px-4 py-3 text-left transition-colors ${
-                          isLandingPage
-                            ? 'text-gray-400 hover:bg-white/5 hover:text-white'
-                            : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
+                        className={`rounded-lg px-4 py-3 text-left transition-colors ${isLandingPage
+                          ? 'text-gray-400 hover:bg-white/5 hover:text-white'
+                          : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
                         }`}
                       >
                         {link.label}
@@ -237,7 +228,7 @@ export const Navbar = () => {
                     )
               ))}
               <div className="mt-2 px-4">
-                <LocaleSwitcher />
+                <LocaleSwitcher variant={isLandingPage ? 'light' : 'dark'} />
               </div>
             </div>
           </div>

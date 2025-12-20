@@ -13,7 +13,11 @@ import {
 import { usePathname, useRouter } from '@/libs/i18nNavigation';
 import { AppConfig } from '@/utils/AppConfig';
 
-export const LocaleSwitcher = () => {
+type Props = {
+  variant?: 'light' | 'dark';
+};
+
+export const LocaleSwitcher = ({ variant = 'dark' }: Props) => {
   const router = useRouter();
   const pathname = usePathname();
   const locale = useLocale();
@@ -23,10 +27,14 @@ export const LocaleSwitcher = () => {
     router.refresh();
   };
 
+  const buttonClasses = variant === 'light'
+    ? 'text-white/70 hover:bg-white/10 hover:text-white' // For dark backgrounds (light icon)
+    : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'; // For light backgrounds (dark icon)
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button className="p-2 text-white/70 hover:bg-white/10 hover:text-white focus-visible:ring-offset-0" variant="ghost" size="icon" aria-label="lang-switcher">
+        <Button className={`p-2 focus-visible:ring-offset-0 ${buttonClasses}`} variant="ghost" size="icon" aria-label="lang-switcher">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="size-6 stroke-current stroke-2"
