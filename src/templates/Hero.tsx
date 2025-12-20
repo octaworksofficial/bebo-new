@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 
+import DarkVeil from '@/components/DarkVeil';
+
 export const Hero = () => {
   const t = useTranslations('Hero');
   const router = useRouter();
@@ -20,10 +22,8 @@ export const Hero = () => {
   return (
     <section className="relative min-h-screen overflow-hidden bg-[#0a0a0f]">
       {/* Animated gradient background */}
-      <div className="absolute inset-0">
-        <div className="absolute left-1/4 top-0 size-[600px] -translate-x-1/2 rounded-full bg-purple-500/20 blur-[120px]" />
-        <div className="absolute right-1/4 top-1/3 size-[500px] rounded-full bg-pink-500/15 blur-[100px]" />
-        <div className="absolute bottom-0 left-1/2 size-[700px] -translate-x-1/2 rounded-full bg-blue-500/10 blur-[130px]" />
+      <div className="absolute inset-0 z-0">
+        <DarkVeil />
       </div>
 
       {/* Subtle grid pattern */}
