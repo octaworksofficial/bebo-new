@@ -29,14 +29,12 @@ export default async function AboutPage(props: AboutPageProps) {
   unstable_setRequestLocale(locale);
 
   // Get dynamic content from database
-  const aboutContent = await getAboutContent(locale);
-
-  // Get about content from database
+  let aboutContent = null;
   try {
-    const { getAllAboutContent } = await import('@/features/about/aboutActions');
-    await getAllAboutContent();
-  } catch {
-    // Handle error silently or log to monitoring service
+    aboutContent = await getAboutContent(locale);
+    console.log('✅ About content loaded:', aboutContent?.title1);
+  } catch (error) {
+    console.error('❌ Error loading about content:', error);
   }
 
   return <AboutContent aboutContent={aboutContent} />;
