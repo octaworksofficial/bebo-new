@@ -6,6 +6,7 @@ import type { Metadata } from 'next';
 import { NextIntlClientProvider, useMessages } from 'next-intl';
 import { unstable_setRequestLocale } from 'next-intl/server';
 
+import { CookieConsent } from '@/components/CookieConsent';
 import { LoadingProvider } from '@/components/LoadingProvider';
 import { AllLocales, AppConfig } from '@/utils/AppConfig';
 
@@ -82,6 +83,7 @@ export default function RootLayout(props: {
           >
             <LoadingProvider>
               {props.children}
+              <CookieConsent />
             </LoadingProvider>
           </NextIntlClientProvider>
         </ClerkProvider>

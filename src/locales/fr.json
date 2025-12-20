@@ -373,5 +373,11 @@
     "success_message": "Votre adresse e-mail a été enregistrée avec succès. Vous serez désormais informé du monde de l'art de Birebiro.",
     "subscribe_another": "S'abonner avec un autre e-mail",
     "back_button": "Retour"
+  },
+  "CookieConsent": {
+    "title": "Politique de cookies",
+    "description": "Nous utilisons des cookies pour vous offrir une meilleure expérience. En utilisant notre site, vous acceptez notre politique de cookies.",
+    "accept": "Accepter",
+    "read_more": "En savoir plus"
   }
 }

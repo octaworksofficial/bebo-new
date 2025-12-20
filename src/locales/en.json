@@ -427,5 +427,11 @@
     "success_message": "Your email address has been successfully saved. You will now be updated with Birebiro's art world.",
     "subscribe_another": "Subscribe with another email",
     "back_button": "Go Back"
+  },
+  "CookieConsent": {
+    "title": "Cookie Policy",
+    "description": "We use cookies to provide you with a better experience. By using our site, you accept our cookie policy.",
+    "accept": "Accept",
+    "read_more": "Read More"
   }
 }

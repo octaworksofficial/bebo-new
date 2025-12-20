@@ -479,5 +479,11 @@
     "success_message": "E-posta adresiniz başarıyla kaydedildi. Artık Birebiro'nun sanat dünyasından haberdar olacaksınız.",
     "subscribe_another": "Başka bir e-posta ile abone ol",
     "back_button": "Geri Dön"
+  },
+  "CookieConsent": {
+    "title": "Çerez Politikası",
+    "description": "Size daha iyi bir deneyim sunmak için çerezleri kullanıyoruz. Sitemizi kullanarak çerez politikamızı kabul etmiş olursunuz.",
+    "accept": "Kabul Et",
+    "read_more": "Çerezleri Gör"
   }
 }

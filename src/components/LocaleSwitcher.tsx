@@ -53,6 +53,9 @@ export const LocaleSwitcher = ({ variant = 'dark' }: Props) => {
         <DropdownMenuRadioGroup value={locale} onValueChange={handleChange}>
           {AppConfig.locales.map(elt => (
             <DropdownMenuRadioItem key={elt.id} value={elt.id}>
+              <span className="mr-2 text-lg">
+                {elt.flag}
+              </span>
               {elt.name}
             </DropdownMenuRadioItem>
           ))}

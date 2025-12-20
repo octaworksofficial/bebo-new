@@ -11,9 +11,10 @@ export const AppConfig = {
     {
       id: 'en',
       name: 'English',
+      flag: '🇺🇸',
     },
-    { id: 'fr', name: 'Français' },
-    { id: 'tr', name: 'Türkçe' },
+    { id: 'fr', name: 'Français', flag: '🇫🇷' },
+    { id: 'tr', name: 'Türkçe', flag: '🇹🇷' },
   ],
   defaultLocale: 'tr',
   localePrefix,
