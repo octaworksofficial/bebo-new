@@ -98,16 +98,10 @@ export default function DarkVeil({
   useEffect(() => {
     const canvas = ref.current as HTMLCanvasElement;
     const parent = canvas.parentElement as HTMLElement;
-    // The user removed "if (!parent) return;" from their snippet in 106, or at least provided a snippet without it. I will keep it safer by default but if the task implies strict adherence I should be careful.
-    // However, in Step 106, the provided snippet:
-    // const resize = () => {
-    //   const w = parent.clientWidth,
-    //     h = parent.clientHeight;
-    // ...
-    // This implies they expect parent to be valid. I'll stick to their exact snippet structure from 106 as much as possible but ensure it's valid TS.
 
+    // Force low DPR for performance
     const renderer = new Renderer({
-      dpr: Math.min(window.devicePixelRatio, 2),
+      dpr: 1, // Reduced from Math.min(window.devicePixelRatio, 2) to 1 for performance
       canvas,
     });
 
@@ -131,6 +125,10 @@ export default function DarkVeil({
     const mesh = new Mesh(gl, { geometry, program });
 
     const resize = () => {
+      // Safety check in case parent is null
+      if (!parent) {
+        return;
+      }
       const w = parent.clientWidth;
       const h = parent.clientHeight;
       renderer.setSize(w * resolutionScale, h * resolutionScale);
@@ -141,9 +139,26 @@ export default function DarkVeil({
     resize();
 
     const start = performance.now();
-    let frame = 0;
+    let frameId: number;
+    let isVisible = true;
+    let lastTime = 0;
+    const targetFPS = 30;
+    const interval = 1000 / targetFPS;
 
-    const loop = () => {
+    const loop = (time: number) => {
+      frameId = requestAnimationFrame(loop);
+
+      if (!isVisible) {
+        return;
+      }
+
+      const delta = time - lastTime;
+      if (delta < interval) {
+        return;
+      }
+
+      lastTime = time - (delta % interval);
+
       program.uniforms.uTime.value = ((performance.now() - start) / 1000) * speed;
       program.uniforms.uHueShift.value = hueShift;
       program.uniforms.uNoise.value = noiseIntensity;
@@ -151,14 +166,28 @@ export default function DarkVeil({
       program.uniforms.uScanFreq.value = scanlineFrequency;
       program.uniforms.uWarp.value = warpAmount;
       renderer.render({ scene: mesh });
-      frame = requestAnimationFrame(loop);
     };
 
-    loop();
+    // Pause animation when out of view
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry) {
+          isVisible = entry.isIntersecting;
+        }
+      },
+      { threshold: 0 },
+    );
+
+    if (canvas) {
+      observer.observe(canvas);
+    }
+
+    frameId = requestAnimationFrame(loop);
 
     return () => {
-      cancelAnimationFrame(frame);
+      cancelAnimationFrame(frameId);
       window.removeEventListener('resize', resize);
+      observer.disconnect();
     };
   }, [hueShift, noiseIntensity, scanlineIntensity, speed, scanlineFrequency, warpAmount, resolutionScale]);
   return <canvas ref={ref} className="block size-full" />;

@@ -1,5 +1,6 @@
 import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
 
+import { ForceDarkTheme } from '@/components/ForceDarkTheme';
 import { CTA } from '@/templates/CTA';
 import { FAQ } from '@/templates/FAQ';
 import { Features } from '@/templates/Features';
@@ -28,6 +29,7 @@ const IndexPage = (props: { params: { locale: string } }) => {
 
   return (
     <>
+      <ForceDarkTheme />
       <Navbar />
       <Hero />
       <Sponsors />
