@@ -21,7 +21,7 @@ export async function subscribeToNewsletter(email: string) {
     const userAgent = headersList.get('user-agent') || 'unknown';
 
     // E-posta formatını kontrol et
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/u;
+    const emailRegex = /^[\w.%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/u;
     if (!emailRegex.test(email)) {
       return { success: false, error: 'Geçersiz e-posta adresi' };
     }
@@ -38,12 +38,12 @@ export async function subscribeToNewsletter(email: string) {
     return { success: true };
   } catch (error) {
     console.error('Newsletter subscription error:', error);
-    
+
     // Unique constraint hatası (zaten abone)
     if (error instanceof Error && error.message.includes('duplicate key')) {
       return { success: false, error: 'Bu e-posta adresi zaten kayıtlı' };
     }
-    
+
     return { success: false, error: 'Bir hata oluştu. Lütfen tekrar deneyin.' };
   }
 }

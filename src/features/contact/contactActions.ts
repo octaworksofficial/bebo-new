@@ -58,7 +58,7 @@ export async function submitContactForm(formData: FormData) {
     };
   } catch (error) {
     console.error('❌ Error submitting contact form:', error);
-    
+
     return {
       success: false,
       error: 'Bir hata oluştu. Lütfen tekrar deneyin.',

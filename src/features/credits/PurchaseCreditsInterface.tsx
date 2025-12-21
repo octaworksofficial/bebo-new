@@ -3,6 +3,7 @@
 import { useUser } from '@clerk/nextjs';
 import { Info, Sparkles } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import Script from 'next/script';
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 
@@ -73,7 +74,6 @@ export function PurchaseCreditsInterface() {
 
   const handlePurchase = async () => {
     if (!user?.id) {
-      // eslint-disable-next-line no-alert
       alert('Lütfen giriş yapın');
       return;
     }
@@ -81,7 +81,6 @@ export function PurchaseCreditsInterface() {
     // Email kontrolü
     const userEmail = user.primaryEmailAddress?.emailAddress;
     if (!userEmail) {
-      // eslint-disable-next-line no-alert
       alert('Email adresi bulunamadı. Lütfen hesap ayarlarınızı kontrol edin.');
       return;
     }
@@ -103,13 +102,12 @@ export function PurchaseCreditsInterface() {
         setPaytrToken(result.token);
         setMerchantOid(result.merchantOid || null);
       } else {
-        // eslint-disable-next-line no-alert
         alert(result.error || 'Ödeme işlemi başlatılamadı');
         setIsProcessing(false);
       }
     } catch (error) {
       console.error('Payment error:', error);
-      // eslint-disable-next-line no-alert
+
       alert('Bir hata oluştu');
       setIsProcessing(false);
     }
@@ -201,11 +199,10 @@ export function PurchaseCreditsInterface() {
                 key={amount}
                 type="button"
                 onClick={() => handleQuickSelect(amount)}
-                className={`rounded-lg border-2 p-4 text-center transition-all ${
-                  !isCustom && selectedAmount === amount
-                    ? 'border-purple-600 bg-purple-50 dark:border-purple-400 dark:bg-purple-900/20'
-                    : 'border-gray-200 hover:border-purple-300 dark:border-gray-700 dark:hover:border-purple-500'
-                }`}
+                className={`rounded-lg border-2 p-4 text-center transition-all ${!isCustom && selectedAmount === amount
+                  ? 'border-purple-600 bg-purple-50 dark:border-purple-400 dark:bg-purple-900/20'
+                  : 'border-gray-200 hover:border-purple-300 dark:border-gray-700 dark:hover:border-purple-500'
+                  }`}
               >
                 <div className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                   {amount}
@@ -231,11 +228,10 @@ export function PurchaseCreditsInterface() {
               value={customAmount}
               onChange={e => handleCustomInput(e.target.value)}
               placeholder={t('amount_placeholder')}
-              className={`w-full rounded-lg border-2 px-4 py-3 transition-all focus:outline-none dark:bg-gray-800 dark:text-gray-100 ${
-                isCustom
-                  ? 'border-purple-600 dark:border-purple-400'
-                  : 'border-gray-200 focus:border-purple-400 dark:border-gray-700'
-              }`}
+              className={`w-full rounded-lg border-2 px-4 py-3 transition-all focus:outline-none dark:bg-gray-800 dark:text-gray-100 ${isCustom
+                ? 'border-purple-600 dark:border-purple-400'
+                : 'border-gray-200 focus:border-purple-400 dark:border-gray-700'
+                }`}
             />
             <Sparkles className="absolute right-4 top-1/2 size-5 -translate-y-1/2 text-yellow-500" />
           </div>
@@ -304,7 +300,7 @@ export function PurchaseCreditsInterface() {
             <h2 className="mb-6 text-xl font-semibold text-gray-900 dark:text-white">
               Güvenli Ödeme
             </h2>
-            <script src="https://www.paytr.com/js/iframeResizer.min.js" />
+            <Script src="https://www.paytr.com/js/iframeResizer.min.js" strategy="afterInteractive" />
             <div className="overflow-hidden rounded-lg" style={{ minHeight: '1000px' }}>
               <iframe
                 ref={iframeRef}

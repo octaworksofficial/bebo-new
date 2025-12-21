@@ -18,6 +18,8 @@ export async function getProducts(locale: string = 'tr') {
     name: locale === 'en' ? (product.nameEn || product.name) : locale === 'fr' ? (product.nameFr || product.name) : product.name,
     description: locale === 'en' ? (product.descriptionEn || product.description) : locale === 'fr' ? (product.descriptionFr || product.description) : product.description,
     imageSquareUrl: product.imageSquareUrl,
+    imageSquareUrl2: product.imageSquareUrl2,
+    imageSquareUrl3: product.imageSquareUrl3,
     imageWideUrl: product.imageWideUrl,
   }));
 }
@@ -137,6 +139,8 @@ export async function getProductBySlug(productSlug: string, locale: string = 'tr
     name: locale === 'en' ? (product.nameEn || product.name) : locale === 'fr' ? (product.nameFr || product.name) : product.name,
     description: locale === 'en' ? (product.descriptionEn || product.description) : locale === 'fr' ? (product.descriptionFr || product.description) : product.description,
     imageSquareUrl: product.imageSquareUrl,
+    imageSquareUrl2: product.imageSquareUrl2,
+    imageSquareUrl3: product.imageSquareUrl3,
     imageWideUrl: product.imageWideUrl,
   };
 
