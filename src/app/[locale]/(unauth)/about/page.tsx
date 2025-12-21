@@ -6,6 +6,9 @@ import { getAboutContent } from '@/features/about/aboutActions';
 import { Footer } from '@/templates/Footer';
 import { Navbar, NavbarSpacer } from '@/templates/Navbar';
 
+// Force dynamic rendering to prevent build-time database queries
+export const dynamic = 'force-dynamic';
+
 type AboutPageProps = {
   params: Promise<{ locale: string }>;
 };
@@ -73,23 +76,23 @@ function AboutContent({ aboutContent }: AboutContentProps) {
                 <div className="relative aspect-[4/3]">
                   {aboutContent?.image1
                     ? (
-                        <Image
-                          src={aboutContent.image1}
-                          alt={aboutContent?.title1 || 'Section 1'}
-                          fill
-                          className="object-cover"
-                        />
-                      )
+                      <Image
+                        src={aboutContent.image1}
+                        alt={aboutContent?.title1 || 'Section 1'}
+                        fill
+                        className="object-cover"
+                      />
+                    )
                     : (
-                        <div className="flex size-full items-center justify-center bg-gradient-to-br from-purple-500/20 to-pink-500/20 p-8 backdrop-blur">
-                          <div className="text-center text-white">
-                            <svg className="mx-auto size-24 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                            <p className="mt-4 text-sm opacity-75">Görsel Alanı 1</p>
-                          </div>
+                      <div className="flex size-full items-center justify-center bg-gradient-to-br from-purple-500/20 to-pink-500/20 p-8 backdrop-blur">
+                        <div className="text-center text-white">
+                          <svg className="mx-auto size-24 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          </svg>
+                          <p className="mt-4 text-sm opacity-75">Görsel Alanı 1</p>
                         </div>
-                      )}
+                      </div>
+                    )}
                 </div>
               </div>
             </div>
@@ -130,23 +133,23 @@ function AboutContent({ aboutContent }: AboutContentProps) {
                   <div className="relative aspect-[4/3]">
                     {aboutContent?.image2
                       ? (
-                          <Image
-                            src={aboutContent.image2}
-                            alt={aboutContent?.title2 || 'Section 2'}
-                            fill
-                            className="object-cover"
-                          />
-                        )
+                        <Image
+                          src={aboutContent.image2}
+                          alt={aboutContent?.title2 || 'Section 2'}
+                          fill
+                          className="object-cover"
+                        />
+                      )
                       : (
-                          <div className="flex size-full items-center justify-center bg-gradient-to-br from-blue-500/20 to-cyan-500/20 p-8 backdrop-blur">
-                            <div className="text-center text-white">
-                              <svg className="mx-auto size-24 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                              </svg>
-                              <p className="mt-4 text-sm opacity-75">Görsel Alanı 2</p>
-                            </div>
+                        <div className="flex size-full items-center justify-center bg-gradient-to-br from-blue-500/20 to-cyan-500/20 p-8 backdrop-blur">
+                          <div className="text-center text-white">
+                            <svg className="mx-auto size-24 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            <p className="mt-4 text-sm opacity-75">Görsel Alanı 2</p>
                           </div>
-                        )}
+                        </div>
+                      )}
                   </div>
                 </div>
               </div>
@@ -163,23 +166,23 @@ function AboutContent({ aboutContent }: AboutContentProps) {
                 <div className="relative aspect-[4/3]">
                   {aboutContent?.image3
                     ? (
-                        <Image
-                          src={aboutContent.image3}
-                          alt={aboutContent?.title3 || 'Section 3'}
-                          fill
-                          className="object-cover"
-                        />
-                      )
+                      <Image
+                        src={aboutContent.image3}
+                        alt={aboutContent?.title3 || 'Section 3'}
+                        fill
+                        className="object-cover"
+                      />
+                    )
                     : (
-                        <div className="flex size-full items-center justify-center bg-gradient-to-br from-green-500/20 to-emerald-500/20 p-8 backdrop-blur">
-                          <div className="text-center text-white">
-                            <svg className="mx-auto size-24 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                            <p className="mt-4 text-sm opacity-75">Görsel Alanı 3</p>
-                          </div>
+                      <div className="flex size-full items-center justify-center bg-gradient-to-br from-green-500/20 to-emerald-500/20 p-8 backdrop-blur">
+                        <div className="text-center text-white">
+                          <svg className="mx-auto size-24 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          </svg>
+                          <p className="mt-4 text-sm opacity-75">Görsel Alanı 3</p>
                         </div>
-                      )}
+                      </div>
+                    )}
                 </div>
               </div>
             </div>
