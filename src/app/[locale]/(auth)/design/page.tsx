@@ -1,3 +1,4 @@
+import { StepProgressBar } from '@/components/StepProgressBar';
 import { ChatInterface } from '@/features/design/ChatInterface';
 import { Footer } from '@/templates/Footer';
 import { Navbar, NavbarSpacer } from '@/templates/Navbar';
@@ -13,6 +14,7 @@ export default function DesignPage(props: {
     <>
       <Navbar />
       <NavbarSpacer />
+      <StepProgressBar currentStep={2} />
       <ChatInterface
         locale={props.params.locale}
         productSlug={props.searchParams.product}

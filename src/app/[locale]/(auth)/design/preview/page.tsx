@@ -1,3 +1,4 @@
+import { StepProgressBar } from '@/components/StepProgressBar';
 import { PreviewInterface } from '@/features/design/PreviewInterface';
 import { Footer } from '@/templates/Footer';
 import { Navbar } from '@/templates/Navbar';
@@ -23,6 +24,7 @@ export default function PreviewPage(props: {
     return (
       <>
         <Navbar />
+        <StepProgressBar currentStep={3} />
         <div className="flex min-h-screen items-center justify-center">
           <div className="text-center">
             <h1 className="text-2xl font-bold">Geçersiz önizleme</h1>
@@ -38,6 +40,7 @@ export default function PreviewPage(props: {
   return (
     <>
       <Navbar />
+      <StepProgressBar currentStep={3} />
       <PreviewInterface
         locale={props.params.locale}
         generationId={generationId}

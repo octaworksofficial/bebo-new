@@ -11,17 +11,23 @@
     "docs": "How It Works",
     "blog": "Pricing",
     "community": "FAQ",
-    "company": "Contact"
+    "company": "Contact",
+    "subtitle": "AI Supported Design Products Platform"
+  },
+  "ProgressBar": {
+    "step_1": "Product Selection",
+    "step_2": "Design",
+    "step_3": "Preview"
   },
   "Hero": {
     "follow_twitter": "Follow @Ixartz on Twitter",
     "title": "The perfect <important>SaaS template</important> to build and scale your business with ease.",
     "description": "A free and open-source landing page template for your SaaS business, built with React, TypeScript, Shadcn UI, and Tailwind CSS.",
     "primary_button": "Get Started",
-    "secondary_button": "Star on GitHub"
+    "how_it_works": "How It Works?"
   },
   "Sponsors": {
-    "title": "Sponsored by"
+    "title": "Our Dream Partners"
   },
   "HowItWorks": {
     "section_title": "How It Works?",
@@ -71,7 +77,22 @@
     "enterprise_feature_1": "Unlimited design credits",
     "enterprise_feature_2": "Priority support",
     "enterprise_feature_3": "Custom project management",
-    "enterprise_plan_button": "Contact Us"
+    "enterprise_plan_button": "Contact Us",
+    "equality_badge": "Equality for Art",
+    "main_title": "Everyone has the right to art at <gradient>birebiro</gradient>",
+    "main_description": "Turn your dream painting into reality, regardless of your budget.<br />Art should be accessible to everyone.",
+    "starting_price": "Starting price",
+    "price_per_item": "/ painting",
+    "affordable_badge": "Affordable",
+    "feature1_title": "Design with AI",
+    "feature1_desc": "Your photos turn into art with the most advanced AI technology. In seconds, professional quality.",
+    "feature2_title": "Unlimited style options",
+    "feature2_desc": "Oil painting, watercolor, charcoal, pop art and more. Choose your dream style, leave the rest to us.",
+    "feature3_title": "Free shipping",
+    "feature3_desc": "Free and safe delivery. Your painting comes to your door with special packaging.",
+    "cta_button": "Discover Paintings",
+    "guarantee_text": "✓ Satisfaction guarantee &nbsp; ✓ Secure payment &nbsp; ✓ 14 days return",
+    "quote": "\"Art should touch not only walls but also hearts.<br /><highlight>birebiro makes this possible for everyone.</highlight>\""
   },
   "PricingPlan": {
     "free_plan_name": "Free",
@@ -90,6 +111,9 @@
     "next_renew_date": "Your subscription renews on {date}"
   },
   "FAQ": {
+    "section_subtitle": "Help",
+    "section_title": "Frequently Asked Questions",
+    "section_description": "Answers to everything you are curious about are here",
     "question": "Lorem ipsum dolor sit amet, consectetur adipiscing elit?",
     "answer": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam aliquam enim dui, id consequat turpis ullamcorper ac. Mauris id quam dolor. Nullam eu egestas turpis. Proin risus elit, sollicitudin in mi a, accumsan euismod turpis. In euismod mi sed diam tristique hendrerit.",
     "question-2": "Lorem ipsum dolor sit amet, consectetur adipiscing elit?",
@@ -106,7 +130,11 @@
   "CTA": {
     "title": "You are ready?",
     "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    "button_text": "Star on GitHub"
+    "button_text": "Star on GitHub",
+    "badge_text": "AI Supported",
+    "trust_1": "Free Trial",
+    "trust_2": "No Credit Card Required",
+    "trust_3": "Start Instantly"
   },
   "Footer": {
     "product": "Product",
@@ -117,7 +145,13 @@
     "terms_of_service": "Terms Of Service",
     "privacy_policy": "Privacy Policy",
     "legal_documents": "Legal Documents",
-    "designed_by": "Designed by <author></author>."
+    "designed_by": "Designed by <author></author>.",
+    "company_title": "Company",
+    "support_title": "Support",
+    "email_label": "Email",
+    "brand_description": "Transform your images into professional quality in seconds with AI-powered photo editing.",
+    "secure_payment": "Secure Payment:",
+    "rights_reserved": "All rights reserved."
   },
   "ProtectFallback": {
     "not_enough_permission": "You do not have the permissions to perform this action"
@@ -381,6 +415,22 @@
     "mission_text": "Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus.",
     "vision_title": "Our Vision",
     "vision_text": "Ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat. Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur."
+  },
+  "ProcessSteps": {
+    "section_title": "Your Dream Product in <gradient>3 Steps</gradient>",
+    "section_description": "We are with you at every stage from design to delivery",
+    "step1_title": "Design & Order",
+    "step1_description": "Choose your product, design it with AI, and place your order.",
+    "step2_title": "Custom Production",
+    "step2_description": "Your product is produced exclusively for you.",
+    "step3_title": "Secure Shipping",
+    "step3_description": "Your order is shipped safely and with quality.",
+    "footer_text": "We guide you at every step"
+  },
+  "Stats": {
+    "happy_customers": "Happy Customers",
+    "designs_created": "Designs Created",
+    "user_rating": "User Rating"
   },
   "Contact": {
     "meta_title": "Contact - Birebiro",

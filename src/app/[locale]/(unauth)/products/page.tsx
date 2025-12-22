@@ -1,5 +1,6 @@
 import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
 
+import { StepProgressBar } from '@/components/StepProgressBar';
 import { getProducts } from '@/features/products/productActions';
 import { ProductSelection } from '@/features/products/ProductSelection';
 import { Footer } from '@/templates/Footer';
@@ -32,6 +33,7 @@ const ProductsPage = async (props: {
     <>
       <Navbar />
       <NavbarSpacer />
+      <StepProgressBar currentStep={1} />
       <ProductSelection
         products={products}
         locale={props.params.locale}

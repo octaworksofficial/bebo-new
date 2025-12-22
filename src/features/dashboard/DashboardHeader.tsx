@@ -28,7 +28,7 @@ export const DashboardHeader = (props: {
   return (
     <>
       <div className="flex items-center">
-        <Link href="/" className="max-sm:hidden">
+        <Link href="/">
           <Logo />
         </Link>
 

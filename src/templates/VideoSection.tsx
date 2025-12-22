@@ -83,7 +83,7 @@ export const VideoSection = () => {
   }, [isVisible, player]);
 
   return (
-    <section className="relative overflow-hidden bg-[#0a0a0f] py-24 md:py-32">
+    <section id="nasil-calisir" className="relative overflow-hidden bg-[#0a0a0f] py-24 md:py-32">
       {/* Background gradient effects */}
       <div className="absolute inset-0 z-0">
         <div className="absolute left-1/4 top-0 size-96 rounded-full bg-purple-500/20 blur-[120px]" />

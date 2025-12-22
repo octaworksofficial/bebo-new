@@ -1,4 +1,8 @@
+import { useTranslations } from 'next-intl';
+
 export const Stats = () => {
+  const t = useTranslations('Stats');
+
   return (
     <section className="relative overflow-hidden bg-[#0a0a0f] py-16">
       {/* Background elements */}
@@ -12,15 +16,15 @@ export const Stats = () => {
         <div className="grid grid-cols-3 gap-8 border-t border-white/10 pt-12 md:gap-16">
           <div className="text-center">
             <div className="text-3xl font-bold text-white md:text-4xl">10K+</div>
-            <div className="mt-1 text-sm text-gray-500">Mutlu Müşteri</div>
+            <div className="mt-1 text-sm text-gray-500">{t('happy_customers')}</div>
           </div>
           <div className="text-center">
             <div className="text-3xl font-bold text-white md:text-4xl">50K+</div>
-            <div className="mt-1 text-sm text-gray-500">Tasarım Üretildi</div>
+            <div className="mt-1 text-sm text-gray-500">{t('designs_created')}</div>
           </div>
           <div className="text-center">
             <div className="text-3xl font-bold text-white md:text-4xl">4.9</div>
-            <div className="mt-1 text-sm text-gray-500">Kullanıcı Puanı</div>
+            <div className="mt-1 text-sm text-gray-500">{t('user_rating')}</div>
           </div>
         </div>
       </div>

@@ -1,8 +1,11 @@
 import { ArrowRight, Heart, Palette, Sparkles, Star, Truck, Wand2 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 export const Pricing = () => {
+  const t = useTranslations('Pricing');
+
   return (
     <section id="fiyatlandirma" className="relative overflow-hidden bg-[#0a0a0f] py-24 md:py-32">
       {/* Artistic background */}
@@ -16,33 +19,35 @@ export const Pricing = () => {
         <div className="mb-16 text-center md:mb-24">
           <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-purple-500/30 bg-purple-500/10 px-4 py-2">
             <Heart className="size-4 text-pink-400" />
-            <span className="text-sm text-purple-300">Sanat için eşitlik</span>
+            <span className="text-sm text-purple-300">{t('equality_badge')}</span>
           </div>
 
           <h2 className="mx-auto max-w-4xl text-4xl font-bold leading-tight text-white md:text-5xl lg:text-6xl">
-            birebiro'da
-            <span className="relative mx-2 inline-block">
-              <span className="relative z-10 bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent">
-                herkesin
-              </span>
-              <svg className="absolute -bottom-2 left-0 h-3 w-full" viewBox="0 0 100 12" preserveAspectRatio="none">
-                <path d="M0,8 Q25,0 50,8 T100,8" stroke="url(#underline-gradient)" strokeWidth="3" fill="none" strokeLinecap="round" />
-                <defs>
-                  <linearGradient id="underline-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#a855f7" />
-                    <stop offset="50%" stopColor="#ec4899" />
-                    <stop offset="100%" stopColor="#f97316" />
-                  </linearGradient>
-                </defs>
-              </svg>
-            </span>
-            sanat hakkı var
+            {t.rich('main_title', {
+              gradient: chunks => (
+                <span className="relative mx-2 inline-block">
+                  <span className="relative z-10 bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent">
+                    {chunks}
+                  </span>
+                  <svg className="absolute -bottom-2 left-0 h-3 w-full" viewBox="0 0 100 12" preserveAspectRatio="none">
+                    <path d="M0,8 Q25,0 50,8 T100,8" stroke="url(#underline-gradient)" strokeWidth="3" fill="none" strokeLinecap="round" />
+                    <defs>
+                      <linearGradient id="underline-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stopColor="#a855f7" />
+                        <stop offset="50%" stopColor="#ec4899" />
+                        <stop offset="100%" stopColor="#f97316" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                </span>
+              ),
+            })}
           </h2>
 
           <p className="mx-auto mt-8 max-w-2xl text-lg text-gray-400 md:text-xl">
-            Bütçen ne olursa olsun, hayalindeki tabloyu gerçeğe dönüştür.
-            <br className="hidden md:block" />
-            Sanat, herkes için ulaşılabilir olmalı.
+            {t.rich('main_description', {
+              br: () => <br className="hidden md:block" />,
+            })}
           </p>
         </div>
 
@@ -64,15 +69,15 @@ export const Pricing = () => {
                 <div className="rounded-2xl border border-white/20 bg-black/60 p-4 backdrop-blur-md">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-sm text-gray-400">Başlangıç fiyatı</p>
+                      <p className="text-sm text-gray-400">{t('starting_price')}</p>
                       <p className="text-2xl font-bold text-white">
                         ₺499
-                        <span className="ml-1 text-sm font-normal text-gray-400">/ tablo</span>
+                        <span className="ml-1 text-sm font-normal text-gray-400">{t('price_per_item')}</span>
                       </p>
                     </div>
                     <div className="flex items-center gap-1 rounded-full bg-green-500/20 px-3 py-1">
                       <Sparkles className="size-4 text-green-400" />
-                      <span className="text-sm font-medium text-green-400">Uygun fiyat</span>
+                      <span className="text-sm font-medium text-green-400">{t('affordable_badge')}</span>
                     </div>
                   </div>
                 </div>
@@ -95,10 +100,10 @@ export const Pricing = () => {
                 </div>
                 <div>
                   <h3 className="mb-2 text-xl font-semibold text-white">
-                    Yapay zeka ile tasarım
+                    {t('feature1_title')}
                   </h3>
                   <p className="text-gray-400">
-                    En gelişmiş yapay zeka teknolojisi ile fotoğraflarınız sanata dönüşüyor. Saniyeler içinde, profesyonel kalitede.
+                    {t('feature1_desc')}
                   </p>
                 </div>
               </div>
@@ -112,10 +117,10 @@ export const Pricing = () => {
                 </div>
                 <div>
                   <h3 className="mb-2 text-xl font-semibold text-white">
-                    Sınırsız stil seçeneği
+                    {t('feature2_title')}
                   </h3>
                   <p className="text-gray-400">
-                    Yağlı boya, suluboya, karakalem, pop art ve daha fazlası. Hayalinizdeki stili seçin, gerisini bize bırakın.
+                    {t('feature2_desc')}
                   </p>
                 </div>
               </div>
@@ -129,10 +134,10 @@ export const Pricing = () => {
                 </div>
                 <div>
                   <h3 className="mb-2 text-xl font-semibold text-white">
-                    Ücretsiz kargo
+                    {t('feature3_title')}
                   </h3>
                   <p className="text-gray-400">
-                    Türkiye'nin her yerine ücretsiz ve güvenli teslimat. Tablonuz özel paketlemeyle kapınıza kadar gelsin.
+                    {t('feature3_desc')}
                   </p>
                 </div>
               </div>
@@ -144,13 +149,11 @@ export const Pricing = () => {
                 href="/products"
                 className="group inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 px-8 py-4 font-semibold text-white transition-all hover:gap-4 hover:shadow-lg hover:shadow-purple-500/25"
               >
-                Tabloları keşfet
+                {t('cta_button')}
                 <ArrowRight className="size-5 transition-transform group-hover:translate-x-1" />
               </Link>
 
-              <p className="mt-4 text-sm text-gray-500">
-                ✓ Memnuniyet garantisi &nbsp; ✓ Güvenli ödeme &nbsp; ✓ 14 gün iade
-              </p>
+              <p className="mt-4 text-sm text-gray-500" dangerouslySetInnerHTML={{ __html: t.raw('guarantee_text') }} />
             </div>
           </div>
         </div>
@@ -159,10 +162,10 @@ export const Pricing = () => {
         <div className="mt-20 text-center md:mt-28">
           <blockquote className="mx-auto max-w-3xl">
             <p className="text-xl italic text-gray-400 md:text-2xl">
-              "Sanat, sadece duvarlara değil, kalplere dokunmalı.
-              <br />
-              <span className="text-white">birebiro bunu herkes için mümkün kılıyor.</span>
-              "
+              {t.rich('quote', {
+                br: () => <br />,
+                highlight: chunks => <span className="text-white">{chunks}</span>,
+              })}
             </p>
           </blockquote>
         </div>

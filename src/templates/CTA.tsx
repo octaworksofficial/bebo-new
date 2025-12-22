@@ -24,7 +24,7 @@ export const CTA = () => {
         {/* Badge */}
         <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-purple-500/30 bg-purple-500/10 px-4 py-2">
           <span className="size-2 animate-pulse rounded-full bg-purple-400" />
-          <span className="text-sm font-medium text-purple-300">Yapay Zeka Destekli</span>
+          <span className="text-sm font-medium text-purple-300">{t('badge_text')}</span>
         </div>
 
         {/* Title */}
@@ -52,19 +52,19 @@ export const CTA = () => {
             <svg className="size-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
             </svg>
-            <span>Ücretsiz Deneme</span>
+            <span>{t('trust_1')}</span>
           </div>
           <div className="flex items-center gap-2">
             <svg className="size-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
             </svg>
-            <span>Kredi Kartı Gerekmez</span>
+            <span>{t('trust_2')}</span>
           </div>
           <div className="flex items-center gap-2">
             <svg className="size-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
             </svg>
-            <span>Anında Başla</span>
+            <span>{t('trust_3')}</span>
           </div>
         </div>
       </div>

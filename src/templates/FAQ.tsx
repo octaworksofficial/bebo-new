@@ -31,13 +31,13 @@ export const FAQ = () => {
         {/* Header */}
         <div className="mb-16 text-center">
           <p className="mb-4 text-sm uppercase tracking-widest text-purple-400">
-            Yardım
+            {t('section_subtitle')}
           </p>
           <h2 className="mb-6 text-4xl font-bold tracking-tight text-white md:text-5xl">
-            Sıkça Sorulan Sorular
+            {t('section_title')}
           </h2>
           <p className="text-lg text-gray-400">
-            Merak ettiğiniz her şeyin cevabı burada
+            {t('section_description')}
           </p>
         </div>
 

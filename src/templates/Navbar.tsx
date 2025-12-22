@@ -71,19 +71,22 @@ export const Navbar = () => {
   return (
     <nav
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${isLandingPage
-        ? isScrolled
-          ? 'border-b border-white/10 bg-[#0a0a0f]/80 backdrop-blur-xl'
-          : 'bg-transparent'
-        : isScrolled
-          ? 'border-b border-gray-200 bg-white/90 shadow-sm backdrop-blur-xl'
-          : 'border-b border-gray-100 bg-white/80 backdrop-blur-xl'
+        ? (isScrolled || isMobileMenuOpen)
+            ? 'border-b border-white/10 bg-[#0a0a0f]/80 backdrop-blur-xl'
+            : 'bg-transparent'
+        : (isScrolled || isMobileMenuOpen)
+            ? 'border-b border-gray-200 bg-white/90 shadow-sm backdrop-blur-xl'
+            : 'border-b border-gray-100 bg-white/80 backdrop-blur-xl'
       }`}
     >
       <div className="mx-auto max-w-7xl px-6">
         <div className="flex h-16 items-center justify-between md:h-20">
           {/* Logo */}
-          <Link href="/" className="relative z-10">
+          <Link href="/" className="group relative z-10 flex flex-col items-start">
             <Logo variant={isLandingPage ? 'light' : 'dark'} scrollProgress={scrollProgress} />
+            <span className={`-mt-1 whitespace-nowrap text-[0.55rem] font-medium sm:text-[0.65rem] ${isLandingPage ? 'text-white/60' : 'text-gray-400'}`}>
+              {t('subtitle')}
+            </span>
           </Link>
 
           {/* Desktop Navigation - GooeyNav */}

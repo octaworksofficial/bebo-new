@@ -86,7 +86,7 @@ export const Hero = () => {
             href="#nasil-calisir"
             className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-8 py-4 text-base font-medium text-white backdrop-blur-sm transition-all hover:border-white/40 hover:bg-white/10"
           >
-            Nasıl Çalışır?
+            {t('how_it_works')}
           </Link>
         </div>
       </div>

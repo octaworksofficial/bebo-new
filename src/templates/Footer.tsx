@@ -7,7 +7,6 @@ import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
 import { getSiteSettings, type SiteSettings } from '@/features/settings/siteSettingsActions';
-import { AppConfig } from '@/utils/AppConfig';
 
 import { Logo } from './Logo';
 
@@ -34,7 +33,7 @@ export const Footer = () => {
 
   const footerLinks = [
     {
-      title: 'Ürün',
+      title: t('product'),
       links: [
         { label: tNavbar('products'), href: '/products' },
         { label: tNavbar('product'), action: () => scrollToSection('ozellikler') },
@@ -43,18 +42,18 @@ export const Footer = () => {
       ],
     },
     {
-      title: 'Şirket',
+      title: t('company_title'),
       links: [
-        { label: 'Hakkımızda', href: '/about' },
+        { label: tNavbar('about'), href: '/about' },
         { label: tNavbar('company'), href: '/contact' },
         { label: t('legal_documents'), href: `/${locale}/legal` },
       ],
     },
     {
-      title: 'Destek',
+      title: t('support_title'),
       links: [
         { label: tNavbar('community'), action: () => scrollToSection('sss') },
-        { label: 'E-posta', href: `mailto:${settings.contact_email || 'info@birebiro.com'}` },
+        { label: t('email_label'), href: `mailto:${settings.contact_email || 'info@birebiro.com'}` },
       ],
     },
   ];
@@ -91,7 +90,7 @@ export const Footer = () => {
               <Logo />
             </Link>
             <p className="mb-6 max-w-sm text-gray-400">
-              Yapay zeka destekli fotoğraf düzenleme ile görsellerinizi saniyeler içinde profesyonel kaliteye dönüştürün.
+              {t('brand_description')}
             </p>
 
             {/* Social Links */}
@@ -150,12 +149,12 @@ export const Footer = () => {
         <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
           {/* Copyright */}
           <p className="text-sm text-gray-500">
-            {settings.copyright_text || `© ${new Date().getFullYear()} ${AppConfig.name}. Tüm hakları saklıdır.`}
+            {settings.copyright_text || t('designed_by')}
           </p>
 
           {/* Payment Methods */}
           <div className="flex items-center gap-4">
-            <span className="text-xs text-gray-500">Güvenli Ödeme:</span>
+            <span className="text-xs text-gray-500">{t('secure_payment')}</span>
             <div className="flex items-center gap-3">
               {paymentLogos.map(logo => (
                 // eslint-disable-next-line @next/next/no-img-element

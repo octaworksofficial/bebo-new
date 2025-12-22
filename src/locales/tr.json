@@ -12,17 +12,23 @@
     "blog": "Fiyatlandırma",
     "community": "SSS",
     "company": "İletişim",
-    "about": "Hakkımızda"
+    "about": "Hakkımızda",
+    "subtitle": "YZ Destekli Tasarım Ürünleri Platformu"
+  },
+  "ProgressBar": {
+    "step_1": "Ürün Seçimi",
+    "step_2": "Tasarım",
+    "step_3": "Önizleme"
   },
   "Hero": {
     "follow_twitter": "X'te @Birebiro'yu takip et",
     "title": "Sunulanı Değil Hayalindeki Ürünü Al <important>Hayalindeki Tasarım Birebiro</important>",
     "description": "Kalemin yok, fırçan yok… ama hayalin var. Artık sunulan stoklu ürünlerle vakit kaybetmene gerek yok. Birebiro, sadece birkaç kelimenle bilinçaltının derinliklerinden bu mistik manzarayı ortaya çıkarır, evin ve ofisin için ustalıkla eserini işler ve sana ulaştırır. Bu senin zihninden çıkan bir şaheser.",
     "primary_button": "Hemen Tasarla",
-    "secondary_button": "Hayal Mağazası"
+    "how_it_works": "Nasıl Çalışır?"
   },
   "Sponsors": {
-    "title": "İş Ortaklarımız"
+    "title": "Hayal Ortaklarımız"
   },
   "HowItWorks": {
     "section_title": "Nasıl Çalışır?",
@@ -77,7 +83,22 @@
     "enterprise_feature_1": "Sınırsız tasarım hakkı",
     "enterprise_feature_2": "Öncelikli destek",
     "enterprise_feature_3": "Özel proje yönetimi",
-    "enterprise_plan_button": "İletişime Geç"
+    "enterprise_plan_button": "İletişime Geç",
+    "equality_badge": "Sanat için eşitlik",
+    "main_title": "birebiro'da <gradient>herkesin</gradient> sanat hakkı var",
+    "main_description": "Bütçen ne olursa olsun, hayalindeki tabloyu gerçeğe dönüştür.<br />Sanat, herkes için ulaşılabilir olmalı.",
+    "starting_price": "Başlangıç fiyatı",
+    "price_per_item": "/ tablo",
+    "affordable_badge": "Uygun fiyat",
+    "feature1_title": "Yapay zeka ile tasarım",
+    "feature1_desc": "En gelişmiş yapay zeka teknolojisi ile fotoğraflarınız sanata dönüşüyor. Saniyeler içinde, profesyonel kalitede.",
+    "feature2_title": "Sınırsız stil seçeneği",
+    "feature2_desc": "Yağlı boya, suluboya, karakalem, pop art ve daha fazlası. Hayalinizdeki stili seçin, gerisini bize bırakın.",
+    "feature3_title": "Ücretsiz kargo",
+    "feature3_desc": "Türkiye'nin her yerine ücretsiz ve güvenli teslimat. Tablonuz özel paketlemeyle kapınıza kadar gelsin.",
+    "cta_button": "Tabloları keşfet",
+    "guarantee_text": "✓ Memnuniyet garantisi &nbsp; ✓ Güvenli ödeme &nbsp; ✓ 14 gün iade",
+    "quote": "\"Sanat, sadece duvarlara değil, kalplere dokunmalı.<br /><highlight>birebiro bunu herkes için mümkün kılıyor.</highlight>\""
   },
   "PricingPlan": {
     "free_plan_name": "Deneme",
@@ -96,6 +117,9 @@
     "next_renew_date": "Aboneliğiniz {date} tarihinde yenilenir"
   },
   "FAQ": {
+    "section_subtitle": "Yardım",
+    "section_title": "Sıkça Sorulan Sorular",
+    "section_description": "Merak ettiğiniz her şeyin cevabı burada",
     "question": "Birebiro nasıl çalışır?",
     "answer": "Birebiro, yapay zeka teknolojisi kullanarak hayal ettiğiniz tasarımları kelimelerle tarif etmenizi sağlar. Sadece birkaç cümleyle istediğiniz tasarımı tanımlayın, sistemimiz anında görsel önizleme oluşturur ve onayınızın ardından ürününüz özenle hazırlanıp adresinize gönderilir.",
     "question-2": "Hangi tür ürünler sipariş edebilirim?",
@@ -112,7 +136,11 @@
   "CTA": {
     "title": "Hayallerinizi Gerçeğe Dönüştürmeye Hazır mısınız?",
     "description": "Sen hayal et, biz yapalım. Hayal gücünün yolculuğuna şimdi başla.",
-    "button_text": "Hemen Tasarla"
+    "button_text": "Hemen Tasarla",
+    "badge_text": "Yapay Zeka Destekli",
+    "trust_1": "Ücretsiz Deneme",
+    "trust_2": "Kredi Kartı Gerekmez",
+    "trust_3": "Anında Başla"
   },
   "Footer": {
     "product": "Ürünler",
@@ -123,7 +151,13 @@
     "terms_of_service": "Şart ve Koşullar",
     "privacy_policy": "Gizlilik Politikası",
     "legal_documents": "Yasal Metinler",
-    "designed_by": "© 2025, BİREBİRO, Özboya Group Global Markasıdır. Tüm Hakları Saklıdır."
+    "designed_by": "© 2025, BİREBİRO, Özboya Group Global Markasıdır. Tüm Hakları Saklıdır.",
+    "company_title": "Şirket",
+    "support_title": "Destek",
+    "email_label": "E-posta",
+    "brand_description": "Yapay zeka destekli fotoğraf düzenleme ile görsellerinizi saniyeler içinde profesyonel kaliteye dönüştürün.",
+    "secure_payment": "Güvenli Ödeme:",
+    "rights_reserved": "Tüm hakları saklıdır."
   },
   "ProtectFallback": {
     "not_enough_permission": "Bu işlemi gerçekleştirmek için yetkiniz yok"
@@ -438,6 +472,22 @@
     "mission_text": "Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus.",
     "vision_title": "Vizyonumuz",
     "vision_text": "Ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat. Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur."
+  },
+  "ProcessSteps": {
+    "section_title": "<gradient>3 Adımda</gradient> Hayalindeki Ürün",
+    "section_description": "Tasarımdan teslimat kadar her aşamada yanınızdayız",
+    "step1_title": "Tasarla & Sipariş Ver",
+    "step1_description": "Ürününüzü seçersiniz, yapay zeka ile tasarımını yaparsınız ve sipariş edersiniz.",
+    "step2_title": "Özel Üretim",
+    "step2_description": "Ürününüz yalnızca size özel olacak şekilde üretilir.",
+    "step3_title": "Güvenli Kargo",
+    "step3_description": "Siparişiniz güven ve kaliteli bir şekilde kargolanır.",
+    "footer_text": "Her adımda size rehberlik ediyoruz"
+  },
+  "Stats": {
+    "happy_customers": "Mutlu Müşteri",
+    "designs_created": "Tasarım Üretildi",
+    "user_rating": "Kullanıcı Puanı"
   },
   "Contact": {
     "meta_title": "İletişim - Birebiro",

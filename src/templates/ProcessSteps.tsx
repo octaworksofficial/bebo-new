@@ -2,14 +2,17 @@
 
 import { Package, ShieldCheck, Sparkles } from 'lucide-react';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 
 export const ProcessSteps = () => {
+  const t = useTranslations('ProcessSteps');
+
   const steps = [
     {
       number: '01',
       icon: Sparkles,
-      title: 'Tasarla & Sipariş Ver',
-      description: 'Ürününüzü seçersiniz, yapay zeka ile tasarımını yaparsınız ve sipariş edersiniz.',
+      title: t('step1_title'),
+      description: t('step1_description'),
       gradient: 'from-purple-500/20 to-pink-500/20',
       iconColor: 'text-purple-400',
       borderColor: 'border-purple-500/30',
@@ -18,8 +21,8 @@ export const ProcessSteps = () => {
     {
       number: '02',
       icon: Package,
-      title: 'Özel Üretim',
-      description: 'Ürününüz yalnızca size özel olacak şekilde üretilir.',
+      title: t('step2_title'),
+      description: t('step2_description'),
       gradient: 'from-blue-500/20 to-cyan-500/20',
       iconColor: 'text-blue-400',
       borderColor: 'border-blue-500/30',
@@ -28,8 +31,8 @@ export const ProcessSteps = () => {
     {
       number: '03',
       icon: ShieldCheck,
-      title: 'Güvenli Kargo',
-      description: 'Siparişiniz güven ve kaliteli bir şekilde kargolanır.',
+      title: t('step3_title'),
+      description: t('step3_description'),
       gradient: 'from-green-500/20 to-emerald-500/20',
       iconColor: 'text-green-400',
       borderColor: 'border-green-500/30',
@@ -58,12 +61,16 @@ export const ProcessSteps = () => {
         {/* Section Header */}
         <div className="mb-16 text-center">
           <h2 className="mb-4 text-4xl font-bold text-white md:text-5xl">
-            <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent">
-              3 Adımda Hayalindeki Ürün
-            </span>
+            {t.rich('section_title', {
+              gradient: chunks => (
+                <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent">
+                  {chunks}
+                </span>
+              ),
+            })}
           </h2>
           <p className="mx-auto max-w-2xl text-lg text-gray-400">
-            Tasarımdan teslimat kadar her aşamada yanınızdayız
+            {t('section_description')}
           </p>
         </div>
 
@@ -132,7 +139,7 @@ export const ProcessSteps = () => {
         {/* Bottom CTA or Info */}
         <div className="mt-16 text-center">
           <p className="text-sm text-gray-500">
-            Her adımda size rehberlik ediyoruz
+            {t('footer_text')}
           </p>
         </div>
       </div>
