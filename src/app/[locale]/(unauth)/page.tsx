@@ -10,7 +10,9 @@ import { HowItWorks } from '@/templates/HowItWorks';
 import { Navbar } from '@/templates/Navbar';
 import { Newsletter } from '@/templates/Newsletter';
 import { Pricing } from '@/templates/Pricing';
+import { ProcessSteps } from '@/templates/ProcessSteps';
 import { Sponsors } from '@/templates/Sponsors';
+import { VideoSection } from '@/templates/VideoSection';
 
 export async function generateMetadata(props: { params: { locale: string } }) {
   const t = await getTranslations({
@@ -32,12 +34,14 @@ const IndexPage = (props: { params: { locale: string } }) => {
       <ForceDarkTheme />
       <Navbar />
       <Hero />
-      <Sponsors />
+      <VideoSection />
       <HowItWorks />
       <Features />
-      <Pricing />
       <FAQ />
+      <Sponsors />
       <Newsletter />
+      <ProcessSteps />
+      <Pricing />
       <CTA />
       <Footer />
     </>

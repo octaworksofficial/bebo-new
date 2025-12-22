@@ -202,7 +202,7 @@ export function PurchaseCreditsInterface() {
                 className={`rounded-lg border-2 p-4 text-center transition-all ${!isCustom && selectedAmount === amount
                   ? 'border-purple-600 bg-purple-50 dark:border-purple-400 dark:bg-purple-900/20'
                   : 'border-gray-200 hover:border-purple-300 dark:border-gray-700 dark:hover:border-purple-500'
-                  }`}
+                }`}
               >
                 <div className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                   {amount}
@@ -231,7 +231,7 @@ export function PurchaseCreditsInterface() {
               className={`w-full rounded-lg border-2 px-4 py-3 transition-all focus:outline-none dark:bg-gray-800 dark:text-gray-100 ${isCustom
                 ? 'border-purple-600 dark:border-purple-400'
                 : 'border-gray-200 focus:border-purple-400 dark:border-gray-700'
-                }`}
+              }`}
             />
             <Sparkles className="absolute right-4 top-1/2 size-5 -translate-y-1/2 text-yellow-500" />
           </div>

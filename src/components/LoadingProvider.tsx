@@ -1,42 +1,42 @@
 'use client';
 
-import { usePathname, useSearchParams } from 'next/navigation';
 import { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { LoadingContext } from '@/hooks/useLoading';
 
+import { SlotMachineLoader } from './SlotMachineLoader';
+
 function LoadingProviderContent({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true); // Start with loading for initial page load
-  const [isHiding, setIsHiding] = useState(false);
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const [finishFast, setFinishFast] = useState(false);
+
+  useEffect(() => {
+    // Signal that the page is ready/hydrated.
+    // We can also attach to window.onload if we want to wait for all assets.
+    if (document.readyState === 'complete') {
+      setFinishFast(true);
+    } else {
+      const onPageLoad = () => setFinishFast(true);
+      window.addEventListener('load', onPageLoad);
+      return () => window.removeEventListener('load', onPageLoad);
+    }
+    // Fallback safety to ensure we don't spin forever if load event missed
+    const timer = setTimeout(() => setFinishFast(true), 1000);
+    return () => clearTimeout(timer);
+  }, []);
 
   const showLoading = useCallback(() => {
-    setIsHiding(false);
     setIsLoading(true);
+    // Reset finishFast if we show loading again manually?
+    // Usually manual showLoading means we are starting a NEW op.
+    setFinishFast(false);
   }, []);
 
   const hideLoading = useCallback(() => {
-    setIsHiding(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      setIsHiding(false);
-    }, 500);
+    setIsLoading(false);
   }, []);
 
-  // Initial page load - hide after content is ready
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      hideLoading();
-    }, 1500); // Delay to show the beautiful animation
-    return () => clearTimeout(timer);
-  }, [hideLoading]);
-
-  // Route change detection
-  useEffect(() => {
-    hideLoading();
-  }, [pathname, searchParams, hideLoading]);
-
+  // Update context to expose ability to setFinished manually if needed (optional, keeping simple for now)
   const contextValue = useMemo(() => ({
     isLoading,
     showLoading,
@@ -45,50 +45,7 @@ function LoadingProviderContent({ children }: { children: React.ReactNode }) {
 
   return (
     <LoadingContext.Provider value={contextValue}>
-      {isLoading && (
-        <div className={`loader-container ${isHiding ? 'loader-hiding' : ''}`}>
-          {/* Background Glows */}
-          <div className="bg-glow bg-glow-1" />
-          <div className="bg-glow bg-glow-2" />
-
-          {/* Particles */}
-          <div className="particles">
-            <div className="particle" />
-            <div className="particle" />
-            <div className="particle" />
-            <div className="particle" />
-            <div className="particle" />
-            <div className="particle" />
-            <div className="particle" />
-            <div className="particle" />
-          </div>
-
-          {/* Art Circle */}
-          <div className="art-circle">
-            {/* Rings */}
-            <div className="ring" />
-            <div className="ring" />
-            <div className="ring" />
-
-            {/* AI Core */}
-            <div className="ai-core">
-              <div className="morph-shape" />
-              <div className="inner-glow" />
-            </div>
-
-            {/* Orbits */}
-            <div className="orbit">
-              <div className="orbit-dot" />
-            </div>
-            <div className="orbit">
-              <div className="orbit-dot" />
-            </div>
-            <div className="orbit">
-              <div className="orbit-dot" />
-            </div>
-          </div>
-        </div>
-      )}
+      {isLoading && <SlotMachineLoader onComplete={hideLoading} finishFast={finishFast} />}
       {children}
     </LoadingContext.Provider>
   );

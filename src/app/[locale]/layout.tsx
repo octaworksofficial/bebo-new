@@ -73,8 +73,8 @@ export default function RootLayout(props: {
   // The `suppressHydrationWarning` attribute in <body> is used to prevent hydration errors caused by Sentry Overlay,
   // which dynamically adds a `style` attribute to the body tag.
   return (
-    <html lang={props.params.locale} suppressHydrationWarning>
-      <body className={`bg-background text-foreground antialiased ${anton.variable}`} suppressHydrationWarning>
+    <html lang={props.params.locale} suppressHydrationWarning className="overflow-x-hidden">
+      <body className={`overflow-x-hidden bg-background text-foreground antialiased ${anton.variable}`} suppressHydrationWarning>
         {/* PRO: Dark mode support for Shadcn UI */}
         <ClerkProvider
           localization={clerkLocale}

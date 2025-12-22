@@ -35,16 +35,21 @@
     "step3_description": "Dünyada yalnızca 1 tane olan ürününü beğendin mi? Tek tıkla sipariş ver, biz sana ulaştıralım."
   },
   "Features": {
-    "section_subtitle": "Teknik Özellikler",
-    "section_title": "Birebiro Teknik Özellikler",
-    "section_description": "Yapay zeka destekli tasarım platformumuzla hayal gücünüzün sınırlarını zorlayın. Sen hayal et, biz yapalım.",
-    "feature1_title": "Hayalindeki Tabloyu Metinle Tarif Et",
-    "feature2_title": "Anında Görsel Önizleme",
-    "feature3_title": "Her Dilde Dilediğin Tasarımı Oluştur",
-    "feature4_title": "Boyut ve Yön Seçimiyle Kişiselleştirme",
-    "feature5_title": "Yüksek Kalite Baskı",
-    "feature6_title": "Hızlı Teslimat",
-    "feature_description": "Yapay zeka teknolojisiyle hayal ettiğiniz tasarımları gerçeğe dönüştürüyoruz. Kelimeleriniz bizim için yeterli."
+    "section_subtitle": "Özellikler",
+    "section_title": "Yapay Zeka ile Tasarım",
+    "section_description": "Hayal gücünüzü gerçeğe dönüştüren güçlü özellikler",
+    "feature1_title": "Metinle Tasarım",
+    "feature1_description": "Hayalinizdeki tabloyu kelimelerle tarif edin, yapay zeka sizin için oluştursun",
+    "feature2_title": "Anında Önizleme",
+    "feature2_description": "Tasarımınızı gerçek zamanlı olarak görün ve düzenleyin",
+    "feature3_title": "Çoklu Dil Desteği",
+    "feature3_description": "Türkçe, İngilizce ve daha fazla dilde tasarım oluşturun",
+    "feature4_title": "Özel Boyutlar",
+    "feature4_description": "Boyut ve yön seçimiyle tamamen kişiselleştirin",
+    "feature5_title": "Premium Kalite",
+    "feature5_description": "Yüksek çözünürlüklü, profesyonel baskı kalitesi",
+    "feature6_title": "Hızlı Kargo",
+    "feature6_description": "3-5 iş günü içinde kapınızda"
   },
   "Pricing": {
     "section_subtitle": "Fiyatlandırma",

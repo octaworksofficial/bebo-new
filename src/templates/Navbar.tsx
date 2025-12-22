@@ -7,6 +7,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
+import GooeyNav from '@/components/GooeyNav';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
 
 import { Logo } from './Logo';
@@ -56,13 +57,16 @@ export const Navbar = () => {
 
   const navLinks = [
     { id: 'products', label: t('products'), href: '/products' },
-    { id: 'features', label: t('product'), onClick: () => scrollToSection('ozellikler') },
     { id: 'how-it-works', label: t('docs'), onClick: () => scrollToSection('nasil-calisir') },
-    { id: 'pricing', label: t('blog'), onClick: () => scrollToSection('fiyatlandirma') },
-    { id: 'faq', label: t('community'), onClick: () => scrollToSection('sss') },
-    { id: 'about', label: 'Hakkımızda', href: '/about' },
-    { id: 'contact', label: t('company'), href: '/contact' },
+    { id: 'features', label: t('product'), onClick: () => scrollToSection('ozellikler') },
   ];
+
+  // Transform navLinks for GooeyNav
+  const gooeyNavItems = navLinks.map(link => ({
+    label: link.label,
+    href: link.href,
+    onClick: link.onClick,
+  }));
 
   return (
     <nav
@@ -82,36 +86,19 @@ export const Navbar = () => {
             <Logo variant={isLandingPage ? 'light' : 'dark'} scrollProgress={scrollProgress} />
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden items-center gap-1 md:flex">
-            {navLinks.map(link => (
-              link.href
-                ? (
-                    <Link
-                      key={link.id}
-                      href={link.href}
-                      className={`rounded-full px-4 py-2 text-sm transition-colors ${isLandingPage
-                        ? 'text-gray-400 hover:bg-white/5 hover:text-white'
-                        : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
-                      }`}
-                    >
-                      {link.label}
-                    </Link>
-                  )
-                : (
-                    <button
-                      key={link.id}
-                      type="button"
-                      onClick={link.onClick}
-                      className={`rounded-full px-4 py-2 text-sm transition-colors ${isLandingPage
-                        ? 'text-gray-400 hover:bg-white/5 hover:text-white'
-                        : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
-                      }`}
-                    >
-                      {link.label}
-                    </button>
-                  )
-            ))}
+          {/* Desktop Navigation - GooeyNav */}
+          <div className="hidden md:flex">
+            <GooeyNav
+              items={gooeyNavItems}
+              particleCount={15}
+              particleDistances={[90, 10]}
+              particleR={100}
+              initialActiveIndex={0}
+              animationTime={600}
+              timeVariance={300}
+              colors={[1, 2, 3, 1, 2, 3, 1, 4]}
+              variant={isLandingPage ? 'light' : 'dark'}
+            />
           </div>
 
           {/* Right side */}

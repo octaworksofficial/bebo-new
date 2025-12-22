@@ -45,7 +45,7 @@ export const Footer = () => {
     {
       title: 'Şirket',
       links: [
-        { label: t('community'), href: '/about' },
+        { label: 'Hakkımızda', href: '/about' },
         { label: tNavbar('company'), href: '/contact' },
         { label: t('legal_documents'), href: `/${locale}/legal` },
       ],

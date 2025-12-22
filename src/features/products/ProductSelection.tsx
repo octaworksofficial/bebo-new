@@ -1,9 +1,9 @@
 'use client';
 
 import { ChevronRight, Frame, Maximize2 } from 'lucide-react';
+import NextImage from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import NextImage from 'next/image';
 import { useEffect, useState } from 'react';
 
 import { ProductCarousel } from '@/components/ProductCarousel';
@@ -205,21 +205,21 @@ export const ProductSelection = ({ products, locale, imageUrl }: Props) => {
                 {/* Product Image / Carousel */}
                 {isSelected
                   ? (
-                    <ProductImage
-                      imageUrl={selectedFrame?.frameImageLarge ? selectedFrame.frameImageLarge : product.imageWideUrl}
-                      productName={product.name}
-                      variant="wide"
-                      className="h-48 md:h-64 lg:h-80 xl:h-96"
-                    />
-                  )
+                      <ProductImage
+                        imageUrl={selectedFrame?.frameImageLarge ? selectedFrame.frameImageLarge : product.imageWideUrl}
+                        productName={product.name}
+                        variant="wide"
+                        className="h-48 md:h-64 lg:h-80 xl:h-96"
+                      />
+                    )
                   : (
-                    <ProductCarousel
-                      images={carouselImages}
-                      productName={product.name}
-                      variant="square"
-                      className="aspect-square w-full"
-                    />
-                  )}
+                      <ProductCarousel
+                        images={carouselImages}
+                        productName={product.name}
+                        variant="square"
+                        className="aspect-square w-full"
+                      />
+                    )}
 
                 {/* Product Info (when not selected) */}
                 {!isSelected && (
@@ -278,118 +278,118 @@ export const ProductSelection = ({ products, locale, imageUrl }: Props) => {
 
                     {loading
                       ? (
-                        <div className="py-12 text-center text-muted-foreground">
-                          {t('loading') || 'Yükleniyor...'}
-                        </div>
-                      )
+                          <div className="py-12 text-center text-muted-foreground">
+                            {t('loading') || 'Yükleniyor...'}
+                          </div>
+                        )
                       : (
-                        <div className="grid gap-8 md:grid-cols-2">
-                          {/* Size Selection */}
-                          <div>
-                            <div className="mb-4 flex items-center gap-2">
-                              <Maximize2 className="size-5 text-primary" />
-                              <h4 className="text-lg font-semibold">{sizeLabel || t('select_size')}</h4>
-                            </div>
-                            <div className="grid gap-3">
-                              {sizes.map(size => (
-                                <button
-                                  key={size.id}
-                                  type="button"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    setConfig(prev => ({ ...prev, size: size.slug }));
-                                  }}
-                                  className={cn(
-                                    'rounded-lg border-2 p-4 text-left transition-all',
-                                    config.size === size.slug
-                                      ? 'border-primary bg-primary/5'
-                                      : 'border-border hover:border-primary/50',
-                                  )}
-                                >
-                                  <div className="flex items-center justify-between">
-                                    <div>
-                                      <div className="font-semibold">{size.name}</div>
-                                      <div className="text-sm text-muted-foreground">
-                                        {size.dimensions}
+                          <div className="grid gap-8 md:grid-cols-2">
+                            {/* Size Selection */}
+                            <div>
+                              <div className="mb-4 flex items-center gap-2">
+                                <Maximize2 className="size-5 text-primary" />
+                                <h4 className="text-lg font-semibold">{sizeLabel || t('select_size')}</h4>
+                              </div>
+                              <div className="grid gap-3">
+                                {sizes.map(size => (
+                                  <button
+                                    key={size.id}
+                                    type="button"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setConfig(prev => ({ ...prev, size: size.slug }));
+                                    }}
+                                    className={cn(
+                                      'rounded-lg border-2 p-4 text-left transition-all',
+                                      config.size === size.slug
+                                        ? 'border-primary bg-primary/5'
+                                        : 'border-border hover:border-primary/50',
+                                    )}
+                                  >
+                                    <div className="flex items-center justify-between">
+                                      <div>
+                                        <div className="font-semibold">{size.name}</div>
+                                        <div className="text-sm text-muted-foreground">
+                                          {size.dimensions}
+                                        </div>
                                       </div>
-                                    </div>
-                                    <div className="font-bold text-primary">
-                                      {size.price}
-                                      ₺
-                                    </div>
-                                  </div>
-                                </button>
-                              ))}
-                            </div>
-                          </div>
-
-                          {/* Frame Selection */}
-                          <div>
-                            <div className="mb-4 flex items-center gap-2">
-                              <Frame className="size-5 text-primary" />
-                              <h4 className="text-lg font-semibold">{frameLabel || t('select_frame')}</h4>
-                            </div>
-                            <div className="grid gap-3">
-                              {frames.map(frame => (
-                                <button
-                                  key={frame.id}
-                                  type="button"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    setConfig(prev => ({ ...prev, frame: frame.slug }));
-                                  }}
-                                  className={cn(
-                                    'rounded-lg border-2 p-4 text-left transition-all',
-                                    config.frame === frame.slug
-                                      ? 'border-primary bg-primary/5'
-                                      : 'border-border hover:border-primary/50',
-                                  )}
-                                >
-                                  <div className="flex items-center gap-4">
-                                    {/* Frame Preview */}
-                                    <div className="relative size-16 shrink-0 overflow-hidden rounded">
-                                      {frame.frameImage
-                                        ? (
-                                          <NextImage
-                                            src={frame.frameImage}
-                                            alt={frame.name}
-                                            className="size-full object-cover"
-                                            fill
-                                            sizes="64px"
-                                          />
-                                        )
-                                        : (
-                                          <div className={cn(
-                                            'flex size-full items-center justify-center',
-                                            frame.slug === 'no-frame' && 'bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900',
-                                            frame.slug === 'black' && 'bg-black p-1',
-                                            frame.slug === 'white' && 'bg-white p-1 ring-2 ring-gray-200',
-                                            frame.slug === 'wood' && 'bg-gradient-to-br from-amber-700 to-amber-900 p-1',
-                                          )}
-                                          >
-                                            <div className={cn(
-                                              'size-full rounded-sm bg-gradient-to-br from-purple-400 to-pink-400',
-                                              frame.slug !== 'no-frame' && 'ring-1 ring-white/20',
-                                            )}
-                                            />
-                                          </div>
-                                        )}
-                                    </div>
-
-                                    {/* Frame Info */}
-                                    <div className="flex flex-1 items-center justify-between">
-                                      <div className="font-semibold">{frame.name}</div>
                                       <div className="font-bold text-primary">
-                                        {frame.price > 0 ? `+${frame.price}₺` : t('free')}
+                                        {size.price}
+                                        ₺
                                       </div>
                                     </div>
-                                  </div>
-                                </button>
-                              ))}
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+
+                            {/* Frame Selection */}
+                            <div>
+                              <div className="mb-4 flex items-center gap-2">
+                                <Frame className="size-5 text-primary" />
+                                <h4 className="text-lg font-semibold">{frameLabel || t('select_frame')}</h4>
+                              </div>
+                              <div className="grid gap-3">
+                                {frames.map(frame => (
+                                  <button
+                                    key={frame.id}
+                                    type="button"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setConfig(prev => ({ ...prev, frame: frame.slug }));
+                                    }}
+                                    className={cn(
+                                      'rounded-lg border-2 p-4 text-left transition-all',
+                                      config.frame === frame.slug
+                                        ? 'border-primary bg-primary/5'
+                                        : 'border-border hover:border-primary/50',
+                                    )}
+                                  >
+                                    <div className="flex items-center gap-4">
+                                      {/* Frame Preview */}
+                                      <div className="relative size-16 shrink-0 overflow-hidden rounded">
+                                        {frame.frameImage
+                                          ? (
+                                              <NextImage
+                                                src={frame.frameImage}
+                                                alt={frame.name}
+                                                className="size-full object-cover"
+                                                fill
+                                                sizes="64px"
+                                              />
+                                            )
+                                          : (
+                                              <div className={cn(
+                                                'flex size-full items-center justify-center',
+                                                frame.slug === 'no-frame' && 'bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900',
+                                                frame.slug === 'black' && 'bg-black p-1',
+                                                frame.slug === 'white' && 'bg-white p-1 ring-2 ring-gray-200',
+                                                frame.slug === 'wood' && 'bg-gradient-to-br from-amber-700 to-amber-900 p-1',
+                                              )}
+                                              >
+                                                <div className={cn(
+                                                  'size-full rounded-sm bg-gradient-to-br from-purple-400 to-pink-400',
+                                                  frame.slug !== 'no-frame' && 'ring-1 ring-white/20',
+                                                )}
+                                                />
+                                              </div>
+                                            )}
+                                      </div>
+
+                                      {/* Frame Info */}
+                                      <div className="flex flex-1 items-center justify-between">
+                                        <div className="font-semibold">{frame.name}</div>
+                                        <div className="font-bold text-primary">
+                                          {frame.price > 0 ? `+${frame.price}₺` : t('free')}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </button>
+                                ))}
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      )}
+                        )}
 
                     {/* Total & Continue Button */}
                     {isConfigComplete && (
@@ -412,17 +412,17 @@ export const ProductSelection = ({ products, locale, imageUrl }: Props) => {
                         >
                           {navigating
                             ? (
-                              <>
-                                <span className="mr-2 size-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                                {t('loading') || 'Yükleniyor...'}
-                              </>
-                            )
+                                <>
+                                  <span className="mr-2 size-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                                  {t('loading') || 'Yükleniyor...'}
+                                </>
+                              )
                             : (
-                              <>
-                                {t('continue')}
-                                <ChevronRight className="ml-2 size-5" />
-                              </>
-                            )}
+                                <>
+                                  {t('continue')}
+                                  <ChevronRight className="ml-2 size-5" />
+                                </>
+                              )}
                         </Button>
                       </div>
                     )}
