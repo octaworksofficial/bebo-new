@@ -188,6 +188,7 @@ export async function createCreditPurchase(
       currency,
       test_mode: testMode.toString(),
       lang: 'tr',
+      iframe_redirect: '1', // Ensure iframe breaks out on success/fail
     });
 
     console.log('PayTR Credit Purchase Request:', {
