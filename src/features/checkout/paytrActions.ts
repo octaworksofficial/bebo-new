@@ -112,6 +112,32 @@ export async function getPayTRToken(
       iframe_redirect: '1',
     });
 
+    // 1. Önce Siparişi 'pending' olarak oluştur
+    await db.insert(orderSchema).values({
+      userId,
+      generationId: request.generationId,
+      imageUrl: request.imageUrl,
+      productId: request.productId,
+      productSizeId: request.productSizeId,
+      productFrameId: request.productFrameId,
+      merchantOid,
+      paymentAmount: request.paymentAmount,
+      currency: 'TL',
+      paymentStatus: 'pending',
+      paytrToken: null, // Token henüz yok
+      customerName: request.customerName,
+      customerEmail: request.customerEmail,
+      customerPhone: request.customerPhone,
+      customerAddress: request.customerAddress,
+      customerCity: request.customerCity,
+      customerDistrict: request.customerDistrict,
+      isCorporateInvoice: request.isCorporateInvoice || false,
+      companyName: request.companyName,
+      taxNumber: request.taxNumber,
+      taxOffice: request.taxOffice,
+      companyAddress: request.companyAddress,
+    });
+
     // PayTR'a token isteği gönder
     const response = await fetch('https://www.paytr.com/odeme/api/get-token', {
       method: 'POST',
@@ -126,31 +152,13 @@ export async function getPayTRToken(
     console.log('PayTR Response:', result);
 
     if (result.status === 'success' && result.token) {
-      // Siparişi database'e kaydet
-      await db.insert(orderSchema).values({
-        userId,
-        generationId: request.generationId,
-        imageUrl: request.imageUrl,
-        productId: request.productId,
-        productSizeId: request.productSizeId,
-        productFrameId: request.productFrameId,
-        merchantOid,
-        paymentAmount: request.paymentAmount,
-        currency: 'TL',
-        paymentStatus: 'pending',
-        paytrToken: result.token,
-        customerName: request.customerName,
-        customerEmail: request.customerEmail,
-        customerPhone: request.customerPhone,
-        customerAddress: request.customerAddress,
-        customerCity: request.customerCity,
-        customerDistrict: request.customerDistrict,
-        isCorporateInvoice: request.isCorporateInvoice || false,
-        companyName: request.companyName,
-        taxNumber: request.taxNumber,
-        taxOffice: request.taxOffice,
-        companyAddress: request.companyAddress,
-      });
+      // 2. Token alındı, siparişi güncelle
+      await db
+        .update(orderSchema)
+        .set({
+          paytrToken: result.token,
+        })
+        .where(eq(orderSchema.merchantOid, merchantOid));
 
       return {
         success: true,
@@ -158,6 +166,15 @@ export async function getPayTRToken(
         merchantOid,
       };
     }
+
+    // Başarısız olursa siparişi güncelle (Opsiyonel: Failed olarak işaretle)
+    await db
+      .update(orderSchema)
+      .set({
+        paymentStatus: 'failed',
+        failedReasonMsg: result.reason || 'Token alınamadı',
+      })
+      .where(eq(orderSchema.merchantOid, merchantOid));
 
     return {
       success: false,
