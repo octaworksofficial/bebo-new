@@ -29,7 +29,7 @@ export const DashboardHeader = (props: {
     <>
       <div className="flex items-center">
         <Link href="/">
-          <Logo />
+          <Logo variant="dark" />
         </Link>
 
         <svg

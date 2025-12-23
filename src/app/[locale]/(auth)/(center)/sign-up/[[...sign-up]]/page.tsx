@@ -16,14 +16,26 @@ export async function generateMetadata(props: { params: { locale: string } }) {
   };
 }
 
-const SignUpPage = (props: { params: { locale: string } }) => (
-  <div className="flex flex-col items-center px-4 sm:px-6">
-    {/* Promotional Banner */}
-    {/* Promotional Banner */}
-    <AuthWelcomeHeader />
+const SignUpPage = (props: {
+  params: { locale: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+}) => {
+  const redirectUrl = props.searchParams.redirect_url;
+  const forceRedirectUrl
+    = typeof redirectUrl === 'string' ? redirectUrl : undefined;
 
-    <SignUp path={getI18nPath('/sign-up', props.params.locale)} />
-  </div>
-);
+  return (
+    <div className="flex flex-col items-center px-4 sm:px-6">
+      {/* Promotional Banner */}
+      {/* Promotional Banner */}
+      <AuthWelcomeHeader />
+
+      <SignUp
+        path={getI18nPath('/sign-up', props.params.locale)}
+        forceRedirectUrl={forceRedirectUrl}
+      />
+    </div>
+  );
+};
 
 export default SignUpPage;
