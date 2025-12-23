@@ -1,15 +1,11 @@
-import path from 'node:path';
-
 import { PGlite } from '@electric-sql/pglite';
 import { drizzle as drizzlePg } from 'drizzle-orm/node-postgres';
-import { migrate as migratePg } from 'drizzle-orm/node-postgres/migrator';
 import { drizzle as drizzlePglite, type PgliteDatabase } from 'drizzle-orm/pglite';
 import { PHASE_PRODUCTION_BUILD } from 'next/dist/shared/lib/constants';
-import { Client } from 'pg';
+import { Pool } from 'pg';
 
 import * as schema from '@/models/Schema';
 
-let client;
 let drizzle;
 
 // Need a database for production? Check out https://www.prisma.io/?via=saasboilerplatesrc
@@ -22,21 +18,21 @@ if (process.env.NEXT_PHASE === PHASE_PRODUCTION_BUILD) {
   // Production/Development with real PostgreSQL
 
   console.log('🔌 Connecting to PostgreSQL database...');
-  client = new Client({
+  const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
+    max: 10, // Max clients in the pool
+    idleTimeoutMillis: 30000,
   });
-  await client.connect();
 
   console.log('✅ Connected to PostgreSQL');
 
-  drizzle = drizzlePg(client, { schema });
+  drizzle = drizzlePg(pool, { schema });
 
-  console.log('🚀 Running migrations...');
-  await migratePg(drizzle, {
-    migrationsFolder: path.join(process.cwd(), 'migrations'),
-  });
-
-  console.log('✅ Migrations completed');
+  // Migrations should be run manually or during deployment, not at runtime
+  // to avoid timeouts and "cold start" issues
+  // await migratePg(drizzle, {
+  //   migrationsFolder: path.join(process.cwd(), 'migrations'),
+  // });
 } else {
   // Local development with PGlite (in-memory database)
 
