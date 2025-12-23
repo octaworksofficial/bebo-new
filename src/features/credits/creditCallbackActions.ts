@@ -53,7 +53,8 @@ export async function validatePayTRCreditCallback(
     }
 
     // Ödeme başarılıysa kredileri yükle
-    if (status === '1') { // PayTR'de 1 = başarılı
+    // PayTR'da status: '1' = Başarılı, '0' = Başarısız
+    if (status === '1' || status === 'success') { // PayTR'de 1 = başarılı
       // merchant_oid ile order'ı bul ve user ID'yi al (güvenli yöntem)
       const orderRecord = await db
         .select({
