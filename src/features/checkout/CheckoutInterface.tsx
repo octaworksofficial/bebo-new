@@ -207,7 +207,7 @@ export function CheckoutInterface({
           1,
         ],
       ];
-      const userBasket = btoa(JSON.stringify(basketItems));
+      const userBasket = btoa(unescape(encodeURIComponent(JSON.stringify(basketItems))));
 
       console.log('Sending to PayTR:', {
         productId: priceData.productId,
