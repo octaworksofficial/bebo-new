@@ -53,6 +53,7 @@ export async function processSuccessfulCreditPurchase(
         userId: orderSchema.userId,
         paymentAmount: orderSchema.paymentAmount,
         paymentStatus: orderSchema.paymentStatus,
+        creditAmount: orderSchema.creditAmount, // Fetch stored credit amount
       })
       .from(orderSchema)
       .where(eq(orderSchema.merchantOid, merchantOid))
@@ -75,16 +76,19 @@ export async function processSuccessfulCreditPurchase(
       };
     }
 
-    // Sipariş durumu kontrol et
+    // Use stored credit amount or fallback to calculation (though stored is preferred)
+    const creditAmount = order.creditAmount || Math.floor(order.paymentAmount / 150);
+
+    // Sipariş zaten başarılıysa, sadece başarı mesajı dön (Race condition handling)
     if (order.paymentStatus === 'success') {
       return {
-        success: false,
-        message: 'Bu siparişin kredileri zaten hesabınıza yüklenmiş',
+        success: true,
+        message: 'Ödemeniz başarıyla alındı',
+        creditsAdded: creditAmount,
       };
     }
 
-    // Gerçek kredi miktarını hesapla (paymentAmount kuruş cinsinden, 150 kuruş = 1 kredi)
-    const creditAmount = Math.floor(order.paymentAmount / 150);
+    // ... continue with processing only if NOT success ...
 
     // Kullanıcının mevcut kredilerini getir
     const userRecord = await db
@@ -116,6 +120,8 @@ export async function processSuccessfulCreditPurchase(
       .update(orderSchema)
       .set({
         paymentStatus: 'success',
+        orderType: 'credit', // Ensure type is set
+        creditAmount, // Ensure amount is set if it wasn't
         paidAt: new Date(),
         updatedAt: new Date(),
       })
