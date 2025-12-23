@@ -4,7 +4,7 @@ import { useUser } from '@clerk/nextjs';
 import { Info, Sparkles } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Script from 'next/script';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 
 import { Footer } from '@/templates/Footer';
@@ -14,6 +14,7 @@ import { createCreditPurchase, type CreditSettings, getCreditSettings } from './
 
 export function PurchaseCreditsInterface() {
   const t = useTranslations('PurchaseCredits');
+  const locale = useLocale();
   const router = useRouter();
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const { user } = useUser();
@@ -95,8 +96,8 @@ export function PurchaseCreditsInterface() {
       const ipData = await ipResponse.json();
       const userIp = ipData.ip;
 
-      // PayTR token al - userId ve email'i geçiyoruz
-      const result = await createCreditPurchase(user.id, userEmail, amount, userIp);
+      // PayTR token al - userId ve email'i geçiyoruz, ve LOCALE
+      const result = await createCreditPurchase(user.id, userEmail, amount, userIp, locale);
 
       if (result.success && result.token) {
         setPaytrToken(result.token);
@@ -132,16 +133,16 @@ export function PurchaseCreditsInterface() {
     const handleMessage = (event: MessageEvent) => {
       if (event.origin === 'https://www.paytr.com') {
         if (event.data === 'success' && merchantOid) {
-          router.push(`/purchase-credits/success?merchant_oid=${merchantOid}`);
+          router.push(`/${locale}/purchase-credits/success?merchant_oid=${merchantOid}`);
         } else if (event.data === 'fail') {
-          router.push('/purchase-credits/failed');
+          router.push(`/${locale}/purchase-credits/failed`);
         }
       }
     };
 
     window.addEventListener('message', handleMessage);
     return () => window.removeEventListener('message', handleMessage);
-  }, [paytrToken, merchantOid, router]);
+  }, [paytrToken, merchantOid, router, locale]);
 
   // Loading durumu
   if (isLoadingSettings) {

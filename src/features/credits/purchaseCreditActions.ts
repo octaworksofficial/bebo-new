@@ -92,6 +92,7 @@ export async function createCreditPurchase(
   userEmail: string,
   creditAmount: number,
   userIp: string,
+  locale: string = 'tr', // Default to 'tr' if not provided
 ): Promise<PayTRCreditTokenResponse> {
   try {
     if (!userId) {
@@ -134,8 +135,9 @@ export async function createCreditPurchase(
       ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}`
       : 'http://localhost:3001';
 
-    const merchantOkUrl = `${appUrl}/purchase-credits/success?merchant_oid=${merchantOid}`;
-    const merchantFailUrl = `${appUrl}/purchase-credits/failed?merchant_oid=${merchantOid}`;
+    // Update URLs to include locale
+    const merchantOkUrl = `${appUrl}/${locale}/purchase-credits/success?merchant_oid=${merchantOid}`;
+    const merchantFailUrl = `${appUrl}/${locale}/purchase-credits/failed?merchant_oid=${merchantOid}`;
 
     // User basket (sepet içeriği) - PayTR formatında
     const userBasket = Buffer.from(JSON.stringify([
