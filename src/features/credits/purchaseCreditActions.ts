@@ -123,9 +123,12 @@ export async function createCreditPurchase(
     const totalAmount = creditAmount * settings.pricePerCredit;
 
     // Benzersiz sipariş numarası oluştur - alfanumerik format (PayTR requirement)
-    // Format: CRD{timestamp}{userIdHash} - özel karakter yok
+    // Format: CRD{timestamp}{random}{userIdHash} - özel karakter yok
     const userIdHash = Buffer.from(userId).toString('base64').replace(/[^a-z0-9]/gi, '').slice(0, 8);
-    const merchantOid = `CRD${Date.now()}${userIdHash}`;
+    const randomPart = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+    const merchantOid = `CRD${Date.now()}${randomPart}${userIdHash}`;
+
+    console.log('🆔 Generated merchant_oid:', merchantOid);
 
     // PayTR API bilgileri
     const merchantId = Env.PAYTR_MERCHANT_ID;
