@@ -2,7 +2,7 @@
 
 import { OrganizationSwitcher, UserButton } from '@clerk/nextjs';
 import Link from 'next/link';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 
 import { ActiveLink } from '@/components/ActiveLink';
 import { LocaleSwitcher } from '@/components/LocaleSwitcher';
@@ -23,6 +23,7 @@ export const DashboardHeader = (props: {
     label: string;
   }[];
 }) => {
+  const t = useTranslations('DashboardLayout');
   const locale = useLocale();
 
   return (
@@ -112,7 +113,7 @@ export const DashboardHeader = (props: {
             >
               <UserButton.MenuItems>
                 <UserButton.Link
-                  label="Geçmiş Siparişlerim"
+                  label={t('past_orders')}
                   labelIcon={(
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

@@ -12,6 +12,7 @@
     "blog": "Pricing",
     "community": "FAQ",
     "company": "Contact",
+    "about": "About Us",
     "subtitle": "AI Supported Design Products Platform"
   },
   "ProgressBar": {
@@ -169,7 +170,8 @@
     "todos": "Todos",
     "members": "Members",
     "billing": "Billing",
-    "settings": "Settings"
+    "settings": "Settings",
+    "past_orders": "Past Orders"
   },
   "Dashboard": {
     "meta_title": "SaaS Template Dashboard",
