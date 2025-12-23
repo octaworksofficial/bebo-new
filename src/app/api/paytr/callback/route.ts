@@ -20,6 +20,15 @@ export async function POST(request: NextRequest) {
     // PayTR'dan gelen POST verilerini al
     const formData = await request.formData();
 
+    // Log all keys to debug mismatched field names
+    const allData: Record<string, string> = {};
+    formData.forEach((value, key) => {
+      if (typeof value === 'string') {
+        allData[key] = value;
+      }
+    });
+    console.log('📝 PayTR RAW Callback Data:', allData);
+
     const payload = {
       merchant_oid: formData.get('merchant_oid') as string,
       status: formData.get('status') as string,
@@ -30,9 +39,10 @@ export async function POST(request: NextRequest) {
       failed_reason_msg: formData.get('failed_reason_msg') as string | undefined,
     };
 
-    console.log('PayTR callback received:', {
+    console.log('PayTR callback processed payload:', {
       merchant_oid: payload.merchant_oid,
       status: payload.status,
+      fail_msg: payload.failed_reason_msg,
     });
 
     // Kredi ödeme kontrolü - merchant_oid CRD ile başlıyor
