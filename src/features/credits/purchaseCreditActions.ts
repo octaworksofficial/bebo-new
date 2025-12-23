@@ -8,6 +8,7 @@ import { eq } from 'drizzle-orm';
 import { db } from '@/libs/DB';
 import { Env } from '@/libs/Env';
 import { artCreditSettingsSchema, orderSchema } from '@/models/Schema';
+import { AppConfig } from '@/utils/AppConfig';
 
 export type CreditSettings = {
   pricePerCredit: number; // Kuruş cinsinden
@@ -135,9 +136,15 @@ export async function createCreditPurchase(
       ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}`
       : 'http://localhost:3001';
 
-    // Update URLs to include locale
-    const merchantOkUrl = `${appUrl}/${locale}/purchase-credits/success?merchant_oid=${merchantOid}`;
-    const merchantFailUrl = `${appUrl}/${locale}/purchase-credits/failed?merchant_oid=${merchantOid}`;
+    // Construct URL based on locale prefix strategy
+    let localePath = '';
+    if (locale !== AppConfig.defaultLocale) {
+      localePath = `/${locale}`;
+    }
+
+    // Update URLs to include locale only if needed
+    const merchantOkUrl = `${appUrl}${localePath}/purchase-credits/success?merchant_oid=${merchantOid}`;
+    const merchantFailUrl = `${appUrl}${localePath}/purchase-credits/failed?merchant_oid=${merchantOid}`;
 
     // User basket (sepet içeriği) - PayTR formatında
     const userBasket = Buffer.from(JSON.stringify([

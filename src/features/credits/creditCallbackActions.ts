@@ -41,6 +41,14 @@ export async function validatePayTRCreditCallback(
       .digest('base64');
 
     if (hash !== expectedHash) {
+      console.error('❌ PayTR Credit Hash Mismatch', {
+        merchant_oid,
+        status,
+        total_amount,
+        receivedHash: hash,
+        computedHash: expectedHash,
+        hashString: `${merchant_oid}***SALT***${status}${total_amount}`,
+      });
       return { success: false, error: 'Invalid hash signature' };
     }
 
