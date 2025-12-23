@@ -3,6 +3,8 @@ import { NextResponse } from 'next/server';
 
 import { validatePayTRCallback } from '@/features/checkout/paytrActions';
 import { validatePayTRCreditCallback } from '@/features/credits/creditCallbackActions';
+import { db } from '@/libs/DB';
+import { paymentLogsSchema } from '@/models/Schema';
 
 // Force dynamic rendering for this API route
 export const dynamic = 'force-dynamic';
@@ -44,6 +46,28 @@ export async function POST(request: NextRequest) {
       status: payload.status,
       fail_msg: payload.failed_reason_msg,
     });
+
+    // Log to database
+    try {
+      await db.insert(paymentLogsSchema).values({
+        merchantOid: payload.merchant_oid,
+        status: payload.status,
+        totalAmount: payload.total_amount,
+        hash: payload.hash,
+        paymentType: payload.payment_type || null,
+        failedReasonCode: payload.failed_reason_code || null,
+        failedReasonMsg: payload.failed_reason_msg || null,
+        testMode: allData.test_mode || null,
+        currency: allData.currency || null,
+        paymentAmount: allData.payment_amount || null,
+        rawPayload: JSON.stringify(allData),
+        ipAddress: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || null,
+        userAgent: request.headers.get('user-agent') || null,
+      });
+      console.log('✅ Payment log saved to database');
+    } catch (logError) {
+      console.error('❌ Failed to save payment log:', logError);
+    }
 
     // Kredi ödeme kontrolü - merchant_oid CRD ile başlıyor
     let result;

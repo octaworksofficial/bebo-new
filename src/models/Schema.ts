@@ -329,3 +329,22 @@ export const siteSettingsSchema = pgTable('site_settings', {
     .notNull(),
   createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
 });
+
+// Payment Logs Schema - for logging all PayTR callback data for debugging
+export const paymentLogsSchema = pgTable('payment_logs', {
+  id: serial('id').primaryKey(),
+  merchantOid: varchar('merchant_oid', { length: 64 }), // PayTR sipariş numarası
+  status: varchar('status', { length: 20 }), // success, failed
+  totalAmount: varchar('total_amount', { length: 20 }),
+  hash: text('hash'),
+  paymentType: varchar('payment_type', { length: 20 }),
+  failedReasonCode: varchar('failed_reason_code', { length: 20 }),
+  failedReasonMsg: text('failed_reason_msg'),
+  testMode: varchar('test_mode', { length: 5 }),
+  currency: varchar('currency', { length: 10 }),
+  paymentAmount: varchar('payment_amount', { length: 20 }),
+  rawPayload: text('raw_payload'), // JSON string of entire payload
+  ipAddress: text('ip_address'),
+  userAgent: text('user_agent'),
+  createdAt: timestamp('created_at', { mode: 'date' }).defaultNow().notNull(),
+});
