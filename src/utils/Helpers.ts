@@ -14,6 +14,10 @@ export const getBaseUrl = () => {
     return process.env.NEXT_PUBLIC_APP_URL;
   }
 
+  if (process.env.RAILWAY_PUBLIC_DOMAIN) {
+    return `https://${process.env.RAILWAY_PUBLIC_DOMAIN}`;
+  }
+
   if (
     process.env.VERCEL_ENV === 'production'
     && process.env.VERCEL_PROJECT_PRODUCTION_URL

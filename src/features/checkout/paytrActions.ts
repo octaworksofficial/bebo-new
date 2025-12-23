@@ -8,6 +8,7 @@ import { eq } from 'drizzle-orm';
 import { db } from '@/libs/DB';
 import { Env } from '@/libs/Env';
 import { generatedImageSchema, orderSchema, userSchema } from '@/models/Schema';
+import { getBaseUrl } from '@/utils/Helpers';
 
 export type PayTRTokenRequest = {
   generationId: string;
@@ -60,9 +61,7 @@ export async function getPayTRToken(
     const merchantSalt = Env.PAYTR_MERCHANT_SALT;
 
     // App URL'ler - Production'da Railway'den gelecek
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.RAILWAY_PUBLIC_DOMAIN
-      ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}`
-      : 'http://localhost:3001';
+    const appUrl = getBaseUrl();
 
     console.log('App URL for PayTR:', appUrl);
 
