@@ -131,10 +131,19 @@ export async function createCreditPurchase(
     const merchantKey = Env.PAYTR_MERCHANT_KEY;
     const merchantSalt = Env.PAYTR_MERCHANT_SALT;
 
-    // App URL
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.RAILWAY_PUBLIC_DOMAIN
-      ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}`
-      : 'http://localhost:3001';
+    // App URL - Prioritize NEXT_PUBLIC_APP_URL for correct domain (e.g. www)
+    let appUrl = process.env.NEXT_PUBLIC_APP_URL;
+
+    if (!appUrl) {
+      appUrl = process.env.RAILWAY_PUBLIC_DOMAIN
+        ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}`
+        : 'http://localhost:3000';
+    }
+
+    // Ensure no trailing slash for consistency
+    if (appUrl.endsWith('/')) {
+      appUrl = appUrl.slice(0, -1);
+    }
 
     // Construct URL based on locale prefix strategy
     let localePath = '';
