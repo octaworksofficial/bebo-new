@@ -47,9 +47,9 @@ export async function POST(request: NextRequest) {
 
     if (!result.success) {
       console.error('PayTR callback validation failed:', result.error);
-      // Hata durumunda bile OK dönmemek gerekebilir,
-      // ancak PayTR tekrar deneme yapar
-      return new NextResponse('ERROR', { status: 400 });
+      // Hata olsa bile PayTR'ın tekrar denemesini engellemek için OK dönüyoruz.
+      // Kullanıcı isteği üzerine bu şekilde güncellendi.
+      // return new NextResponse('ERROR', { status: 400 });
     }
 
     // PayTR'a başarılı yanıt dön
@@ -62,7 +62,8 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error('PayTR callback error:', error);
-    return new NextResponse('ERROR', { status: 500 });
+    // Beklenmedik hatada bile OK dönerek timeout/retry döngüsünü kırıyoruz
+    return new NextResponse('OK', { status: 200 });
   }
 }
 
