@@ -1,7 +1,7 @@
 {
   "Index": {
-    "meta_title": "SaaS Template - The perfect SaaS template to build and scale your business with ease.",
-    "meta_description": "A free and open-source landing page template for your SaaS business, built with React, TypeScript, Shadcn UI, and Tailwind CSS."
+    "meta_title": "Get Your Dream Product, Not What's Offered - Design Your Dream with Birebiro",
+    "meta_description": "AI-powered custom design products platform. Design with your imagination, we produce for you. Personalized paintings, wall decorations, and more."
   },
   "Navbar": {
     "sign_in": "Sign In",
@@ -21,9 +21,9 @@
     "step_3": "Preview"
   },
   "Hero": {
-    "follow_twitter": "Follow @Ixartz on Twitter",
-    "title": "The perfect <important>SaaS template</important> to build and scale your business with ease.",
-    "description": "A free and open-source landing page template for your SaaS business, built with React, TypeScript, Shadcn UI, and Tailwind CSS.",
+    "follow_twitter": "Follow @Birebiro on X",
+    "title": "Get Your Dream Product, Not What's Offered <important>Design Your Dream with Birebiro</important>",
+    "description": "No pencil, no brush… but you have a dream. No need to waste time with stock products anymore. Birebiro brings this mystical landscape from the depths of your subconscious to life with just a few words, expertly crafts your masterpiece for your home and office, and delivers it to you. This is a masterpiece from your mind.",
     "primary_button": "Get Started",
     "how_it_works": "How It Works?"
   },
@@ -42,15 +42,15 @@
   },
   "Features": {
     "section_subtitle": "Features",
-    "section_title": "Unlock the Full Potential of the SaaS Template",
-    "section_description": "A free and open-source landing page template for your SaaS business, built with React, TypeScript, Shadcn UI, and Tailwind CSS.",
+    "section_title": "Design with AI",
+    "section_description": "Powerful features that turn your imagination into reality",
     "feature1_title": "Node.js",
     "feature2_title": "React",
     "feature3_title": "Tailwind CSS",
     "feature4_title": "TypeScript",
     "feature5_title": "Shadcn UI",
     "feature6_title": "ESLint",
-    "feature_description": "A free and open-source landing page template for your SaaS business, built with React, TypeScript, Shadcn UI, and Tailwind CSS."
+    "feature_description": "Powerful features that turn your imagination into reality"
   },
   "Pricing": {
     "section_subtitle": "Pricing",
@@ -174,8 +174,8 @@
     "past_orders": "Past Orders"
   },
   "Dashboard": {
-    "meta_title": "SaaS Template Dashboard",
-    "meta_description": "A free and open-source landing page template for your SaaS business, built with Next.js, TypeScript, Shadcn UI, and Tailwind CSS."
+    "meta_title": "Dashboard - Birebiro",
+    "meta_description": "Welcome to your Birebiro user panel. Manage your designs, track your orders."
   },
   "DashboardIndex": {
     "title_bar": "Dashboard",
