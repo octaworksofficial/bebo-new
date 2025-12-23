@@ -1,7 +1,7 @@
 'use server';
 
 import { auth } from '@clerk/nextjs/server';
-import { desc, eq } from 'drizzle-orm';
+import { and, desc, eq, ne } from 'drizzle-orm';
 
 import { db } from '@/libs/DB';
 import {
@@ -63,7 +63,7 @@ export async function getUserOrders() {
         productFrameSchema,
         eq(orderSchema.productFrameId, productFrameSchema.id),
       )
-      .where(eq(orderSchema.userId, userId))
+      .where(and(eq(orderSchema.userId, userId), ne(orderSchema.paymentStatus, 'failed')))
       .orderBy(desc(orderSchema.createdAt));
 
     return orders;
