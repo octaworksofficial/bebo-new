@@ -32,6 +32,29 @@ const IndexPage = (props: { params: { locale: string } }) => {
   return (
     <>
       <ForceDarkTheme />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Organization',
+            'name': 'Birebiro',
+            'url': 'https://birebiro.com',
+            'logo': 'https://birebiro.com/android-chrome-512x512.png',
+            'sameAs': [
+              'https://twitter.com/birebiro',
+              'https://instagram.com/birebiro',
+            ],
+            'contactPoint': {
+              '@type': 'ContactPoint',
+              'telephone': '+90-555-123-4567',
+              'contactType': 'customer service',
+              'areaServed': 'TR',
+              'availableLanguage': ['Turkish', 'English'],
+            },
+          }),
+        }}
+      />
       <Navbar />
       <Hero />
       <VideoSection />

@@ -31,6 +31,26 @@ const ProductsPage = async (props: {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'ItemList',
+            'itemListElement': products.map((product: any, index: number) => ({
+              '@type': 'ListItem',
+              'position': index + 1,
+              'item': {
+                '@type': 'Product',
+                'name': product.name,
+                'description': product.description,
+                'image': product.imageSquareUrl,
+                'url': `https://birebiro.com/${props.params.locale}/products#${product.slug}`,
+              },
+            })),
+          }),
+        }}
+      />
       <Navbar />
       <NavbarSpacer />
       <StepProgressBar currentStep={1} />

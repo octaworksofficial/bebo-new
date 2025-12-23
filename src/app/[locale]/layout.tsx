@@ -11,6 +11,7 @@ import { CookieConsent } from '@/components/CookieConsent';
 import { GoogleAnalytics } from '@/components/GoogleAnalytics';
 import { LoadingProvider } from '@/components/LoadingProvider';
 import { AllLocales, AppConfig } from '@/utils/AppConfig';
+import { getBaseUrl } from '@/utils/Helpers';
 
 const anton = localFont({
   src: '../fonts/Anton-Regular.ttf',
@@ -19,6 +20,12 @@ const anton = localFont({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(getBaseUrl()),
+  title: {
+    default: 'Birebiro - Hayalindeki Tasarım',
+    template: '%s | Birebiro',
+  },
+  description: 'Yapay zeka destekli özel tasarım ürünleri platformu. Hayal gücünüzle tasarlayın, biz sizin için üretelim.',
   manifest: '/site.webmanifest',
   icons: [
     {
@@ -31,6 +38,33 @@ export const metadata: Metadata = {
       url: '/favicon.svg',
     },
   ],
+  openGraph: {
+    title: 'Birebiro - Hayalindeki Tasarım',
+    description: 'Yapay zeka destekli özel tasarım ürünleri platformu.',
+    url: getBaseUrl(),
+    siteName: 'Birebiro',
+    locale: 'tr_TR',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Birebiro - Hayalindeki Tasarım',
+    description: 'Yapay zeka destekli özel tasarım ürünleri platformu.',
+  },
+  alternates: {
+    canonical: './',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      'index': true,
+      'follow': true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
 };
 
 export function generateStaticParams() {
