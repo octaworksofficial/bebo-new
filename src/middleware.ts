@@ -62,6 +62,11 @@ export default function middleware(
 
         signInUrl.searchParams.set('redirect_url', req.url);
 
+        // PayTR callback route should be public
+        if (req.nextUrl.pathname.includes('/api/paytr/callback')) {
+          return;
+        }
+
         await auth.protect({
           // `unauthenticatedUrl` is needed to avoid error: "Unable to find `next-intl` locale because the middleware didn't run on this request"
           unauthenticatedUrl: signInUrl.toString(),
